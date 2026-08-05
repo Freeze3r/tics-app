@@ -1,5 +1,6 @@
 const PROFILE_KEY = 'ticsProfile'
 const PRACTICE_KEY = 'ticsPracticeDays'
+const DEEP_ANSWERS_KEY = 'ticsDeepAnswers'
 
 // Le "profil actif" = dernières réponses au quiz + plan généré, gardés en local
 // pour que Home/Tracker/SOS puissent les retrouver sans repasser par le quiz.
@@ -9,6 +10,22 @@ export function saveProfile(answers, plan) {
 
 export function loadProfile() {
   const raw = localStorage.getItem(PROFILE_KEY)
+  if (!raw) return null
+  try {
+    return JSON.parse(raw)
+  } catch {
+    return null
+  }
+}
+
+// Réponses du quiz approfondi (post-achat premium, brief section 6) : plus personnel,
+// avec un commentaire libre optionnel — distinct du quiz rapide gratuit.
+export function saveDeepAnswers(answers) {
+  localStorage.setItem(DEEP_ANSWERS_KEY, JSON.stringify({ answers, savedAt: Date.now() }))
+}
+
+export function loadDeepAnswers() {
+  const raw = localStorage.getItem(DEEP_ANSWERS_KEY)
   if (!raw) return null
   try {
     return JSON.parse(raw)

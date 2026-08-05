@@ -14,6 +14,7 @@ import Library from './screens/Library.jsx'
 import Community from './screens/Community.jsx'
 import Profile from './screens/Profile.jsx'
 import Premium from './screens/Premium.jsx'
+import DeepQuiz from './screens/DeepQuiz.jsx'
 
 export default function App() {
   return (
@@ -21,11 +22,12 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/premium" element={<Premium />} />
 
         <Route element={<RequireAuth />}>
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/plan" element={<Plan />} />
+          <Route path="/premium" element={<Premium />} />
+          <Route path="/deep-quiz" element={<DeepQuiz />} />
 
           <Route element={<AppShell />}>
             <Route path="/home" element={<Home />} />

@@ -94,7 +94,7 @@ export default function Plan() {
         </section>
 
         <div className="mt-10 flex justify-center">
-          <Button onClick={() => navigate('/home')}>Continuer vers l'app</Button>
+          <Button onClick={() => navigate('/premium')}>Continuer vers l'app</Button>
         </div>
 
         <p className="mt-4 text-center text-xs text-ink-800/40 dark:text-sand-100/40">

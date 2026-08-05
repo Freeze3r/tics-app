@@ -1,32 +1,31 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
+import { TOP_BENEFITS, COMPARISON_TABLE } from '../data/premiumBenefits.js'
+import { getPricing, getLoyaltyOffer, startTrial, acceptLoyaltyOffer } from '../lib/subscription.js'
 
-const FEATURES = [
-  'Coach illimité, à toute heure',
-  'Communauté complète et modérée',
-  'Suivi photo privé et chiffré (optionnel)',
-  'Statistiques avancées et détection de patterns',
-  'Bibliothèque complète d’exercices par comportement',
-]
-
-const PLANS = [
-  { id: 'weekly', label: 'Hebdo', price: '4,99 €/semaine' },
-  { id: 'monthly', label: 'Mensuel', price: '12,99 €/mois', highlight: true },
-  { id: 'yearly', label: 'Annuel', price: '69,99 €/an' },
-]
+const pricing = getPricing()
 
 export default function Premium() {
   const navigate = useNavigate()
-  const [selected, setSelected] = useState('monthly')
-  const [message, setMessage] = useState('')
+  const [selected, setSelected] = useState('yearly')
+  const [showComparison, setShowComparison] = useState(false)
+  const loyaltyOffer = getLoyaltyOffer()
+
+  const yearlyMonthlyEquivalent = (pricing.yearly.introPrice / 12).toFixed(2)
+  const monthlyOverOneYear =
+    pricing.monthly.introPrice * pricing.monthly.introMonths +
+    pricing.monthly.price * (12 - pricing.monthly.introMonths)
+  const yearlySavings = Math.round(monthlyOverOneYear - pricing.yearly.introPrice)
 
   function handleStart() {
-    // Mock volontaire : aucune vraie transaction n'est déclenchée ici.
-    // À intégrer plus tard avec Stripe (ou RevenueCat pour du mobile natif).
-    setMessage(
-      'Aperçu uniquement — le paiement réel (Stripe) reste à intégrer avant le lancement.'
-    )
+    startTrial(selected)
+    navigate('/deep-quiz')
+  }
+
+  function handleAcceptLoyalty() {
+    acceptLoyaltyOffer()
+    navigate('/home')
   }
 
   return (
@@ -36,52 +35,132 @@ export default function Premium() {
           ← Retour
         </Button>
 
+        {loyaltyOffer && (
+          <div className="mt-4 rounded-2xl border-2 border-coral-500 bg-coral-100/60 p-5 dark:bg-coral-500/10">
+            <p className="font-semibold text-coral-600 dark:text-coral-300">
+              Offre unique pour toi — {loyaltyOffer.daysLeft} jour{loyaltyOffer.daysLeft > 1 ? 's' : ''} restant{loyaltyOffer.daysLeft > 1 ? 's' : ''}
+            </p>
+            <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
+              Passe à l'annuel pour <strong>{loyaltyOffer.price.toFixed(2)} €</strong>, garanti pendant{' '}
+              {loyaltyOffer.guaranteedYears} ans — ton mois déjà payé et ta fidélité sont déduits du prix normal.
+            </p>
+            <Button className="mt-3 w-full" onClick={handleAcceptLoyalty}>
+              Profiter de l'offre
+            </Button>
+          </div>
+        )}
+
         <h1 className="mt-4 text-2xl font-bold text-ink-800 dark:text-sand-100">
           Va plus loin, à ton rythme
         </h1>
         <p className="mt-2 text-ink-800/70 dark:text-sand-100/70">
-          7 jours d'essai gratuit. On te prévient avant tout prélèvement — jamais de surprise.
+          Essai gratuit de 3 jours sur le mensuel. On te prévient avant tout prélèvement — jamais
+          de surprise, et tu gardes l'accès jusqu'à la fin de l'essai même si tu annules
+          immédiatement.
         </p>
 
-        <ul className="mt-6 flex flex-col gap-2">
-          {FEATURES.map((f) => (
-            <li key={f} className="flex items-start gap-2 text-sm text-ink-800/80 dark:text-sand-100/80">
-              <span className="text-sage-500">✓</span> {f}
-            </li>
-          ))}
-        </ul>
-
         <div className="mt-6 flex flex-col gap-3">
-          {PLANS.map((p) => (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => setSelected(p.id)}
-              className={`flex items-center justify-between rounded-2xl border-2 px-5 py-4 text-left transition-colors ${
-                selected === p.id
-                  ? 'border-coral-500 bg-coral-100/60 dark:bg-coral-500/10'
-                  : 'border-sage-200 dark:border-sage-700'
-              }`}
-            >
+          <button
+            type="button"
+            onClick={() => setSelected('yearly')}
+            className={`rounded-2xl border-2 px-5 py-4 text-left transition-colors ${
+              selected === 'yearly'
+                ? 'border-coral-500 bg-coral-100/60 dark:bg-coral-500/10'
+                : 'border-sage-200 dark:border-sage-700'
+            }`}
+          >
+            <div className="flex items-center justify-between">
               <span className="font-semibold text-ink-800 dark:text-sand-100">
-                {p.label} {p.highlight && '· le plus choisi'}
+                Annuel · économise {yearlySavings} € la 1ère année
               </span>
-              <span className="text-ink-800/70 dark:text-sand-100/70">{p.price}</span>
-            </button>
-          ))}
+              <span className="text-ink-800/70 dark:text-sand-100/70">
+                {pricing.yearly.introPrice} €/an
+              </span>
+            </div>
+            <p className="mt-1 text-sm text-ink-800/60 dark:text-sand-100/60">
+              Soit {yearlyMonthlyEquivalent} €/mois, garanti {pricing.yearly.introYears} ans, puis{' '}
+              {pricing.yearly.price} €/an
+            </p>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSelected('monthly')}
+            className={`rounded-2xl border-2 px-5 py-4 text-left transition-colors ${
+              selected === 'monthly'
+                ? 'border-coral-500 bg-coral-100/60 dark:bg-coral-500/10'
+                : 'border-sage-200 dark:border-sage-700'
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-ink-800 dark:text-sand-100">Mensuel</span>
+              <span className="text-ink-800/70 dark:text-sand-100/70">
+                {pricing.monthly.introPrice} €/mois
+              </span>
+            </div>
+            <p className="mt-1 text-sm text-ink-800/60 dark:text-sand-100/60">
+              Pendant {pricing.monthly.introMonths} mois, puis {pricing.monthly.price} €/mois
+            </p>
+          </button>
         </div>
 
         <Button className="mt-6 w-full" onClick={handleStart}>
-          Commencer l'essai gratuit
+          {selected === 'monthly' ? "Commencer l'essai gratuit (3 jours)" : "S'abonner à l'annuel"}
         </Button>
-        {message && (
-          <p className="mt-3 text-center text-xs text-ink-800/50 dark:text-sand-100/50">
-            {message}
-          </p>
-        )}
+        <button
+          type="button"
+          onClick={() => navigate('/home')}
+          className="mt-3 w-full text-center text-sm text-ink-800/50 dark:text-sand-100/50"
+        >
+          Continuer avec la version gratuite
+        </button>
 
-        <p className="mt-4 text-center text-xs text-ink-800/40 dark:text-sand-100/40">
-          Annulable à tout moment, en un tap, avant la fin de l'essai.
+        <section className="mt-8">
+          <h2 className="text-lg font-semibold text-ink-800 dark:text-sand-100">
+            Ce que débloque Premium
+          </h2>
+          <ul className="mt-3 flex flex-col gap-2">
+            {TOP_BENEFITS.map((f) => (
+              <li key={f} className="flex items-start gap-2 text-sm text-ink-800/80 dark:text-sand-100/80">
+                <span className="text-sage-500">✓</span> {f}
+              </li>
+            ))}
+          </ul>
+
+          <button
+            type="button"
+            onClick={() => setShowComparison((s) => !s)}
+            className="mt-4 text-sm font-medium text-sage-600 dark:text-sage-400"
+          >
+            {showComparison ? 'Masquer le comparatif' : 'Voir le comparatif complet →'}
+          </button>
+
+          {showComparison && (
+            <div className="mt-4 overflow-hidden rounded-2xl bg-white dark:bg-ink-800">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-sage-100 dark:border-sage-700/40">
+                    <th className="p-3 font-semibold text-ink-800 dark:text-sand-100">Fonctionnalité</th>
+                    <th className="p-3 font-semibold text-ink-800/60 dark:text-sand-100/60">Gratuit</th>
+                    <th className="p-3 font-semibold text-coral-600 dark:text-coral-300">Premium</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {COMPARISON_TABLE.map((row) => (
+                    <tr key={row.feature} className="border-b border-sage-100 last:border-0 dark:border-sage-700/40">
+                      <td className="p-3 text-ink-800 dark:text-sand-100">{row.feature}</td>
+                      <td className="p-3 text-ink-800/60 dark:text-sand-100/60">{row.free}</td>
+                      <td className="p-3 text-coral-600 dark:text-coral-300">{row.premium}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+
+        <p className="mt-6 text-center text-xs text-ink-800/40 dark:text-sand-100/40">
+          Annulable à tout moment, en un tap.
         </p>
       </div>
     </main>
