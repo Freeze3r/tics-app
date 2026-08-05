@@ -1,4 +1,4 @@
-# Sooth (nom provisoire) — v1
+# Sooth — v1
 
 App de gestion des BFRB (onychophagie, dermatillomanie, trichotillomanie, tics...) : accueil rassurant, quiz de diagnostic, plan personnalisé, dashboard, tracker d'épisodes, bouton SOS, coach, journal, bibliothèque éducative, communauté, badges, thème clair/sombre. PWA React + Supabase, déployable gratuitement.
 

@@ -1,4 +1,4 @@
-import { supabase, getOrCreateAnonUser } from './supabase.js'
+import { supabase, getCurrentUser } from './supabase.js'
 
 const LOCAL_KEY = 'ticsEpisodes'
 
@@ -34,7 +34,8 @@ export async function logEpisode({ behaviorId, triggerContext, emotion, duration
 
   if (supabase) {
     try {
-      const user = await getOrCreateAnonUser()
+      const user = await getCurrentUser()
+      if (!user) return episode
       await supabase.from('episodes').insert({
         user_id: user.id,
         behavior_id: episode.behaviorId,

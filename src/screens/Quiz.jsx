@@ -47,6 +47,7 @@ export default function Quiz() {
 
   function isAnswered() {
     const value = answers[question.key]
+    if (question.type === 'text') return true
     if (question.type === 'multi') return (value ?? []).length > 0
     return value !== undefined && value !== null
   }
@@ -72,7 +73,15 @@ export default function Quiz() {
           )}
 
           <div className="mt-6 flex flex-col gap-3">
-            {question.type === 'boolean' ? (
+            {question.type === 'text' ? (
+              <textarea
+                value={answers[question.key] ?? ''}
+                onChange={(e) => setSingle(question.key, e.target.value)}
+                placeholder="Par exemple : je tire sur la peau autour de mes ongles quand je stresse…"
+                rows={4}
+                className="w-full resize-none rounded-2xl border-2 border-sage-200 bg-transparent p-4 text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:text-sand-100 dark:placeholder:text-sand-100/40"
+              />
+            ) : question.type === 'boolean' ? (
               <div className="flex gap-3">
                 {[
                   { value: true, label: 'Oui' },

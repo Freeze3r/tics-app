@@ -1,4 +1,4 @@
-import { supabase, getOrCreateAnonUser } from './supabase.js'
+import { supabase, getCurrentUser } from './supabase.js'
 
 const LOCAL_KEY = 'ticsJournal'
 
@@ -30,7 +30,8 @@ export async function addJournalEntry({ mood, note }) {
 
   if (supabase) {
     try {
-      const user = await getOrCreateAnonUser()
+      const user = await getCurrentUser()
+      if (!user) return entry
       await supabase.from('journal_entries').insert({
         user_id: user.id,
         mood: entry.mood,

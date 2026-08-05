@@ -29,9 +29,9 @@ export default function Welcome() {
       </p>
 
       <div className="mt-10 flex flex-col gap-3">
-        <Button onClick={() => navigate('/quiz')}>Commencer en douceur</Button>
+        <Button onClick={() => navigate('/auth')}>Commencer en douceur</Button>
         <p className="text-sm text-ink-800/50 dark:text-sand-100/50">
-          2 minutes, aucune donnée partagée
+          2 minutes, tes données restent privées
         </p>
       </div>
     </main>

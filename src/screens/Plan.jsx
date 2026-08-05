@@ -52,9 +52,7 @@ export default function Plan() {
 
         {plan.suggestProfessional && (
           <div className="mt-6 rounded-2xl bg-coral-100 px-4 py-3 text-sm text-coral-600 dark:bg-coral-500/10 dark:text-coral-300">
-            Vu ce que tu nous as partagé, ça pourrait vraiment t'aider d'en parler aussi à un
-            professionnel (dermatologue ou psychologue spécialisé TCC/CBIT). L'app reste un bon
-            complément, pas un remplacement.
+            {plan.professionalSuggestion}
           </div>
         )}
 

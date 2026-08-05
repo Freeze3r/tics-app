@@ -6,7 +6,16 @@ export const QUIZ_QUESTIONS = [
     type: 'multi',
     title: 'Quel(s) comportement(s) te concernent ?',
     subtitle: 'Tu peux en choisir plusieurs.',
-    options: BEHAVIORS.map((b) => ({ value: b.id, label: b.label, sublabel: b.sublabel })),
+    options: [
+      ...BEHAVIORS.map((b) => ({ value: b.id, label: b.label, sublabel: b.sublabel })),
+      { value: 'other', label: 'Autre / Je ne sais pas trop', sublabel: 'On va t’aider à trouver ensemble' },
+    ],
+  },
+  {
+    key: 'freeText',
+    type: 'text',
+    title: 'Si tu veux, décris ce que tu fais avec tes mots',
+    subtitle: 'Optionnel — ça nous aide surtout si rien ne correspondait vraiment juste avant.',
   },
   {
     key: 'frequency',
