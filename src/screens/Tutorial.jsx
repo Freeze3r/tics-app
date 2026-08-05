@@ -7,22 +7,40 @@ import { markTutorialSeen } from '../lib/tutorial.js'
 
 const STEPS = [
   {
-    text: "Salut, moi c'est ta petite plante compagne. Je vais te montrer les 5 trucs à connaître, ça prend 30 secondes.",
+    icon: '👋',
+    menu: null,
+    title: 'Salut !',
+    text: "Moi c'est ta petite pousse compagne. Je vais te montrer les 5 menus en bas de l'écran, en quelques secondes chacun.",
   },
   {
-    text: "Le bouton SOS, en bas, c'est pour les envies fortes. Un tap, tu choisis ton comportement, on te guide.",
+    icon: '🏠',
+    menu: 'Accueil',
+    title: 'Accueil',
+    text: "Ta série de pratique, ton exercice du jour, et un accès direct à SOS ou au tracker. C'est ton point de départ à chaque ouverture.",
   },
   {
-    text: "Le Tracker organise ton programme en Saisons et Épisodes — un peu comme une série, mais pour reprendre le contrôle. Tu avances à ton rythme.",
+    icon: '🌿',
+    menu: 'SOS',
+    title: 'SOS',
+    text: "Envie forte là, maintenant ? Un tap ici, tu choisis ton comportement, on t'affiche l'exercice et tu lances le chrono quand tu es prêt·e.",
   },
   {
-    text: "Le Coach est là 24/7 si tu veux en parler, même de quelque chose qui n'a rien à voir avec tes tics.",
+    icon: '📝',
+    menu: 'Tracker',
+    title: 'Tracker',
+    text: 'Ton programme rangé en Saisons et Épisodes, comme une série à suivre à ton rythme. Tu peux aussi y noter un moment difficile, sans jugement.',
   },
   {
-    text: "Chaque jour où tu ouvres l'app et pratiques un peu, ça compte dans ta série 🔥. Un jour raté n'efface rien.",
+    icon: '💬',
+    menu: 'Coach',
+    title: 'Coach',
+    text: "Dispo 24/7 pour en parler — d'un épisode, d'une envie, ou d'autre chose. Il t'écoute vraiment, pas juste un bot mono-sujet.",
   },
   {
-    text: "Et la Communauté, c'est plein de gens comme toi qui partagent leurs petites victoires. Prêt·e ?",
+    icon: '🙂',
+    menu: 'Profil',
+    title: 'Profil',
+    text: 'Tes badges, ton titre, tes réglages de confidentialité, ton abonnement. Tout se passe là si tu veux ajuster quelque chose.',
   },
 ]
 
@@ -30,6 +48,7 @@ export default function Tutorial() {
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
   const isLast = step === STEPS.length - 1
+  const current = STEPS[step]
 
   function finish() {
     markTutorialSeen()
@@ -49,7 +68,11 @@ export default function Tutorial() {
       <Mascot size="lg" bounce />
 
       <div className="mt-6 max-w-sm rounded-3xl rounded-tl-none bg-white p-5 dark:bg-navy-800">
-        <p className="text-navy-800 dark:text-sand-100">{STEPS[step].text}</p>
+        <div className="flex items-center justify-center gap-2">
+          <span className="text-xl">{current.icon}</span>
+          <p className="font-semibold text-navy-800 dark:text-sand-100">{current.title}</p>
+        </div>
+        <p className="mt-2 text-navy-800/80 dark:text-sand-100/80">{current.text}</p>
       </div>
 
       <div className="mt-8">

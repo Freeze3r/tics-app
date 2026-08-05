@@ -8,6 +8,7 @@ import { TRIGGER_CONTEXTS, getBehavior } from '../data/behaviors.js'
 import { EMOTIONS, DURATIONS } from '../data/episodeOptions.js'
 import { getSeasons } from '../lib/seasons.js'
 import { getSeasonProgress, getNextEpisode } from '../lib/seasonProgress.js'
+import { isPremiumActive } from '../lib/subscription.js'
 
 function relativeTime(iso) {
   const diffMs = Date.now() - new Date(iso).getTime()
@@ -90,7 +91,7 @@ function BehaviorSeasonCard({ behavior, navigate }) {
             key={s.id}
             className="rounded-full bg-teal-100 px-3 py-1 text-xs text-navy-800/50 dark:bg-teal-700/20 dark:text-sand-100/50"
           >
-            🔒 {s.title} · bientôt
+            {isPremiumActive() ? `🔓 ${s.title} · débloqué, contenu bientôt` : `🔒 ${s.title} · premium`}
           </span>
         ))}
       </div>

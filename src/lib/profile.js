@@ -1,3 +1,5 @@
+import { BEHAVIORS } from '../data/behaviors.js'
+
 const PROFILE_KEY = 'ticsProfile'
 const PRACTICE_KEY = 'ticsPracticeDays'
 const DEEP_ANSWERS_KEY = 'ticsDeepAnswers'
@@ -32,6 +34,40 @@ export function loadDeepAnswers() {
   } catch {
     return null
   }
+}
+
+// Le quiz initial n'est pas figé pour toujours : on peut ajouter ou retirer un
+// comportement suivi depuis le profil (brief v2 section B1).
+export function addBehaviorToProfile(behaviorId) {
+  const profile = loadProfile()
+  const behavior = BEHAVIORS.find((b) => b.id === behaviorId)
+  if (!profile || !behavior) return profile
+  if (profile.plan.behaviors.some((b) => b.id === behaviorId)) return profile
+
+  const updatedPlan = {
+    ...profile.plan,
+    behaviors: [...profile.plan.behaviors, behavior],
+    exercisesByBehavior: [
+      ...profile.plan.exercisesByBehavior,
+      { behavior, exercises: behavior.exercises.slice(0, 3) },
+    ],
+  }
+  saveProfile(profile.answers, updatedPlan)
+  return loadProfile()
+}
+
+export function removeBehaviorFromProfile(behaviorId) {
+  const profile = loadProfile()
+  if (!profile) return profile
+  if (profile.plan.behaviors.length <= 1) return profile // toujours garder au moins un comportement
+
+  const updatedPlan = {
+    ...profile.plan,
+    behaviors: profile.plan.behaviors.filter((b) => b.id !== behaviorId),
+    exercisesByBehavior: profile.plan.exercisesByBehavior.filter((e) => e.behavior.id !== behaviorId),
+  }
+  saveProfile(profile.answers, updatedPlan)
+  return loadProfile()
 }
 
 // Basé sur le fuseau horaire local de l'utilisateur (dates calendaires), pas sur

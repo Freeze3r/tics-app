@@ -3,6 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { QUIZ_QUESTIONS } from '../data/quizQuestions.js'
+import { getUserSettings } from '../lib/userSettings.js'
+
+function personalize(title, name) {
+  if (!name) return title
+  return `${name}, ${title.charAt(0).toLowerCase()}${title.slice(1)}`
+}
 
 function OptionCard({ selected, onClick, label, sublabel }) {
   return (
@@ -27,8 +33,10 @@ export default function Quiz() {
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState({ behaviors: [], triggers: [] })
+  const [userName] = useState(() => getUserSettings().displayName)
 
   const question = QUIZ_QUESTIONS[step]
+  const displayTitle = question.personalizable ? personalize(question.title, userName) : question.title
   const isLast = step === QUIZ_QUESTIONS.length - 1
 
   function toggleMulti(key, value) {
@@ -67,7 +75,7 @@ export default function Quiz() {
         <ProgressDots total={QUIZ_QUESTIONS.length} current={step} />
 
         <div className="mt-8 flex-1">
-          <h1 className="text-2xl font-bold text-navy-800 dark:text-sand-100">{question.title}</h1>
+          <h1 className="text-2xl font-bold text-navy-800 dark:text-sand-100">{displayTitle}</h1>
           {question.subtitle && (
             <p className="mt-2 text-navy-800/60 dark:text-sand-100/60">{question.subtitle}</p>
           )}

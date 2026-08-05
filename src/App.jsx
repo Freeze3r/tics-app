@@ -18,6 +18,7 @@ import DeepQuiz from './screens/DeepQuiz.jsx'
 import EpisodePlayer from './screens/EpisodePlayer.jsx'
 import Settings from './screens/Settings.jsx'
 import Tutorial from './screens/Tutorial.jsx'
+import RoutineExercise from './screens/RoutineExercise.jsx'
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/tracker" element={<Tracker />} />
             <Route path="/episode/:behaviorId/:episodeId" element={<EpisodePlayer />} />
+            <Route path="/routine/:period" element={<RoutineExercise />} />
             <Route path="/sos" element={<Sos />} />
             <Route path="/coach" element={<Coach />} />
             <Route path="/journal" element={<Journal />} />

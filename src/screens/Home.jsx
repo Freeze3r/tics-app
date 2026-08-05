@@ -10,6 +10,7 @@ import { canRestoreStreak, restoreStreak } from '../lib/streak.js'
 import { isPremiumActive } from '../lib/subscription.js'
 import { getSeasons } from '../lib/seasons.js'
 import { getNextEpisode } from '../lib/seasonProgress.js'
+import { DAILY_ROUTINE, currentPeriod } from '../data/dailyRoutine.js'
 
 function dayOfYear() {
   const now = new Date()
@@ -49,6 +50,8 @@ export default function Home() {
     ...plan.exercisesByBehavior.flatMap((e) => e.exercises),
   ]
   const todayExercise = dailyPool[dayOfYear() % dailyPool.length]
+
+  const routine = DAILY_ROUTINE[currentPeriod()]
 
   const primaryBehavior = plan.behaviors[0]
   const primarySeason = primaryBehavior ? getSeasons(primaryBehavior)[0] : null
@@ -123,6 +126,17 @@ export default function Home() {
             Noter un moment difficile
           </Button>
         </div>
+
+        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
+          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+            {routine.icon} Routine du {routine.label.toLowerCase()}
+          </p>
+          <p className="mt-1 font-semibold text-navy-800 dark:text-sand-100">{routine.title}</p>
+          <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">{routine.detail}</p>
+          <Button variant="secondary" className="mt-3 w-full" onClick={() => navigate(`/routine/${routine.period}`)}>
+            Faire l'exercice ({routine.timerSeconds}s)
+          </Button>
+        </section>
 
         {nextEpisode && (
           <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">

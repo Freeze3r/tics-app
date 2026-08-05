@@ -1,4 +1,7 @@
+import { useEffect } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
+import { getUserSettings } from '../lib/userSettings.js'
+import { checkAndFireReminders } from '../lib/notifications.js'
 
 const NAV_ITEMS = [
   { to: '/home', label: 'Accueil', icon: '🏠' },
@@ -9,6 +12,16 @@ const NAV_ITEMS = [
 ]
 
 export default function AppShell() {
+  useEffect(() => {
+    // Vérifie les rappels toutes les minutes tant que l'app est ouverte quelque
+    // part (onglet actif ou en arrière-plan) — pas de vraie notification push
+    // serveur pour l'instant, voir lib/notifications.js.
+    const check = () => checkAndFireReminders(getUserSettings())
+    check()
+    const interval = setInterval(check, 60_000)
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <div className="flex min-h-svh flex-1 flex-col bg-teal-50 dark:bg-navy-900">
       <div className="flex-1 pb-20">

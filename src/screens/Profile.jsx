@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
-import { loadProfile, getPracticeStats } from '../lib/profile.js'
+import { loadProfile, getPracticeStats, addBehaviorToProfile, removeBehaviorFromProfile } from '../lib/profile.js'
+import { BEHAVIORS } from '../data/behaviors.js'
 import { getBadges } from '../lib/badges.js'
 import { getTheme, applyTheme } from '../lib/theme.js'
-import { getUserSettings } from '../lib/userSettings.js'
+import { getUserSettings, saveUserSettings } from '../lib/userSettings.js'
+import { getAccountCreatedAt, getUnlockedTitles, TENURE_TITLES } from '../lib/tenure.js'
 import { isPremiumActive, getSubscription, cancelSubscription } from '../lib/subscription.js'
 import { getSeasons } from '../lib/seasons.js'
 import { getSeasonProgress, getNextEpisode } from '../lib/seasonProgress.js'
@@ -43,13 +45,23 @@ const LOCAL_KEYS = [
 
 export default function Profile() {
   const navigate = useNavigate()
-  const [profile] = useState(() => loadProfile())
+  const [profile, setProfile] = useState(() => loadProfile())
+  const [showAddBehavior, setShowAddBehavior] = useState(false)
+  const [unlockedTitles, setUnlockedTitles] = useState([])
+  const [settings, setSettingsState] = useState(() => getUserSettings())
   const stats = getPracticeStats()
+
+  useEffect(() => {
+    getAccountCreatedAt().then((createdAt) => {
+      setUnlockedTitles(getUnlockedTitles(createdAt))
+    })
+  }, [])
+
+  const selectedTitle = TENURE_TITLES.find((t) => t.id === settings.selectedTitleId)
   const badges = getBadges()
   const unlockedCount = badges.filter((b) => b.unlocked).length
   const [theme, setTheme] = useState(() => getTheme())
   const [expandedBadge, setExpandedBadge] = useState(null)
-  const settings = getUserSettings()
   const [premium, setPremium] = useState(() => isPremiumActive())
   const [subscription, setSubscription] = useState(() => getSubscription())
   const [showAdvanced, setShowAdvanced] = useState(false)
@@ -86,6 +98,26 @@ export default function Profile() {
     navigate('/', { replace: true })
   }
 
+  function handleAddBehavior(behaviorId) {
+    setProfile(addBehaviorToProfile(behaviorId))
+    setShowAddBehavior(false)
+  }
+
+  function handleRemoveBehavior(behaviorId, label) {
+    if (profile.plan.behaviors.length <= 1) return
+    const confirmed = window.confirm(`Retirer "${label}" de tes comportements suivis ?`)
+    if (!confirmed) return
+    setProfile(removeBehaviorFromProfile(behaviorId))
+  }
+
+  const trackedIds = new Set(profile.plan.behaviors.map((b) => b.id))
+  const availableToAdd = BEHAVIORS.filter((b) => !trackedIds.has(b.id))
+
+  async function handleSelectTitle(titleId) {
+    const next = await saveUserSettings({ selectedTitleId: titleId })
+    setSettingsState(next)
+  }
+
   return (
     <main className="px-6 py-8">
       <div className="mx-auto max-w-md pb-6">
@@ -98,6 +130,11 @@ export default function Profile() {
               <h1 className="text-xl font-bold text-navy-800 dark:text-sand-100">
                 {settings.displayName || 'Ton profil'}
               </h1>
+              {selectedTitle && (
+                <span className="rounded-full bg-teal-100 px-2 py-0.5 text-xs font-semibold text-teal-700 dark:bg-teal-700/30 dark:text-teal-300">
+                  {selectedTitle.icon} {selectedTitle.label}
+                </span>
+              )}
               {premium && (
                 <span className="rounded-full bg-coral-100 px-2 py-0.5 text-xs font-semibold text-coral-600 dark:bg-coral-500/10 dark:text-coral-300">
                   ⭐ Premium
@@ -112,6 +149,33 @@ export default function Profile() {
         <Button variant="ghost" className="mt-3" onClick={() => navigate('/settings')}>
           Modifier mon profil
         </Button>
+
+        {unlockedTitles.length > 0 && (
+          <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
+            <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+              Ton titre d'ancienneté
+            </p>
+            <p className="mt-1 text-xs text-navy-800/50 dark:text-sand-100/50">
+              Choisis lequel afficher — indépendant des badges, ça récompense juste le temps passé avec nous.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {unlockedTitles.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => handleSelectTitle(t.id)}
+                  className={`rounded-full border-2 px-3 py-1.5 text-xs font-medium ${
+                    settings.selectedTitleId === t.id
+                      ? 'border-coral-500 bg-coral-100/60 text-coral-600 dark:bg-coral-500/10 dark:text-coral-300'
+                      : 'border-teal-200 text-navy-800/70 dark:border-teal-700 dark:text-sand-100/70'
+                  }`}
+                >
+                  {t.icon} {t.label}
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
           <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">Ton plan</p>
@@ -132,9 +196,21 @@ export default function Profile() {
                 <div key={b.id} className="rounded-2xl bg-teal-50 p-3 dark:bg-navy-900/40">
                   <div className="flex items-center justify-between text-sm">
                     <span className="font-medium text-navy-800 dark:text-sand-100">{b.label}</span>
-                    <span className="text-xs text-navy-800/50 dark:text-sand-100/50">
-                      {progress.completed}/{progress.total}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-navy-800/50 dark:text-sand-100/50">
+                        {progress.completed}/{progress.total}
+                      </span>
+                      {profile.plan.behaviors.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveBehavior(b.id, b.label)}
+                          title="Retirer ce comportement"
+                          className="text-navy-800/30 hover:text-coral-500 dark:text-sand-100/30"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
                   </div>
                   <div className="mt-1.5 h-1.5 rounded-full bg-teal-200 dark:bg-teal-700/40">
                     <div className="h-1.5 rounded-full bg-coral-500" style={{ width: `${percent}%` }} />
@@ -152,6 +228,40 @@ export default function Profile() {
               )
             })}
           </div>
+
+          {availableToAdd.length > 0 && (
+            <div className="mt-3">
+              {!showAddBehavior ? (
+                <button
+                  type="button"
+                  onClick={() => setShowAddBehavior(true)}
+                  className="text-sm font-medium text-teal-600 dark:text-teal-400"
+                >
+                  + Ajouter un comportement
+                </button>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {availableToAdd.map((b) => (
+                    <button
+                      key={b.id}
+                      type="button"
+                      onClick={() => handleAddBehavior(b.id)}
+                      className="rounded-full border-2 border-teal-200 px-3 py-1.5 text-xs text-navy-800/70 dark:border-teal-700 dark:text-sand-100/70"
+                    >
+                      + {b.label}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setShowAddBehavior(false)}
+                    className="text-xs text-navy-800/40 dark:text-sand-100/40"
+                  >
+                    Annuler
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </section>
 
         <section className="mt-6">

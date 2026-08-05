@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import { getUserSettings, saveUserSettings } from '../lib/userSettings.js'
+import { requestNotificationPermission, isNotificationSupported } from '../lib/notifications.js'
 
 const AVATARS = ['🌿', '🦋', '🌙', '⭐️', '🌸', '🍃', '🐣', '🌊']
 const GENDERS = ['Femme', 'Homme', 'Non-binaire', 'Autre']
@@ -28,6 +29,17 @@ export default function Settings() {
 
   function update(patch) {
     setSettings((prev) => ({ ...prev, ...patch }))
+  }
+
+  async function handleToggleReminders(enabled) {
+    if (enabled) {
+      const permission = await requestNotificationPermission()
+      if (permission !== 'granted') {
+        update({ remindersEnabled: false })
+        return
+      }
+    }
+    update({ remindersEnabled: enabled })
   }
 
   async function handleSave() {
@@ -212,6 +224,49 @@ export default function Settings() {
             </div>
           )}
         </section>
+
+        {isNotificationSupported() && (
+          <section className="mt-4 rounded-2xl bg-white p-5 dark:bg-navy-800">
+            <label className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+                Rappels quotidiens
+              </span>
+              <input
+                type="checkbox"
+                checked={settings.remindersEnabled}
+                onChange={(e) => handleToggleReminders(e.target.checked)}
+                className="h-5 w-5 accent-coral-500"
+              />
+            </label>
+            <p className="mt-1 text-xs text-navy-800/50 dark:text-sand-100/50">
+              Un rappel matin/midi/soir vers un exercice réel de 30s à 3 min. Fonctionne tant
+              que l'app reste ouverte dans un onglet — pas encore de vraie notification quand
+              l'app est complètement fermée.
+            </p>
+
+            {settings.remindersEnabled && (
+              <div className="mt-3 flex flex-col gap-2">
+                {[
+                  { key: 'morning', label: '🌅 Matin' },
+                  { key: 'noon', label: '☀️ Midi' },
+                  { key: 'evening', label: '🌙 Soir' },
+                ].map((slot) => (
+                  <div key={slot.key} className="flex items-center justify-between gap-2">
+                    <span className="text-sm text-navy-800/80 dark:text-sand-100/80">{slot.label}</span>
+                    <input
+                      type="time"
+                      value={settings.reminderTimes?.[slot.key] ?? ''}
+                      onChange={(e) =>
+                        update({ reminderTimes: { ...settings.reminderTimes, [slot.key]: e.target.value } })
+                      }
+                      className="rounded-xl border-2 border-teal-200 bg-transparent px-2 py-1 text-sm text-navy-800 dark:border-teal-700 dark:text-sand-100"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
 
         <Button className="mt-6 w-full" onClick={handleSave} disabled={saving}>
           {saving ? 'Enregistrement…' : isOnboarding ? 'Continuer' : 'Enregistrer'}

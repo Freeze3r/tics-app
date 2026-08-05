@@ -20,8 +20,10 @@ function buildSeasonOne(behavior) {
       id: `exercise-${i}`,
       type: 'exercise',
       title: ex.title,
-      duration: '2 min',
+      duration: ex.timerSeconds ? `${Math.round(ex.timerSeconds / 60) || 1} min` : '2 min',
       content: ex.detail,
+      steps: ex.steps,
+      timerSeconds: ex.timerSeconds,
     })
   })
 
@@ -38,8 +40,10 @@ function buildSeasonOne(behavior) {
       id: `transversal-${i}`,
       type: 'exercise',
       title: ex.title,
-      duration: '3-5 min',
+      duration: ex.timerSeconds ? `${Math.round(ex.timerSeconds / 60) || 1} min` : '3-5 min',
       content: ex.detail,
+      steps: ex.steps,
+      timerSeconds: ex.timerSeconds,
     })
   })
 

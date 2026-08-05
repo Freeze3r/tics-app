@@ -13,6 +13,9 @@ const DEFAULTS = {
   communityPublic: false,
   communityPseudo: '',
   avatarEmoji: '🌿',
+  selectedTitleId: null,
+  remindersEnabled: false,
+  reminderTimes: { morning: '08:00', noon: '13:00', evening: '21:00' },
 }
 
 function randomPseudoSuffix() {

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { BEHAVIORS } from '../data/behaviors.js'
 import { loadProfile } from '../lib/profile.js'
 import { isChecked, toggleChecked } from '../lib/checklist.js'
+import Chip from '../components/Chip.jsx'
 
 function BehaviorCard({ behavior }) {
   const [open, setOpen] = useState(false)
@@ -23,13 +24,33 @@ function BehaviorCard({ behavior }) {
 
       {open && (
         <div className="mt-4 flex flex-col gap-4">
-          <p className="text-sm leading-relaxed text-navy-800/70 dark:text-sand-100/70">
-            {behavior.mechanism}
-          </p>
+          <div className="rounded-2xl bg-teal-50 p-3 dark:bg-navy-900/40">
+            <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-teal-700 dark:text-teal-300">
+              🧠 Comprendre
+            </p>
+            <p className="text-sm leading-relaxed text-navy-800/70 dark:text-sand-100/70">
+              {behavior.mechanism}
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-coral-100/40 p-3 dark:bg-coral-500/5">
+            <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-coral-600 dark:text-coral-300">
+              🏃 Exercices
+            </p>
+            <ul className="flex flex-col gap-1.5">
+              {behavior.exercises.map((ex) => (
+                <li key={ex.title} className="text-sm text-navy-800/80 dark:text-sand-100/80">
+                  <span className="font-medium text-navy-800 dark:text-sand-100">{ex.title}</span>
+                  {' — '}
+                  {ex.detail}
+                </li>
+              ))}
+            </ul>
+          </div>
 
           <div>
-            <p className="mb-2 text-sm font-semibold text-teal-600 dark:text-teal-400">
-              Barrières physiques à essayer
+            <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-teal-600 dark:text-teal-400">
+              🛡️ Barrières physiques à essayer
             </p>
             <div className="flex flex-col gap-2">
               {behavior.barriers.map((item) => {
@@ -62,6 +83,7 @@ function BehaviorCard({ behavior }) {
 
 export default function Library() {
   const [profile] = useState(() => loadProfile())
+  const [filter, setFilter] = useState('all')
 
   useEffect(() => {
     localStorage.setItem('ticsLibraryVisited', '1')
@@ -69,6 +91,7 @@ export default function Library() {
 
   const ownIds = new Set(profile?.plan.behaviors.map((b) => b.id) ?? [])
   const ordered = [...BEHAVIORS].sort((a, b) => (ownIds.has(b.id) ? 1 : 0) - (ownIds.has(a.id) ? 1 : 0))
+  const filtered = filter === 'all' ? ordered : ordered.filter((b) => b.id === filter)
 
   return (
     <main className="px-6 py-8">
@@ -105,8 +128,19 @@ export default function Library() {
           </p>
         </section>
 
-        <section className="mt-6 flex flex-col gap-3">
+        <div className="mt-6 flex flex-wrap gap-2">
+          <Chip selected={filter === 'all'} onClick={() => setFilter('all')}>
+            Tout
+          </Chip>
           {ordered.map((b) => (
+            <Chip key={b.id} selected={filter === b.id} onClick={() => setFilter(b.id)}>
+              {b.label}
+            </Chip>
+          ))}
+        </div>
+
+        <section className="mt-3 flex flex-col gap-3">
+          {filtered.map((b) => (
             <BehaviorCard key={b.id} behavior={b} />
           ))}
         </section>

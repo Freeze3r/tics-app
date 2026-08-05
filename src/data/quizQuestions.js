@@ -5,6 +5,7 @@ export const QUIZ_QUESTIONS = [
     key: 'behaviors',
     type: 'multi',
     title: 'Quel(s) comportement(s) te concernent ?',
+    personalizable: true,
     subtitle: 'Tu peux en choisir plusieurs.',
     options: [
       ...BEHAVIORS.map((b) => ({ value: b.id, label: b.label, sublabel: b.sublabel })),
@@ -49,6 +50,7 @@ export const QUIZ_QUESTIONS = [
     type: 'single',
     title: 'Quel est ton objectif ?',
     subtitle: 'Il n’y a pas de bonne ou mauvaise réponse.',
+    personalizable: true,
     options: [
       { value: 'reduction', label: 'Réduire progressivement' },
       { value: 'stop', label: 'Arrêter complètement' },
