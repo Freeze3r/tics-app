@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+/* Dark mode piloté par la classe .dark sur <html> (voir src/lib/theme.js),
+   plutôt que par la seule préférence système — nécessaire pour un toggle manuel. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Nunito", system-ui, "Segoe UI", Roboto, sans-serif;
+
+  /* sauge */
+  --color-sage-50: #f4f7f4;
+  --color-sage-100: #e4ece3;
+  --color-sage-200: #cadbc8;
+  --color-sage-300: #a6c2a3;
+  --color-sage-400: #82a67e;
+  --color-sage-500: #648c60;
+  --color-sage-600: #4d704a;
+  --color-sage-700: #3f5a3d;
+
+  /* sable */
+  --color-sand-50: #fbf8f3;
+  --color-sand-100: #f4ecdd;
+  --color-sand-200: #e8d8bc;
+  --color-sand-300: #dabf92;
+  --color-sand-400: #cba76a;
+
+  /* corail / terracotta doux - accent */
+  --color-coral-100: #fbe4dc;
+  --color-coral-300: #f2b3a0;
+  --color-coral-400: #ea9179;
+  --color-coral-500: #de7259;
+  --color-coral-600: #c05c45;
+
+  /* neutres chauds pour le dark mode */
+  --color-ink-50: #f7f5f2;
+  --color-ink-800: #2b2622;
+  --color-ink-900: #1e1b18;
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--color-sage-50);
+  color: var(--color-ink-800);
+}
+
+.dark body {
+  background: var(--color-ink-900);
+  color: var(--color-sand-100);
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
