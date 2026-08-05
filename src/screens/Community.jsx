@@ -4,6 +4,7 @@ import Chip from '../components/Chip.jsx'
 import { BEHAVIORS, getBehavior } from '../data/behaviors.js'
 import { listPosts, addPost } from '../lib/community.js'
 import { loadProfile } from '../lib/profile.js'
+import { isPremiumActive } from '../lib/subscription.js'
 
 function relativeTime(iso) {
   const diffMs = Date.now() - new Date(iso).getTime()
@@ -95,6 +96,11 @@ export default function Community() {
                 <div className="flex items-center justify-between text-xs text-ink-800/50 dark:text-sand-100/50">
                   <span className="font-medium text-sage-600 dark:text-sage-400">
                     {post.author} {post.isMine && '· toi'}
+                    {post.isMine && isPremiumActive() && (
+                      <span className="ml-1 rounded-full bg-coral-100 px-2 py-0.5 text-coral-600 dark:bg-coral-500/10 dark:text-coral-300">
+                        ⭐ Premium
+                      </span>
+                    )}
                   </span>
                   <span>{relativeTime(post.createdAt)}</span>
                 </div>

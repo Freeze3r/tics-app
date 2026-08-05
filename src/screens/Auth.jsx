@@ -54,7 +54,13 @@ export default function Auth() {
         setError('Vérifie ta boîte mail pour confirmer ton compte, puis reviens te connecter.')
         return
       }
-      navigate(loadProfile() ? '/home' : '/quiz')
+      if (loadProfile()) {
+        navigate('/home')
+      } else if (mode === 'signup') {
+        navigate('/settings?onboarding=1')
+      } else {
+        navigate('/quiz')
+      }
     } catch (err) {
       setError(friendlyError(err.message))
     } finally {

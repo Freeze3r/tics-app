@@ -1,4 +1,5 @@
 import { SEED_POSTS } from '../data/communityPosts.js'
+import { getCommunityDisplayName } from './userSettings.js'
 
 const LOCAL_KEY = 'ticsCommunityPosts'
 
@@ -32,7 +33,7 @@ export function addPost({ behaviorId, text }) {
   const post = {
     id: crypto.randomUUID(),
     behaviorId,
-    author: 'Toi',
+    author: getCommunityDisplayName(),
     text,
     createdAt: new Date().toISOString(),
     isMine: true,
