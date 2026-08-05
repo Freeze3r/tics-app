@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import { supabase, getCurrentUser, signUpWithEmail, signInWithEmail, signInWithGoogle } from '../lib/supabase.js'
 import { loadProfile } from '../lib/profile.js'
@@ -16,7 +16,8 @@ function friendlyError(message) {
 
 export default function Auth() {
   const navigate = useNavigate()
-  const [mode, setMode] = useState('signup') // signup | login
+  const [searchParams] = useSearchParams()
+  const [mode, setMode] = useState(searchParams.get('mode') === 'login' ? 'login' : 'signup')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
@@ -83,40 +84,65 @@ export default function Auth() {
     <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-sage-50 px-6 py-12 dark:bg-ink-900">
       <div className="w-full max-w-sm">
         <h1 className="text-center text-2xl font-bold text-ink-800 dark:text-sand-100">
-          {mode === 'signup' ? 'Crée ton espace' : 'Bon retour'}
+          {mode === 'signup' ? 'Crée ton compte' : 'Bon retour'}
         </h1>
         <p className="mt-2 text-center text-ink-800/60 dark:text-sand-100/60">
-          Pour garder ton plan et ta progression en sécurité, où que tu te connectes.
+          {mode === 'signup'
+            ? 'Pour garder ton plan et ta progression en sécurité, où que tu te connectes.'
+            : 'Connecte-toi pour retrouver ton plan et ta progression.'}
         </p>
 
-        <Button variant="secondary" className="mt-8 w-full" onClick={handleGoogle}>
-          Continuer avec Google
-        </Button>
+        {mode === 'login' && (
+          <>
+            <Button variant="secondary" className="mt-8 w-full" onClick={handleGoogle}>
+              Continuer avec Google
+            </Button>
 
-        <div className="my-5 flex items-center gap-3">
-          <div className="h-px flex-1 bg-sage-200 dark:bg-sage-700" />
-          <span className="text-xs text-ink-800/40 dark:text-sand-100/40">ou</span>
-          <div className="h-px flex-1 bg-sage-200 dark:bg-sage-700" />
-        </div>
+            <div className="my-5 flex items-center gap-3">
+              <div className="h-px flex-1 bg-sage-200 dark:bg-sage-700" />
+              <span className="text-xs text-ink-800/40 dark:text-sand-100/40">ou</span>
+              <div className="h-px flex-1 bg-sage-200 dark:bg-sage-700" />
+            </div>
+          </>
+        )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            className="rounded-2xl border-2 border-sage-200 bg-white px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:bg-ink-800 dark:text-sand-100"
-          />
-          <input
-            type="password"
-            required
-            minLength={6}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Mot de passe"
-            className="rounded-2xl border-2 border-sage-200 bg-white px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:bg-ink-800 dark:text-sand-100"
-          />
+        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+          <div>
+            <label
+              htmlFor="auth-email"
+              className="mb-1 block text-sm font-medium text-ink-800 dark:text-sand-100"
+            >
+              Email
+            </label>
+            <input
+              id="auth-email"
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="toi@exemple.com"
+              className="w-full rounded-2xl border-2 border-sage-200 bg-white px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:bg-ink-800 dark:text-sand-100"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="auth-password"
+              className="mb-1 block text-sm font-medium text-ink-800 dark:text-sand-100"
+            >
+              Mot de passe
+            </label>
+            <input
+              id="auth-password"
+              type="password"
+              required
+              minLength={6}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="6 caractères minimum"
+              className="w-full rounded-2xl border-2 border-sage-200 bg-white px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:bg-ink-800 dark:text-sand-100"
+            />
+          </div>
 
           {error && <p className="text-sm text-coral-600 dark:text-coral-300">{error}</p>}
 
@@ -133,7 +159,7 @@ export default function Auth() {
           }}
           className="mt-5 w-full text-center text-sm text-sage-600 dark:text-sage-400"
         >
-          {mode === 'signup' ? 'Déjà un compte ? Se connecter' : "Pas encore de compte ? S'inscrire"}
+          {mode === 'signup' ? 'Déjà un compte ? Se connecter' : "Pas encore de compte ? Créer un compte"}
         </button>
       </div>
     </main>

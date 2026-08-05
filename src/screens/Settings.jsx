@@ -87,34 +87,46 @@ export default function Settings() {
               ))}
             </div>
 
-            <div className="mt-5 flex items-center gap-2">
-              <input
-                type="text"
-                value={settings.displayName}
-                onChange={(e) => update({ displayName: e.target.value })}
-                placeholder="Prénom ou pseudo"
-                className="flex-1 rounded-2xl border-2 border-sage-200 bg-transparent px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:text-sand-100"
-              />
-              <EyeToggle
-                hidden={settings.displayNameHidden}
-                onToggle={() => update({ displayNameHidden: !settings.displayNameHidden })}
-              />
+            <div className="mt-5">
+              <label htmlFor="settings-name" className="mb-1 block text-sm font-medium text-ink-800 dark:text-sand-100">
+                Prénom ou pseudo
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  id="settings-name"
+                  type="text"
+                  value={settings.displayName}
+                  onChange={(e) => update({ displayName: e.target.value })}
+                  placeholder="Ex : Alex"
+                  className="flex-1 rounded-2xl border-2 border-sage-200 bg-transparent px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:text-sand-100"
+                />
+                <EyeToggle
+                  hidden={settings.displayNameHidden}
+                  onToggle={() => update({ displayNameHidden: !settings.displayNameHidden })}
+                />
+              </div>
             </div>
 
-            <div className="mt-3 flex items-center gap-2">
-              <input
-                type="number"
-                min="13"
-                max="120"
-                value={settings.age}
-                onChange={(e) => update({ age: e.target.value })}
-                placeholder="Âge"
-                className="flex-1 rounded-2xl border-2 border-sage-200 bg-transparent px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:text-sand-100"
-              />
-              <EyeToggle
-                hidden={settings.ageHidden}
-                onToggle={() => update({ ageHidden: !settings.ageHidden })}
-              />
+            <div className="mt-3">
+              <label htmlFor="settings-age" className="mb-1 block text-sm font-medium text-ink-800 dark:text-sand-100">
+                Âge
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  id="settings-age"
+                  type="number"
+                  min="13"
+                  max="120"
+                  value={settings.age}
+                  onChange={(e) => update({ age: e.target.value })}
+                  placeholder="Ex : 24"
+                  className="flex-1 rounded-2xl border-2 border-sage-200 bg-transparent px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:text-sand-100"
+                />
+                <EyeToggle
+                  hidden={settings.ageHidden}
+                  onToggle={() => update({ ageHidden: !settings.ageHidden })}
+                />
+              </div>
             </div>
 
             <div className="mt-4">
@@ -185,13 +197,19 @@ export default function Settings() {
           </div>
 
           {settings.communityPublic && (
-            <input
-              type="text"
-              value={settings.communityPseudo}
-              onChange={(e) => update({ communityPseudo: e.target.value })}
-              placeholder="Ton pseudo public"
-              className="mt-3 w-full rounded-2xl border-2 border-sage-200 bg-transparent px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:text-sand-100"
-            />
+            <div className="mt-3">
+              <label htmlFor="settings-pseudo" className="mb-1 block text-sm font-medium text-ink-800 dark:text-sand-100">
+                Pseudo public
+              </label>
+              <input
+                id="settings-pseudo"
+                type="text"
+                value={settings.communityPseudo}
+                onChange={(e) => update({ communityPseudo: e.target.value })}
+                placeholder="Ton pseudo public"
+                className="w-full rounded-2xl border-2 border-sage-200 bg-transparent px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:text-sand-100"
+              />
+            </div>
           )}
         </section>
 

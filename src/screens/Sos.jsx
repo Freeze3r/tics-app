@@ -93,9 +93,20 @@ export default function Sos() {
           <h1 className="mt-2 max-w-sm text-xl font-bold text-ink-800 dark:text-sand-100">
             {exercise.title}
           </h1>
-          <p className="mt-3 max-w-sm text-ink-800/70 dark:text-sand-100/70">{exercise.detail}</p>
+          {exercise.steps ? (
+            <ol className="mt-4 flex w-full max-w-sm flex-col gap-2 text-left">
+              {exercise.steps.map((step, i) => (
+                <li key={i} className="flex gap-2 text-sm text-ink-800/80 dark:text-sand-100/80">
+                  <span className="shrink-0 font-semibold text-coral-500">{i + 1}.</span>
+                  {step}
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="mt-3 max-w-sm text-ink-800/70 dark:text-sand-100/70">{exercise.detail}</p>
+          )}
           <p className="mt-4 text-sm text-ink-800/50 dark:text-sand-100/50">
-            Lis bien l'exercice, installe-toi, puis lance le chrono quand tu es prêt·e.
+            Lis bien les étapes, installe-toi, puis lance le chrono quand tu es prêt·e.
           </p>
 
           <Button className="mt-8 w-full max-w-sm" onClick={startTimer}>

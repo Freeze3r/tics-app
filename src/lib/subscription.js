@@ -32,14 +32,22 @@ export function getSubscription() {
   return read()
 }
 
+// Démarre un nouvel abonnement, ou change de palier (mensuel <-> annuel) sur un
+// abonnement existant. Changer d'offre ne redonne pas un essai gratuit et ne
+// réinitialise pas la date de départ (utilisée pour l'offre de fidélité).
 export function startTrial(plan) {
+  const existing = read()
   const now = Date.now()
+  const isNewSubscription = !existing
+
   const sub = {
     plan, // 'monthly' | 'yearly'
-    startedAt: new Date(now).toISOString(),
-    trialEndsAt: plan === 'monthly' ? new Date(now + TRIAL_DAYS * DAY_MS).toISOString() : null,
+    startedAt: existing?.startedAt ?? new Date(now).toISOString(),
+    trialEndsAt: isNewSubscription && plan === 'monthly'
+      ? new Date(now + TRIAL_DAYS * DAY_MS).toISOString()
+      : (existing?.trialEndsAt ?? null),
     cancelledAt: null,
-    loyaltyOfferUsed: false,
+    loyaltyOfferUsed: existing?.loyaltyOfferUsed ?? false,
   }
   write(sub)
   return sub

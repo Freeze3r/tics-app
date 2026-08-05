@@ -2,14 +2,23 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import { TOP_BENEFITS, COMPARISON_TABLE } from '../data/premiumBenefits.js'
-import { getPricing, getLoyaltyOffer, startTrial, acceptLoyaltyOffer } from '../lib/subscription.js'
+import {
+  getPricing,
+  getLoyaltyOffer,
+  startTrial,
+  acceptLoyaltyOffer,
+  getSubscription,
+  isPremiumActive,
+} from '../lib/subscription.js'
 import { nextAfterOnboarding } from '../lib/tutorial.js'
 
 const pricing = getPricing()
 
 export default function Premium() {
   const navigate = useNavigate()
-  const [selected, setSelected] = useState('yearly')
+  const existingSub = getSubscription()
+  const alreadyPremium = isPremiumActive()
+  const [selected, setSelected] = useState(existingSub?.plan ?? 'yearly')
   const [showComparison, setShowComparison] = useState(false)
   const loyaltyOffer = getLoyaltyOffer()
 
@@ -19,14 +28,27 @@ export default function Premium() {
     pricing.monthly.price * (12 - pricing.monthly.introMonths)
   const yearlySavings = Math.round(monthlyOverOneYear - pricing.yearly.introPrice)
 
+  const isChangingPlan = alreadyPremium && existingSub?.plan !== selected
+  const isSamePlan = alreadyPremium && existingSub?.plan === selected
+
   function handleStart() {
     startTrial(selected)
+    if (alreadyPremium) {
+      navigate('/profil')
+      return
+    }
     navigate('/deep-quiz')
   }
 
   function handleAcceptLoyalty() {
     acceptLoyaltyOffer()
     navigate('/home')
+  }
+
+  function ctaLabel() {
+    if (isSamePlan) return 'Offre déjà active'
+    if (isChangingPlan) return selected === 'yearly' ? "Passer à l'annuel" : 'Passer au mensuel'
+    return selected === 'monthly' ? "Commencer l'essai gratuit (3 jours)" : "S'abonner à l'annuel"
   }
 
   return (
@@ -52,12 +74,12 @@ export default function Premium() {
         )}
 
         <h1 className="mt-4 text-2xl font-bold text-ink-800 dark:text-sand-100">
-          Va plus loin, à ton rythme
+          {alreadyPremium ? 'Change ou gère ton offre' : 'Va plus loin, à ton rythme'}
         </h1>
         <p className="mt-2 text-ink-800/70 dark:text-sand-100/70">
-          Essai gratuit de 3 jours sur le mensuel. On te prévient avant tout prélèvement — jamais
-          de surprise, et tu gardes l'accès jusqu'à la fin de l'essai même si tu annules
-          immédiatement.
+          {alreadyPremium
+            ? "Choisis un autre palier — le changement prend effet tout de suite, sans nouvel essai gratuit."
+            : "Essai gratuit de 3 jours sur le mensuel. On te prévient avant tout prélèvement — jamais de surprise, et tu gardes l'accès jusqu'à la fin de l'essai même si tu annules immédiatement."}
         </p>
 
         <div className="mt-6 flex flex-col gap-3">
@@ -70,14 +92,21 @@ export default function Premium() {
                 : 'border-sage-200 dark:border-sage-700'
             }`}
           >
-            <div className="flex items-center justify-between">
-              <span className="font-semibold text-ink-800 dark:text-sand-100">
-                Annuel · économise {yearlySavings} € la 1ère année
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="text-2xl font-bold text-ink-800 dark:text-sand-100">
+                {pricing.yearly.introPrice} €
+                <span className="text-sm font-normal text-ink-800/50 dark:text-sand-100/50">/an</span>
               </span>
-              <span className="text-ink-800/70 dark:text-sand-100/70">
-                {pricing.yearly.introPrice} €/an
-              </span>
+              {existingSub?.plan === 'yearly' && (
+                <span className="rounded-full bg-sage-200 px-2 py-0.5 text-xs font-semibold text-sage-700 dark:bg-sage-700/40 dark:text-sage-300">
+                  Offre actuelle
+                </span>
+              )}
             </div>
+            <p className="mt-1 font-semibold text-ink-800 dark:text-sand-100">Annuel</p>
+            <p className="text-sm text-coral-600 dark:text-coral-300">
+              Économise {yearlySavings} € la 1ère année
+            </p>
             <p className="mt-1 text-sm text-ink-800/60 dark:text-sand-100/60">
               Soit {yearlyMonthlyEquivalent} €/mois, garanti {pricing.yearly.introYears} ans, puis{' '}
               {pricing.yearly.price} €/an
@@ -93,27 +122,33 @@ export default function Premium() {
                 : 'border-sage-200 dark:border-sage-700'
             }`}
           >
-            <div className="flex items-center justify-between">
-              <span className="font-semibold text-ink-800 dark:text-sand-100">Mensuel</span>
-              <span className="text-ink-800/70 dark:text-sand-100/70">
-                {pricing.monthly.introPrice} €/mois
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="text-2xl font-bold text-ink-800 dark:text-sand-100">
+                {pricing.monthly.introPrice} €
+                <span className="text-sm font-normal text-ink-800/50 dark:text-sand-100/50">/mois</span>
               </span>
+              {existingSub?.plan === 'monthly' && (
+                <span className="rounded-full bg-sage-200 px-2 py-0.5 text-xs font-semibold text-sage-700 dark:bg-sage-700/40 dark:text-sage-300">
+                  Offre actuelle
+                </span>
+              )}
             </div>
+            <p className="mt-1 font-semibold text-ink-800 dark:text-sand-100">Mensuel</p>
             <p className="mt-1 text-sm text-ink-800/60 dark:text-sand-100/60">
               Pendant {pricing.monthly.introMonths} mois, puis {pricing.monthly.price} €/mois
             </p>
           </button>
         </div>
 
-        <Button className="mt-6 w-full" onClick={handleStart}>
-          {selected === 'monthly' ? "Commencer l'essai gratuit (3 jours)" : "S'abonner à l'annuel"}
+        <Button className="mt-6 w-full" onClick={handleStart} disabled={isSamePlan}>
+          {ctaLabel()}
         </Button>
         <button
           type="button"
-          onClick={() => navigate(nextAfterOnboarding())}
+          onClick={() => navigate(alreadyPremium ? '/profil' : nextAfterOnboarding())}
           className="mt-3 w-full text-center text-sm text-ink-800/50 dark:text-sand-100/50"
         >
-          Continuer avec la version gratuite
+          {alreadyPremium ? 'Retour au profil' : 'Continuer avec la version gratuite'}
         </button>
 
         <section className="mt-8">
@@ -137,7 +172,7 @@ export default function Premium() {
           </button>
 
           {showComparison && (
-            <div className="mt-4 overflow-hidden rounded-2xl bg-white dark:bg-ink-800">
+            <div className="mt-4 overflow-x-auto rounded-2xl bg-white dark:bg-ink-800">
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-sage-100 dark:border-sage-700/40">
@@ -161,7 +196,7 @@ export default function Premium() {
         </section>
 
         <p className="mt-6 text-center text-xs text-ink-800/40 dark:text-sand-100/40">
-          Annulable à tout moment, en un tap.
+          Annulable à tout moment, en un tap depuis ton profil.
         </p>
       </div>
     </main>

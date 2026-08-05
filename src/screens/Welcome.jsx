@@ -16,14 +16,17 @@ export default function Welcome() {
         aria-hidden="true"
       />
 
-      <Mascot size="lg" bounce className="mb-8" />
+      <Mascot size="lg" bounce className="mb-6" />
 
-      <h1 className="max-w-md text-3xl font-extrabold leading-tight text-ink-800 dark:text-sand-100">
-        Tu n'es pas seul·e.
+      <p className="text-sm font-bold uppercase tracking-[0.3em] text-coral-500 dark:text-coral-300">
+        Sooth
+      </p>
+      <h1 className="mt-2 max-w-md text-3xl font-extrabold leading-tight text-ink-800 dark:text-sand-100">
+        Reprends le contrôle, sans honte.
       </h1>
       <p className="mt-3 max-w-sm text-lg text-ink-800/80 dark:text-sand-100/80">
-        1 personne sur 20 vit avec un comportement comme le tien. On est là pour t'aider à
-        reprendre le contrôle, à ton rythme, sans jugement.
+        Tu n'es pas seul·e — 1 personne sur 20 vit avec un comportement comme le tien. On est là
+        pour t'aider, à ton rythme.
       </p>
 
       <div className="mt-10 flex flex-col gap-3">

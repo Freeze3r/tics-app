@@ -5,9 +5,10 @@ import { loadProfile, getPracticeStats } from '../lib/profile.js'
 import { getBadges } from '../lib/badges.js'
 import { getTheme, applyTheme } from '../lib/theme.js'
 import { getUserSettings } from '../lib/userSettings.js'
-import { isPremiumActive, getSubscription } from '../lib/subscription.js'
+import { isPremiumActive, getSubscription, cancelSubscription } from '../lib/subscription.js'
 import { getSeasons } from '../lib/seasons.js'
 import { getSeasonProgress, getNextEpisode } from '../lib/seasonProgress.js'
+import { signOut } from '../lib/supabase.js'
 
 const THEME_OPTIONS = [
   { id: 'light', label: 'Clair', icon: '☀️' },
@@ -35,6 +36,8 @@ const LOCAL_KEYS = [
   'ticsSubscription',
   'ticsDeepAnswers',
   'ticsUserSettings',
+  'ticsStreakRestores',
+  'ticsTutorialSeen',
   'quizAnswers',
 ]
 
@@ -47,8 +50,10 @@ export default function Profile() {
   const [theme, setTheme] = useState(() => getTheme())
   const [expandedBadge, setExpandedBadge] = useState(null)
   const settings = getUserSettings()
-  const premium = isPremiumActive()
-  const subscription = getSubscription()
+  const [premium, setPremium] = useState(() => isPremiumActive())
+  const [subscription, setSubscription] = useState(() => getSubscription())
+  const [showAdvanced, setShowAdvanced] = useState(false)
+  const [confirmText, setConfirmText] = useState('')
 
   function handleThemeChange(id) {
     applyTheme(id)
@@ -60,12 +65,24 @@ export default function Profile() {
     return null
   }
 
-  function handleReset() {
+  function handleCancelSubscription() {
     const confirmed = window.confirm(
-      'Réinitialiser toutes tes données locales (plan, progression, badges, réglages) ? Cette action est irréversible.'
+      "Annuler ton abonnement Premium ? Tu gardes l'accès jusqu'à la fin de la période en cours."
     )
     if (!confirmed) return
+    cancelSubscription()
+    setSubscription(getSubscription())
+    setPremium(isPremiumActive())
+  }
+
+  function handleReset() {
+    if (confirmText.trim().toLowerCase() !== 'supprimer') return
     LOCAL_KEYS.forEach((k) => localStorage.removeItem(k))
+    navigate('/', { replace: true })
+  }
+
+  async function handleLogout() {
+    await signOut()
     navigate('/', { replace: true })
   }
 
@@ -151,12 +168,15 @@ export default function Profile() {
                 type="button"
                 onClick={() => setExpandedBadge((cur) => (cur === b.id ? null : b.id))}
                 className={`rounded-2xl p-4 text-center transition-opacity ${
-                  b.unlocked ? 'bg-white dark:bg-ink-800' : 'bg-white/50 opacity-50 dark:bg-ink-800/50'
+                  b.unlocked ? 'bg-white dark:bg-ink-800' : 'bg-white/50 opacity-60 dark:bg-ink-800/50'
                 }`}
               >
                 <div className="text-2xl">{b.icon}</div>
                 <div className="mt-1 text-sm font-medium text-ink-800 dark:text-sand-100">
                   {b.label}
+                </div>
+                <div className="mt-0.5 text-xs text-ink-800/40 dark:text-sand-100/40">
+                  {b.progress.current}/{b.progress.target}
                 </div>
               </button>
             ))}
@@ -166,13 +186,20 @@ export default function Profile() {
             <div className="mt-3 rounded-2xl bg-sage-100/60 p-4 dark:bg-sage-700/10">
               {(() => {
                 const b = badges.find((x) => x.id === expandedBadge)
+                const percent = Math.round((b.progress.current / b.progress.target) * 100)
                 return (
                   <>
                     <p className="font-semibold text-ink-800 dark:text-sand-100">
                       {b.icon} {b.label} {b.unlocked && '· débloqué ✓'}
                     </p>
                     <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
-                      {b.detail}
+                      Condition : {b.detail}
+                    </p>
+                    <div className="mt-2 h-1.5 rounded-full bg-sage-200 dark:bg-sage-700/40">
+                      <div className="h-1.5 rounded-full bg-coral-500" style={{ width: `${percent}%` }} />
+                    </div>
+                    <p className="mt-1 text-xs text-ink-800/50 dark:text-sand-100/50">
+                      Progression : {b.progress.current}/{b.progress.target}
                     </p>
                   </>
                 )
@@ -221,10 +248,21 @@ export default function Profile() {
             <>
               <p className="font-semibold text-coral-600 dark:text-coral-300">
                 Premium actif · {subscription?.plan === 'yearly' ? 'Annuel' : 'Mensuel'}
+                {subscription?.cancelledAt && ' (annulé, actif jusqu’à la fin de l’essai)'}
               </p>
               <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
                 Merci de soutenir l'app. Tu profites de tout ce que Premium débloque.
               </p>
+              <div className="mt-3 flex flex-wrap gap-3">
+                <Button variant="secondary" onClick={() => navigate('/premium')}>
+                  Changer d'offre
+                </Button>
+                {!subscription?.cancelledAt && (
+                  <Button variant="ghost" onClick={handleCancelSubscription}>
+                    Annuler mon abonnement
+                  </Button>
+                )}
+              </div>
             </>
           ) : (
             <>
@@ -240,9 +278,53 @@ export default function Profile() {
         </section>
 
         <section className="mt-8">
-          <Button variant="ghost" onClick={handleReset}>
-            Réinitialiser mes données
+          <Button variant="secondary" className="w-full" onClick={handleLogout}>
+            Se déconnecter
           </Button>
+        </section>
+
+        <section className="mt-6">
+          <button
+            type="button"
+            onClick={() => setShowAdvanced((s) => !s)}
+            className="text-sm text-ink-800/40 dark:text-sand-100/40"
+          >
+            {showAdvanced ? 'Masquer les réglages avancés' : 'Réglages avancés'}
+          </button>
+
+          {showAdvanced && (
+            <div className="mt-3 rounded-2xl border-2 border-coral-200 p-4 dark:border-coral-500/20">
+              <p className="text-sm font-semibold text-coral-600 dark:text-coral-300">
+                Zone à risque
+              </p>
+              <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
+                Réinitialise ton plan, ta progression, tes badges et tes réglages sur cet appareil.
+                Action irréversible.
+              </p>
+              <label
+                htmlFor="reset-confirm"
+                className="mt-3 block text-xs font-medium text-ink-800/70 dark:text-sand-100/70"
+              >
+                Tape "supprimer" pour confirmer
+              </label>
+              <input
+                id="reset-confirm"
+                type="text"
+                value={confirmText}
+                onChange={(e) => setConfirmText(e.target.value)}
+                placeholder="supprimer"
+                className="mt-1 w-full rounded-2xl border-2 border-sage-200 bg-transparent px-4 py-2 text-sm text-ink-800 placeholder:text-ink-800/30 focus:border-coral-400 focus:outline-none dark:border-sage-700 dark:text-sand-100"
+              />
+              <Button
+                variant="secondary"
+                className="mt-3 w-full"
+                disabled={confirmText.trim().toLowerCase() !== 'supprimer'}
+                onClick={handleReset}
+              >
+                Réinitialiser mes données
+              </Button>
+            </div>
+          )}
         </section>
       </div>
     </main>
