@@ -1,24 +1,22 @@
 import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
+import Mascot from '../components/Mascot.jsx'
 
 export default function Welcome() {
   const navigate = useNavigate()
 
   return (
-    <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-sage-50 px-6 py-12 text-center dark:bg-ink-900">
+    <main className="relative flex min-h-svh flex-1 flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-sage-50 to-sand-50 px-6 py-12 text-center dark:from-ink-900 dark:to-ink-900">
       <div
-        className="mb-8 h-24 w-24 rounded-full bg-sage-200/70 dark:bg-sage-700/40"
-        style={{
-          animation: 'breathe 4s ease-in-out infinite',
-        }}
+        className="pointer-events-none absolute -left-16 -top-16 h-64 w-64 rounded-full bg-coral-200/40 blur-3xl dark:bg-coral-500/10"
         aria-hidden="true"
       />
-      <style>{`
-        @keyframes breathe {
-          0%, 100% { transform: scale(1); opacity: 0.7; }
-          50% { transform: scale(1.12); opacity: 1; }
-        }
-      `}</style>
+      <div
+        className="pointer-events-none absolute -bottom-24 -right-16 h-72 w-72 rounded-full bg-sage-300/40 blur-3xl dark:bg-sage-600/10"
+        aria-hidden="true"
+      />
+
+      <Mascot size="lg" bounce className="mb-8" />
 
       <h1 className="max-w-md text-3xl font-extrabold leading-tight text-ink-800 dark:text-sand-100">
         Tu n'es pas seul·e.

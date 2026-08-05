@@ -17,6 +17,7 @@ import Premium from './screens/Premium.jsx'
 import DeepQuiz from './screens/DeepQuiz.jsx'
 import EpisodePlayer from './screens/EpisodePlayer.jsx'
 import Settings from './screens/Settings.jsx'
+import Tutorial from './screens/Tutorial.jsx'
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/premium" element={<Premium />} />
           <Route path="/deep-quiz" element={<DeepQuiz />} />
+          <Route path="/tutorial" element={<Tutorial />} />
 
           <Route element={<AppShell />}>
             <Route path="/home" element={<Home />} />

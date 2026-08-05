@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import { TOP_BENEFITS, COMPARISON_TABLE } from '../data/premiumBenefits.js'
 import { getPricing, getLoyaltyOffer, startTrial, acceptLoyaltyOffer } from '../lib/subscription.js'
+import { nextAfterOnboarding } from '../lib/tutorial.js'
 
 const pricing = getPricing()
 
@@ -109,7 +110,7 @@ export default function Premium() {
         </Button>
         <button
           type="button"
-          onClick={() => navigate('/home')}
+          onClick={() => navigate(nextAfterOnboarding())}
           className="mt-3 w-full text-center text-sm text-ink-800/50 dark:text-sand-100/50"
         >
           Continuer avec la version gratuite

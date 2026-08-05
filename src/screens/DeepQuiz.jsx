@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { saveDeepAnswers } from '../lib/profile.js'
+import { nextAfterOnboarding } from '../lib/tutorial.js'
 
 const QUESTIONS = [
   {
@@ -39,7 +40,7 @@ export default function DeepQuiz() {
   function handleNext() {
     if (isLast) {
       saveDeepAnswers(answers)
-      navigate('/home')
+      navigate(nextAfterOnboarding())
       return
     }
     setStep((s) => s + 1)
@@ -68,7 +69,7 @@ export default function DeepQuiz() {
         </div>
 
         <div className="mt-8 flex items-center justify-between gap-3">
-          <Button variant="ghost" onClick={() => (step === 0 ? navigate('/home') : setStep((s) => s - 1))}>
+          <Button variant="ghost" onClick={() => (step === 0 ? navigate(nextAfterOnboarding()) : setStep((s) => s - 1))}>
             {step === 0 ? 'Passer pour l’instant' : 'Retour'}
           </Button>
           <Button onClick={handleNext}>{isLast ? 'Terminer' : 'Continuer'}</Button>

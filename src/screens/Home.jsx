@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
+import Mascot from '../components/Mascot.jsx'
 import { loadProfile, getPracticeStats, markPracticeToday, isPracticedToday } from '../lib/profile.js'
 import { listEpisodes, topTriggerContext } from '../lib/episodes.js'
 import { getBehavior, TRIGGER_CONTEXTS } from '../data/behaviors.js'
 import { thoughtOfTheDay } from '../data/dailyThoughts.js'
 import { canRestoreStreak, restoreStreak } from '../lib/streak.js'
 import { isPremiumActive } from '../lib/subscription.js'
+import { getSeasons } from '../lib/seasons.js'
+import { getNextEpisode } from '../lib/seasonProgress.js'
 
 function dayOfYear() {
   const now = new Date()
@@ -47,6 +50,10 @@ export default function Home() {
   ]
   const todayExercise = dailyPool[dayOfYear() % dailyPool.length]
 
+  const primaryBehavior = plan.behaviors[0]
+  const primarySeason = primaryBehavior ? getSeasons(primaryBehavior)[0] : null
+  const nextEpisode = primarySeason ? getNextEpisode(primaryBehavior.id, primarySeason) : null
+
   function handleCheckIn() {
     markPracticeToday()
     setPracticedToday(true)
@@ -62,8 +69,12 @@ export default function Home() {
   }
 
   return (
-    <main className="px-6 py-8">
-      <div className="mx-auto max-w-md">
+    <main className="relative overflow-hidden bg-gradient-to-b from-sage-50 to-sand-50 px-6 py-8 dark:from-ink-900 dark:to-ink-900">
+      <div
+        className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-coral-200/30 blur-3xl dark:bg-coral-500/10"
+        aria-hidden="true"
+      />
+      <div className="relative mx-auto max-w-md">
         <p className="text-sm text-ink-800/60 dark:text-sand-100/60">Content de te revoir</p>
         <h1 className="mt-1 text-2xl font-bold text-ink-800 dark:text-sand-100">
           Comment tu te sens aujourd'hui ?
@@ -79,7 +90,7 @@ export default function Home() {
                 {stats.practicedThisWeek}/{stats.totalWeekDays} jours
               </p>
               {stats.streak > 0 && (
-                <p className="mt-1 text-sm text-coral-600 dark:text-coral-300">
+                <p className="mt-1 text-sm font-semibold text-coral-600 dark:text-coral-300">
                   🔥 {stats.streak} jour{stats.streak > 1 ? 's' : ''} d'affilée
                 </p>
               )}
@@ -104,6 +115,43 @@ export default function Home() {
           )}
         </section>
 
+        <div className="mt-6 grid grid-cols-2 gap-3">
+          <Button variant="primary" className="w-full" onClick={() => navigate('/sos')}>
+            J'ai une envie forte
+          </Button>
+          <Button variant="secondary" className="w-full" onClick={() => navigate('/tracker?log=1')}>
+            Noter un moment difficile
+          </Button>
+        </div>
+
+        {nextEpisode && (
+          <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-ink-800">
+            <p className="text-sm font-semibold text-sage-600 dark:text-sage-400">
+              {primarySeason.title} · {primaryBehavior.label}
+            </p>
+            <p className="mt-1 font-semibold text-ink-800 dark:text-sand-100">{nextEpisode.title}</p>
+            <Button
+              variant="secondary"
+              className="mt-3 w-full"
+              onClick={() => navigate(`/episode/${primaryBehavior.id}/${nextEpisode.id}`)}
+            >
+              Continuer ma saison
+            </Button>
+          </section>
+        )}
+
+        <section className="mt-6 flex items-start gap-3 rounded-2xl bg-sage-100/60 p-5 dark:bg-sage-700/10">
+          <Mascot size="md" className="shrink-0" />
+          <div>
+            <p className="text-sm font-semibold text-sage-700 dark:text-sage-300">
+              Ta pensée du jour
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-ink-800/80 dark:text-sand-100/80">
+              {thoughtOfTheDay()}
+            </p>
+          </div>
+        </section>
+
         <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-ink-800">
           <p className="text-sm font-semibold text-sage-600 dark:text-sage-400">
             Exercice du jour
@@ -122,22 +170,6 @@ export default function Home() {
           >
             {practicedToday ? 'Fait aujourd’hui ✓' : 'Marquer comme fait'}
           </Button>
-        </section>
-
-        <div className="mt-6 grid grid-cols-2 gap-3">
-          <Button variant="primary" className="w-full" onClick={() => navigate('/sos')}>
-            J'ai une envie forte
-          </Button>
-          <Button variant="secondary" className="w-full" onClick={() => navigate('/tracker?log=1')}>
-            Noter un moment difficile
-          </Button>
-        </div>
-
-        <section className="mt-6 rounded-2xl bg-sage-100/60 p-5 dark:bg-sage-700/10">
-          <p className="text-sm font-semibold text-sage-700 dark:text-sage-300">Pensée du jour</p>
-          <p className="mt-1 text-sm leading-relaxed text-ink-800/80 dark:text-sand-100/80">
-            {thoughtOfTheDay()}
-          </p>
         </section>
 
         {topTrigger && (
@@ -183,7 +215,7 @@ export default function Home() {
         </div>
 
         {recentEpisodes.length > 0 && (
-          <section className="mt-8">
+          <section className="mt-8 pb-4">
             <h2 className="text-lg font-semibold text-ink-800 dark:text-sand-100">
               Derniers moments difficiles
             </h2>

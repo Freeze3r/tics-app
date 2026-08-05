@@ -22,13 +22,18 @@ function recordRestore() {
   localStorage.setItem(RESTORE_KEY, JSON.stringify(restores))
 }
 
-// Le jour manqué qu'on peut restaurer : hier, s'il n'a pas été marqué pratiqué.
+// Le jour manqué qu'on peut restaurer : hier, s'il n'a pas été marqué pratiqué —
+// uniquement s'il y avait une série en cours à reconnecter (un jour pratiqué avant
+// hier). Sans historique antérieur, il n'y a rien à "restaurer".
 export function getMissedYesterday() {
   const days = new Set(getPracticeDays())
   const yesterday = new Date()
   yesterday.setDate(yesterday.getDate() - 1)
   const key = todayKey(yesterday)
-  return days.has(key) ? null : key
+  if (days.has(key)) return null
+
+  const hasEarlierHistory = [...days].some((d) => d < key)
+  return hasEarlierHistory ? key : null
 }
 
 export function getRestoreWindowDays() {
