@@ -92,8 +92,8 @@ export default function Coach() {
   return (
     <main className="flex min-h-svh flex-1 flex-col px-6 py-8">
       <div className="mx-auto flex w-full max-w-md flex-1 flex-col">
-        <h1 className="text-2xl font-bold text-ink-800 dark:text-sand-100">Coach</h1>
-        <p className="mt-1 text-xs text-ink-800/40 dark:text-sand-100/40">
+        <h1 className="text-2xl font-bold text-navy-800 dark:text-sand-100">Coach</h1>
+        <p className="mt-1 text-xs text-navy-800/40 dark:text-sand-100/40">
           {premium
             ? 'Conversations illimitées.'
             : `${remaining}/${getDailyLimit()} messages restants aujourd'hui.`}{' '}
@@ -107,7 +107,7 @@ export default function Coach() {
                 key={topic}
                 type="button"
                 onClick={() => sendMessage(topic)}
-                className="rounded-full border-2 border-sage-200 px-3 py-1.5 text-xs text-ink-800/70 dark:border-sage-700 dark:text-sand-100/70"
+                className="rounded-full border-2 border-teal-200 px-3 py-1.5 text-xs text-navy-800/70 dark:border-teal-700 dark:text-sand-100/70"
               >
                 {topic}
               </button>
@@ -122,14 +122,14 @@ export default function Coach() {
                 <div
                   className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
                     m.from === 'coach'
-                      ? 'bg-white text-ink-800 dark:bg-ink-800 dark:text-sand-100'
+                      ? 'bg-white text-navy-800 dark:bg-navy-800 dark:text-sand-100'
                       : 'ml-auto bg-coral-500 text-white'
                   }`}
                 >
                   {m.text}
                 </div>
                 {m.offline && (
-                  <p className="mt-1 text-xs text-ink-800/40 dark:text-sand-100/40">
+                  <p className="mt-1 text-xs text-navy-800/40 dark:text-sand-100/40">
                     Réponse hors-ligne (le coach n'a pas pu répondre normalement).
                   </p>
                 )}
@@ -146,7 +146,7 @@ export default function Coach() {
               </div>
             ))}
             {sending && (
-              <div className="max-w-[85%] rounded-2xl bg-white px-4 py-2.5 text-sm text-ink-800/50 dark:bg-ink-800 dark:text-sand-100/50">
+              <div className="max-w-[85%] rounded-2xl bg-white px-4 py-2.5 text-sm text-navy-800/50 dark:bg-navy-800 dark:text-sand-100/50">
                 …
               </div>
             )}
@@ -154,10 +154,10 @@ export default function Coach() {
           </div>
         </div>
 
-        <div className="fixed inset-x-0 bottom-16 border-t border-sage-200 bg-sage-50/95 px-6 py-3 backdrop-blur dark:border-sage-700 dark:bg-ink-900/95">
+        <div className="fixed inset-x-0 bottom-16 border-t border-teal-200 bg-teal-50/95 px-6 py-3 backdrop-blur dark:border-teal-700 dark:bg-navy-900/95">
           {limitReached ? (
             <div className="mx-auto flex max-w-md items-center justify-between gap-3 text-sm">
-              <span className="text-ink-800/60 dark:text-sand-100/60">
+              <span className="text-navy-800/60 dark:text-sand-100/60">
                 Limite quotidienne atteinte.
               </span>
               <Button variant="secondary" onClick={() => navigate('/premium')}>
@@ -171,7 +171,7 @@ export default function Coach() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && sendMessage(input.trim())}
                 placeholder="Écris ce que tu ressens…"
-                className="flex-1 rounded-full border-2 border-sage-200 bg-white px-4 py-2 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:bg-ink-800 dark:text-sand-100"
+                className="flex-1 rounded-full border-2 border-teal-200 bg-white px-4 py-2 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:bg-navy-800 dark:text-sand-100"
               />
               <Button onClick={() => sendMessage(input.trim())} disabled={!input.trim() || sending}>
                 Envoyer

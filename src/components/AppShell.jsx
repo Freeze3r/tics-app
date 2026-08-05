@@ -10,12 +10,12 @@ const NAV_ITEMS = [
 
 export default function AppShell() {
   return (
-    <div className="flex min-h-svh flex-1 flex-col bg-sage-50 dark:bg-ink-900">
+    <div className="flex min-h-svh flex-1 flex-col bg-teal-50 dark:bg-navy-900">
       <div className="flex-1 pb-20">
         <Outlet />
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 border-t border-sage-200 bg-white/95 backdrop-blur dark:border-sage-700 dark:bg-ink-800/95">
+      <nav className="fixed inset-x-0 bottom-0 border-t border-teal-200 bg-white/95 backdrop-blur dark:border-teal-700 dark:bg-navy-800/95">
         <div className="mx-auto flex max-w-md items-center justify-around px-2 py-2">
           {NAV_ITEMS.map((item) => (
             <NavLink
@@ -27,7 +27,7 @@ export default function AppShell() {
                     ? 'bg-coral-500 text-white'
                     : isActive
                       ? 'text-coral-600 dark:text-coral-300'
-                      : 'text-ink-800/50 dark:text-sand-100/50'
+                      : 'text-navy-800/50 dark:text-sand-100/50'
                 }`
               }
             >

@@ -63,13 +63,13 @@ export default function Sos() {
   const progress = 1 - secondsLeft / EXERCISE_SECONDS
 
   return (
-    <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-sage-50 px-6 py-10 text-center dark:bg-ink-900">
+    <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-teal-50 px-6 py-10 text-center dark:bg-navy-900">
       {phase === 'select' && (
         <>
-          <h1 className="text-xl font-bold text-ink-800 dark:text-sand-100">
+          <h1 className="text-xl font-bold text-navy-800 dark:text-sand-100">
             Qu'est-ce qui se passe là ?
           </h1>
-          <p className="mt-2 max-w-sm text-ink-800/60 dark:text-sand-100/60">
+          <p className="mt-2 max-w-sm text-navy-800/60 dark:text-sand-100/60">
             Choisis le comportement concerné, on te donne l'exercice adapté.
           </p>
           <div className="mt-6 flex w-full max-w-sm flex-col gap-3">
@@ -78,7 +78,7 @@ export default function Sos() {
                 key={b.id}
                 type="button"
                 onClick={() => selectBehavior(b.id)}
-                className="w-full rounded-2xl border-2 border-sage-200 bg-white px-5 py-4 text-left font-semibold text-ink-800 transition-colors hover:border-sage-300 dark:border-sage-700 dark:bg-ink-800 dark:text-sand-100"
+                className="w-full rounded-2xl border-2 border-teal-200 bg-white px-5 py-4 text-left font-semibold text-navy-800 transition-colors hover:border-teal-300 dark:border-teal-700 dark:bg-navy-800 dark:text-sand-100"
               >
                 {b.label}
               </button>
@@ -89,23 +89,23 @@ export default function Sos() {
 
       {phase === 'instruction' && exercise && (
         <>
-          <p className="text-sm font-semibold text-sage-600 dark:text-sage-400">{behavior.label}</p>
-          <h1 className="mt-2 max-w-sm text-xl font-bold text-ink-800 dark:text-sand-100">
+          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">{behavior.label}</p>
+          <h1 className="mt-2 max-w-sm text-xl font-bold text-navy-800 dark:text-sand-100">
             {exercise.title}
           </h1>
           {exercise.steps ? (
             <ol className="mt-4 flex w-full max-w-sm flex-col gap-2 text-left">
               {exercise.steps.map((step, i) => (
-                <li key={i} className="flex gap-2 text-sm text-ink-800/80 dark:text-sand-100/80">
+                <li key={i} className="flex gap-2 text-sm text-navy-800/80 dark:text-sand-100/80">
                   <span className="shrink-0 font-semibold text-coral-500">{i + 1}.</span>
                   {step}
                 </li>
               ))}
             </ol>
           ) : (
-            <p className="mt-3 max-w-sm text-ink-800/70 dark:text-sand-100/70">{exercise.detail}</p>
+            <p className="mt-3 max-w-sm text-navy-800/70 dark:text-sand-100/70">{exercise.detail}</p>
           )}
-          <p className="mt-4 text-sm text-ink-800/50 dark:text-sand-100/50">
+          <p className="mt-4 text-sm text-navy-800/50 dark:text-sand-100/50">
             Lis bien les étapes, installe-toi, puis lance le chrono quand tu es prêt·e.
           </p>
 
@@ -124,7 +124,7 @@ export default function Sos() {
         <>
           <div className="relative flex h-48 w-48 items-center justify-center">
             <svg className="absolute h-full w-full -rotate-90" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="45" fill="none" stroke="var(--color-sage-200)" strokeWidth="6" />
+              <circle cx="50" cy="50" r="45" fill="none" stroke="var(--color-teal-200)" strokeWidth="6" />
               <circle
                 cx="50"
                 cy="50"
@@ -138,14 +138,14 @@ export default function Sos() {
                 style={{ transition: 'stroke-dashoffset 1s linear' }}
               />
             </svg>
-            <span className="text-3xl font-bold text-ink-800 dark:text-sand-100">{secondsLeft}</span>
+            <span className="text-3xl font-bold text-navy-800 dark:text-sand-100">{secondsLeft}</span>
           </div>
 
-          <h1 className="mt-8 max-w-sm text-xl font-bold text-ink-800 dark:text-sand-100">
+          <h1 className="mt-8 max-w-sm text-xl font-bold text-navy-800 dark:text-sand-100">
             {exercise.title}
           </h1>
-          <p className="mt-2 max-w-sm text-ink-800/70 dark:text-sand-100/70">{exercise.detail}</p>
-          <p className="mt-4 text-sm text-ink-800/50 dark:text-sand-100/50">
+          <p className="mt-2 max-w-sm text-navy-800/70 dark:text-sand-100/70">{exercise.detail}</p>
+          <p className="mt-4 text-sm text-navy-800/50 dark:text-sand-100/50">
             Cette envie va redescendre. Respire, ça passe.
           </p>
 
@@ -158,7 +158,7 @@ export default function Sos() {
       {phase === 'done' && (
         <>
           <div
-            className="mb-6 h-20 w-20 rounded-full bg-sage-200/70 dark:bg-sage-700/40"
+            className="mb-6 h-20 w-20 rounded-full bg-teal-200/70 dark:bg-teal-700/40"
             style={{ animation: 'sosBreathe 4s ease-in-out infinite' }}
             aria-hidden="true"
           />
@@ -169,11 +169,11 @@ export default function Sos() {
             }
           `}</style>
 
-          <h1 className="max-w-sm text-xl font-bold text-ink-800 dark:text-sand-100">
+          <h1 className="max-w-sm text-xl font-bold text-navy-800 dark:text-sand-100">
             C'était peut-être inconfortable, et c'est déjà fini.
           </h1>
           {compassion && (
-            <p className="mt-3 max-w-sm text-ink-800/70 dark:text-sand-100/70">
+            <p className="mt-3 max-w-sm text-navy-800/70 dark:text-sand-100/70">
               {compassion.detail}
             </p>
           )}

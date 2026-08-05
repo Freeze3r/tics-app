@@ -29,23 +29,23 @@ export default function Plan() {
 
   if (!answers || !plan) {
     return (
-      <main className="flex min-h-svh flex-1 flex-col items-center justify-center gap-4 bg-sage-50 px-6 text-center dark:bg-ink-900">
-        <p className="text-ink-800 dark:text-sand-100">On n'a pas retrouvé tes réponses.</p>
+      <main className="flex min-h-svh flex-1 flex-col items-center justify-center gap-4 bg-teal-50 px-6 text-center dark:bg-navy-900">
+        <p className="text-navy-800 dark:text-sand-100">On n'a pas retrouvé tes réponses.</p>
         <Button onClick={() => navigate('/quiz')}>Refaire le quiz</Button>
       </main>
     )
   }
 
   return (
-    <main className="min-h-svh flex-1 bg-sage-50 px-6 py-10 dark:bg-ink-900">
+    <main className="min-h-svh flex-1 bg-teal-50 px-6 py-10 dark:bg-navy-900">
       <div className="mx-auto max-w-md">
-        <p className="text-sm font-semibold uppercase tracking-wide text-sage-600 dark:text-sage-400">
+        <p className="text-sm font-semibold uppercase tracking-wide text-teal-600 dark:text-teal-400">
           Ton plan personnalisé
         </p>
-        <h1 className="mt-1 text-2xl font-bold text-ink-800 dark:text-sand-100">
+        <h1 className="mt-1 text-2xl font-bold text-navy-800 dark:text-sand-100">
           {plan.durationDays} jours de pratique consciente
         </h1>
-        <p className="mt-2 text-ink-800/70 dark:text-sand-100/70">
+        <p className="mt-2 text-navy-800/70 dark:text-sand-100/70">
           Pas de compteur qui repart à zéro. On regarde ta progression sur la durée, pas un
           instant isolé.
         </p>
@@ -57,17 +57,17 @@ export default function Plan() {
         )}
 
         <section className="mt-8">
-          <h2 className="text-lg font-semibold text-ink-800 dark:text-sand-100">
+          <h2 className="text-lg font-semibold text-navy-800 dark:text-sand-100">
             Tes exercices recommandés
           </h2>
           <div className="mt-3 flex flex-col gap-4">
             {plan.exercisesByBehavior.map(({ behavior, exercises }) => (
-              <div key={behavior.id} className="rounded-2xl bg-white p-4 dark:bg-ink-800">
-                <div className="font-semibold text-ink-800 dark:text-sand-100">{behavior.label}</div>
+              <div key={behavior.id} className="rounded-2xl bg-white p-4 dark:bg-navy-800">
+                <div className="font-semibold text-navy-800 dark:text-sand-100">{behavior.label}</div>
                 <ul className="mt-2 flex flex-col gap-2">
                   {exercises.map((ex) => (
-                    <li key={ex.title} className="text-sm text-ink-800/70 dark:text-sand-100/70">
-                      <span className="font-medium text-ink-800 dark:text-sand-100">{ex.title}</span>
+                    <li key={ex.title} className="text-sm text-navy-800/70 dark:text-sand-100/70">
+                      <span className="font-medium text-navy-800 dark:text-sand-100">{ex.title}</span>
                       {' — '}
                       {ex.detail}
                     </li>
@@ -79,15 +79,15 @@ export default function Plan() {
         </section>
 
         <section className="mt-8">
-          <h2 className="text-lg font-semibold text-ink-800 dark:text-sand-100">
+          <h2 className="text-lg font-semibold text-navy-800 dark:text-sand-100">
             Entraînement quotidien (3-5 min)
           </h2>
           <div className="mt-3 flex flex-col gap-2">
             {plan.dailyTraining.map((ex) => (
-              <div key={ex.title} className="rounded-2xl bg-white p-4 text-sm dark:bg-ink-800">
-                <span className="font-medium text-ink-800 dark:text-sand-100">{ex.title}</span>
+              <div key={ex.title} className="rounded-2xl bg-white p-4 text-sm dark:bg-navy-800">
+                <span className="font-medium text-navy-800 dark:text-sand-100">{ex.title}</span>
                 {' — '}
-                <span className="text-ink-800/70 dark:text-sand-100/70">{ex.detail}</span>
+                <span className="text-navy-800/70 dark:text-sand-100/70">{ex.detail}</span>
               </div>
             ))}
           </div>
@@ -97,7 +97,7 @@ export default function Plan() {
           <Button onClick={() => navigate('/premium')}>Continuer vers l'app</Button>
         </div>
 
-        <p className="mt-4 text-center text-xs text-ink-800/40 dark:text-sand-100/40">
+        <p className="mt-4 text-center text-xs text-navy-800/40 dark:text-sand-100/40">
           {saveState === 'saved' && 'Plan enregistré.'}
           {saveState === 'saving' && 'Enregistrement…'}
           {saveState === 'error' && 'Pas de connexion — ton plan reste disponible ici.'}

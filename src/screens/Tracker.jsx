@@ -23,7 +23,7 @@ function FrequencyChart({ counts }) {
 
   if (entries.every((e) => e.count === 0)) {
     return (
-      <p className="text-sm text-ink-800/50 dark:text-sand-100/50">
+      <p className="text-sm text-navy-800/50 dark:text-sand-100/50">
         Pas encore assez de données cette semaine pour voir un pattern.
       </p>
     )
@@ -33,16 +33,16 @@ function FrequencyChart({ counts }) {
     <div className="flex flex-col gap-2">
       {entries.map((e) => (
         <div key={e.id} className="flex items-center gap-3">
-          <span className="w-40 shrink-0 text-xs text-ink-800/60 dark:text-sand-100/60">
+          <span className="w-40 shrink-0 text-xs text-navy-800/60 dark:text-sand-100/60">
             {e.label}
           </span>
-          <div className="h-2 flex-1 rounded-full bg-sage-100 dark:bg-sage-700/30">
+          <div className="h-2 flex-1 rounded-full bg-teal-100 dark:bg-teal-700/30">
             <div
-              className="h-2 rounded-full bg-sage-400 dark:bg-sage-500"
+              className="h-2 rounded-full bg-teal-400 dark:bg-teal-500"
               style={{ width: `${(e.count / max) * 100}%` }}
             />
           </div>
-          <span className="w-4 text-xs text-ink-800/60 dark:text-sand-100/60">{e.count}</span>
+          <span className="w-4 text-xs text-navy-800/60 dark:text-sand-100/60">{e.count}</span>
         </div>
       ))}
     </div>
@@ -57,15 +57,15 @@ function BehaviorSeasonCard({ behavior, navigate }) {
   const percent = progress.total === 0 ? 0 : Math.round((progress.completed / progress.total) * 100)
 
   return (
-    <div className="rounded-2xl bg-white p-4 dark:bg-ink-800">
+    <div className="rounded-2xl bg-white p-4 dark:bg-navy-800">
       <div className="flex items-center justify-between">
-        <span className="font-semibold text-ink-800 dark:text-sand-100">{behavior.label}</span>
-        <span className="text-xs text-ink-800/50 dark:text-sand-100/50">
+        <span className="font-semibold text-navy-800 dark:text-sand-100">{behavior.label}</span>
+        <span className="text-xs text-navy-800/50 dark:text-sand-100/50">
           {activeSeason.title} · {progress.completed}/{progress.total}
         </span>
       </div>
 
-      <div className="mt-2 h-2 rounded-full bg-sage-100 dark:bg-sage-700/30">
+      <div className="mt-2 h-2 rounded-full bg-teal-100 dark:bg-teal-700/30">
         <div className="h-2 rounded-full bg-coral-500" style={{ width: `${percent}%` }} />
       </div>
 
@@ -79,7 +79,7 @@ function BehaviorSeasonCard({ behavior, navigate }) {
           {activeSeason.episodes.length} · {nextEpisode.title}
         </Button>
       ) : (
-        <p className="mt-3 text-sm text-sage-600 dark:text-sage-400">
+        <p className="mt-3 text-sm text-teal-600 dark:text-teal-400">
           Saison 1 terminée ✓ La suite arrive bientôt.
         </p>
       )}
@@ -88,7 +88,7 @@ function BehaviorSeasonCard({ behavior, navigate }) {
         {seasons.slice(1).map((s) => (
           <span
             key={s.id}
-            className="rounded-full bg-sage-100 px-3 py-1 text-xs text-ink-800/50 dark:bg-sage-700/20 dark:text-sand-100/50"
+            className="rounded-full bg-teal-100 px-3 py-1 text-xs text-navy-800/50 dark:bg-teal-700/20 dark:text-sand-100/50"
           >
             🔒 {s.title} · bientôt
           </span>
@@ -141,13 +141,13 @@ export default function Tracker() {
   return (
     <main className="px-6 py-8">
       <div className="mx-auto max-w-md">
-        <h1 className="text-2xl font-bold text-ink-800 dark:text-sand-100">Tracker</h1>
-        <p className="mt-1 text-ink-800/60 dark:text-sand-100/60">
+        <h1 className="text-2xl font-bold text-navy-800 dark:text-sand-100">Tracker</h1>
+        <p className="mt-1 text-navy-800/60 dark:text-sand-100/60">
           Ta progression saison par saison, et tes moments difficiles sans jugement.
         </p>
 
         <section className="mt-6">
-          <h2 className="text-lg font-semibold text-ink-800 dark:text-sand-100">Tes saisons</h2>
+          <h2 className="text-lg font-semibold text-navy-800 dark:text-sand-100">Tes saisons</h2>
           <div className="mt-3 flex flex-col gap-3">
             {behaviors.map((b) => (
               <BehaviorSeasonCard key={b.id} behavior={b} navigate={navigate} />
@@ -162,10 +162,10 @@ export default function Tracker() {
         )}
 
         {formOpen && (
-          <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-ink-800">
+          <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
             {behaviors.length > 1 && (
               <div className="mb-4">
-                <p className="mb-2 text-sm font-semibold text-ink-800 dark:text-sand-100">
+                <p className="mb-2 text-sm font-semibold text-navy-800 dark:text-sand-100">
                   Quel comportement ?
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -179,7 +179,7 @@ export default function Tracker() {
             )}
 
             <div className="mb-4">
-              <p className="mb-2 text-sm font-semibold text-ink-800 dark:text-sand-100">
+              <p className="mb-2 text-sm font-semibold text-navy-800 dark:text-sand-100">
                 Dans quel contexte ?
               </p>
               <div className="flex flex-wrap gap-2">
@@ -192,7 +192,7 @@ export default function Tracker() {
             </div>
 
             <div className="mb-4">
-              <p className="mb-2 text-sm font-semibold text-ink-800 dark:text-sand-100">
+              <p className="mb-2 text-sm font-semibold text-navy-800 dark:text-sand-100">
                 Quelle émotion juste avant ?
               </p>
               <div className="flex flex-wrap gap-2">
@@ -205,7 +205,7 @@ export default function Tracker() {
             </div>
 
             <div className="mb-5">
-              <p className="mb-2 text-sm font-semibold text-ink-800 dark:text-sand-100">
+              <p className="mb-2 text-sm font-semibold text-navy-800 dark:text-sand-100">
                 Durée estimée
               </p>
               <div className="flex flex-wrap gap-2">
@@ -229,18 +229,18 @@ export default function Tracker() {
         )}
 
         <section className="mt-8">
-          <h2 className="text-lg font-semibold text-ink-800 dark:text-sand-100">
+          <h2 className="text-lg font-semibold text-navy-800 dark:text-sand-100">
             Tes déclencheurs cette semaine
           </h2>
-          <div className="mt-3 rounded-2xl bg-white p-4 dark:bg-ink-800">
+          <div className="mt-3 rounded-2xl bg-white p-4 dark:bg-navy-800">
             <FrequencyChart counts={counts} />
           </div>
         </section>
 
         <section className="mt-8 pb-6">
-          <h2 className="text-lg font-semibold text-ink-800 dark:text-sand-100">Historique</h2>
+          <h2 className="text-lg font-semibold text-navy-800 dark:text-sand-100">Historique</h2>
           {episodes.length === 0 ? (
-            <p className="mt-3 text-sm text-ink-800/50 dark:text-sand-100/50">
+            <p className="mt-3 text-sm text-navy-800/50 dark:text-sand-100/50">
               Aucun moment difficile noté pour l'instant.
             </p>
           ) : (
@@ -250,16 +250,16 @@ export default function Tracker() {
                 const context = TRIGGER_CONTEXTS.find((t) => t.id === ep.triggerContext)
                 const emo = EMOTIONS.find((e) => e.id === ep.emotion)
                 return (
-                  <div key={ep.id} className="rounded-2xl bg-white p-4 text-sm dark:bg-ink-800">
+                  <div key={ep.id} className="rounded-2xl bg-white p-4 text-sm dark:bg-navy-800">
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-ink-800 dark:text-sand-100">
+                      <span className="font-medium text-navy-800 dark:text-sand-100">
                         {behavior?.label ?? 'Moment difficile'}
                       </span>
-                      <span className="text-xs text-ink-800/50 dark:text-sand-100/50">
+                      <span className="text-xs text-navy-800/50 dark:text-sand-100/50">
                         {relativeTime(ep.createdAt)}
                       </span>
                     </div>
-                    <div className="mt-1 text-ink-800/60 dark:text-sand-100/60">
+                    <div className="mt-1 text-navy-800/60 dark:text-sand-100/60">
                       {[context?.label, emo?.label].filter(Boolean).join(' · ') || 'Pas de détail'}
                     </div>
                   </div>

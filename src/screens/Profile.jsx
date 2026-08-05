@@ -90,12 +90,12 @@ export default function Profile() {
     <main className="px-6 py-8">
       <div className="mx-auto max-w-md pb-6">
         <div className="flex items-center gap-3">
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-sage-100 text-2xl dark:bg-sage-700/30">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-teal-100 text-2xl dark:bg-teal-700/30">
             {settings.avatarEmoji}
           </span>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold text-ink-800 dark:text-sand-100">
+              <h1 className="text-xl font-bold text-navy-800 dark:text-sand-100">
                 {settings.displayName || 'Ton profil'}
               </h1>
               {premium && (
@@ -104,7 +104,7 @@ export default function Profile() {
                 </span>
               )}
             </div>
-            <p className="text-xs text-ink-800/50 dark:text-sand-100/50">
+            <p className="text-xs text-navy-800/50 dark:text-sand-100/50">
               Communauté : {settings.communityPublic ? settings.communityPseudo : 'Anonyme'}
             </p>
           </div>
@@ -113,12 +113,12 @@ export default function Profile() {
           Modifier mon profil
         </Button>
 
-        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-ink-800">
-          <p className="text-sm font-semibold text-sage-600 dark:text-sage-400">Ton plan</p>
-          <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
+        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
+          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">Ton plan</p>
+          <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
             {profile.plan.durationDays} jours · objectif : {GOAL_LABELS[profile.plan.goal] ?? profile.plan.goal}
           </p>
-          <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
+          <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
             {stats.practicedThisWeek}/{stats.totalWeekDays} jours pratiqués cette semaine
           </p>
 
@@ -129,21 +129,21 @@ export default function Profile() {
               const next = getNextEpisode(b.id, season)
               const percent = progress.total === 0 ? 0 : Math.round((progress.completed / progress.total) * 100)
               return (
-                <div key={b.id} className="rounded-2xl bg-sage-50 p-3 dark:bg-ink-900/40">
+                <div key={b.id} className="rounded-2xl bg-teal-50 p-3 dark:bg-navy-900/40">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium text-ink-800 dark:text-sand-100">{b.label}</span>
-                    <span className="text-xs text-ink-800/50 dark:text-sand-100/50">
+                    <span className="font-medium text-navy-800 dark:text-sand-100">{b.label}</span>
+                    <span className="text-xs text-navy-800/50 dark:text-sand-100/50">
                       {progress.completed}/{progress.total}
                     </span>
                   </div>
-                  <div className="mt-1.5 h-1.5 rounded-full bg-sage-200 dark:bg-sage-700/40">
+                  <div className="mt-1.5 h-1.5 rounded-full bg-teal-200 dark:bg-teal-700/40">
                     <div className="h-1.5 rounded-full bg-coral-500" style={{ width: `${percent}%` }} />
                   </div>
                   {next && (
                     <button
                       type="button"
                       onClick={() => navigate(`/episode/${b.id}/${next.id}`)}
-                      className="mt-2 text-xs font-medium text-sage-600 dark:text-sage-400"
+                      className="mt-2 text-xs font-medium text-teal-600 dark:text-teal-400"
                     >
                       Prochain : {next.title} →
                     </button>
@@ -156,8 +156,8 @@ export default function Profile() {
 
         <section className="mt-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-ink-800 dark:text-sand-100">Badges</h2>
-            <span className="text-sm text-ink-800/50 dark:text-sand-100/50">
+            <h2 className="text-lg font-semibold text-navy-800 dark:text-sand-100">Badges</h2>
+            <span className="text-sm text-navy-800/50 dark:text-sand-100/50">
               {unlockedCount}/{badges.length}
             </span>
           </div>
@@ -168,14 +168,14 @@ export default function Profile() {
                 type="button"
                 onClick={() => setExpandedBadge((cur) => (cur === b.id ? null : b.id))}
                 className={`rounded-2xl p-4 text-center transition-opacity ${
-                  b.unlocked ? 'bg-white dark:bg-ink-800' : 'bg-white/50 opacity-60 dark:bg-ink-800/50'
+                  b.unlocked ? 'bg-white dark:bg-navy-800' : 'bg-white/50 opacity-60 dark:bg-navy-800/50'
                 }`}
               >
                 <div className="text-2xl">{b.icon}</div>
-                <div className="mt-1 text-sm font-medium text-ink-800 dark:text-sand-100">
+                <div className="mt-1 text-sm font-medium text-navy-800 dark:text-sand-100">
                   {b.label}
                 </div>
-                <div className="mt-0.5 text-xs text-ink-800/40 dark:text-sand-100/40">
+                <div className="mt-0.5 text-xs text-navy-800/40 dark:text-sand-100/40">
                   {b.progress.current}/{b.progress.target}
                 </div>
               </button>
@@ -183,22 +183,22 @@ export default function Profile() {
           </div>
 
           {expandedBadge && (
-            <div className="mt-3 rounded-2xl bg-sage-100/60 p-4 dark:bg-sage-700/10">
+            <div className="mt-3 rounded-2xl bg-teal-100/60 p-4 dark:bg-teal-700/10">
               {(() => {
                 const b = badges.find((x) => x.id === expandedBadge)
                 const percent = Math.round((b.progress.current / b.progress.target) * 100)
                 return (
                   <>
-                    <p className="font-semibold text-ink-800 dark:text-sand-100">
+                    <p className="font-semibold text-navy-800 dark:text-sand-100">
                       {b.icon} {b.label} {b.unlocked && '· débloqué ✓'}
                     </p>
-                    <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
+                    <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
                       Condition : {b.detail}
                     </p>
-                    <div className="mt-2 h-1.5 rounded-full bg-sage-200 dark:bg-sage-700/40">
+                    <div className="mt-2 h-1.5 rounded-full bg-teal-200 dark:bg-teal-700/40">
                       <div className="h-1.5 rounded-full bg-coral-500" style={{ width: `${percent}%` }} />
                     </div>
-                    <p className="mt-1 text-xs text-ink-800/50 dark:text-sand-100/50">
+                    <p className="mt-1 text-xs text-navy-800/50 dark:text-sand-100/50">
                       Progression : {b.progress.current}/{b.progress.target}
                     </p>
                   </>
@@ -208,11 +208,11 @@ export default function Profile() {
           )}
         </section>
 
-        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-ink-800">
-          <p className="text-sm font-semibold text-sage-600 dark:text-sage-400">
+        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
+          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
             Confidentialité communauté
           </p>
-          <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
+          <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
             {settings.communityPublic
               ? `Public — affiché comme "${settings.communityPseudo}"`
               : `Anonyme — affiché comme "${settings.communityPseudo || 'Anonyme'}"`}
@@ -222,8 +222,8 @@ export default function Profile() {
           </Button>
         </section>
 
-        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-ink-800">
-          <p className="text-sm font-semibold text-sage-600 dark:text-sage-400">Apparence</p>
+        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
+          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">Apparence</p>
           <div className="mt-3 grid grid-cols-3 gap-2">
             {THEME_OPTIONS.map((opt) => (
               <button
@@ -233,7 +233,7 @@ export default function Profile() {
                 className={`flex flex-col items-center gap-1 rounded-2xl border-2 py-3 text-xs font-medium transition-colors ${
                   theme === opt.id
                     ? 'border-coral-500 bg-coral-100/60 text-coral-600 dark:bg-coral-500/10 dark:text-coral-300'
-                    : 'border-sage-200 text-ink-800/70 dark:border-sage-700 dark:text-sand-100/70'
+                    : 'border-teal-200 text-navy-800/70 dark:border-teal-700 dark:text-sand-100/70'
                 }`}
               >
                 <span className="text-lg">{opt.icon}</span>
@@ -250,7 +250,7 @@ export default function Profile() {
                 Premium actif · {subscription?.plan === 'yearly' ? 'Annuel' : 'Mensuel'}
                 {subscription?.cancelledAt && ' (annulé, actif jusqu’à la fin de l’essai)'}
               </p>
-              <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
+              <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
                 Merci de soutenir l'app. Tu profites de tout ce que Premium débloque.
               </p>
               <div className="mt-3 flex flex-wrap gap-3">
@@ -267,7 +267,7 @@ export default function Profile() {
           ) : (
             <>
               <p className="font-semibold text-coral-600 dark:text-coral-300">Passer en Premium</p>
-              <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
+              <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
                 Coach illimité, communauté complète, suivi photo, statistiques avancées.
               </p>
               <Button className="mt-3" onClick={() => navigate('/premium')}>
@@ -287,7 +287,7 @@ export default function Profile() {
           <button
             type="button"
             onClick={() => setShowAdvanced((s) => !s)}
-            className="text-sm text-ink-800/40 dark:text-sand-100/40"
+            className="text-sm text-navy-800/40 dark:text-sand-100/40"
           >
             {showAdvanced ? 'Masquer les réglages avancés' : 'Réglages avancés'}
           </button>
@@ -297,13 +297,13 @@ export default function Profile() {
               <p className="text-sm font-semibold text-coral-600 dark:text-coral-300">
                 Zone à risque
               </p>
-              <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
+              <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
                 Réinitialise ton plan, ta progression, tes badges et tes réglages sur cet appareil.
                 Action irréversible.
               </p>
               <label
                 htmlFor="reset-confirm"
-                className="mt-3 block text-xs font-medium text-ink-800/70 dark:text-sand-100/70"
+                className="mt-3 block text-xs font-medium text-navy-800/70 dark:text-sand-100/70"
               >
                 Tape "supprimer" pour confirmer
               </label>
@@ -313,7 +313,7 @@ export default function Profile() {
                 value={confirmText}
                 onChange={(e) => setConfirmText(e.target.value)}
                 placeholder="supprimer"
-                className="mt-1 w-full rounded-2xl border-2 border-sage-200 bg-transparent px-4 py-2 text-sm text-ink-800 placeholder:text-ink-800/30 focus:border-coral-400 focus:outline-none dark:border-sage-700 dark:text-sand-100"
+                className="mt-1 w-full rounded-2xl border-2 border-teal-200 bg-transparent px-4 py-2 text-sm text-navy-800 placeholder:text-navy-800/30 focus:border-coral-400 focus:outline-none dark:border-teal-700 dark:text-sand-100"
               />
               <Button
                 variant="secondary"

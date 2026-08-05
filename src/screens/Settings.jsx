@@ -40,17 +40,17 @@ export default function Settings() {
   return (
     <main className="px-6 py-8">
       <div className="mx-auto max-w-md pb-6">
-        <h1 className="text-2xl font-bold text-ink-800 dark:text-sand-100">
+        <h1 className="text-2xl font-bold text-navy-800 dark:text-sand-100">
           {isOnboarding ? 'Personnalise ton espace' : 'Modifier mon profil'}
         </h1>
-        <p className="mt-1 text-ink-800/60 dark:text-sand-100/60">
+        <p className="mt-1 text-navy-800/60 dark:text-sand-100/60">
           Tout est optionnel. Ces infos servent uniquement à personnaliser ton plan — jamais
           visibles par les autres.
         </p>
 
-        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-ink-800">
+        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
           <label className="flex items-center justify-between">
-            <span className="text-sm font-semibold text-ink-800 dark:text-sand-100">
+            <span className="text-sm font-semibold text-navy-800 dark:text-sand-100">
               Mode anonyme complet
             </span>
             <input
@@ -60,14 +60,14 @@ export default function Settings() {
               className="h-5 w-5 accent-coral-500"
             />
           </label>
-          <p className="mt-1 text-xs text-ink-800/50 dark:text-sand-100/50">
+          <p className="mt-1 text-xs text-navy-800/50 dark:text-sand-100/50">
             Passe directement, sans remplir les champs ci-dessous.
           </p>
         </section>
 
         {!settings.anonymousMode && (
-          <section className="mt-4 rounded-2xl bg-white p-5 dark:bg-ink-800">
-            <p className="mb-3 text-sm font-semibold text-sage-600 dark:text-sage-400">
+          <section className="mt-4 rounded-2xl bg-white p-5 dark:bg-navy-800">
+            <p className="mb-3 text-sm font-semibold text-teal-600 dark:text-teal-400">
               Avatar
             </p>
             <div className="flex flex-wrap gap-2">
@@ -79,7 +79,7 @@ export default function Settings() {
                   className={`flex h-11 w-11 items-center justify-center rounded-full text-xl ${
                     settings.avatarEmoji === a
                       ? 'bg-coral-100 ring-2 ring-coral-500 dark:bg-coral-500/20'
-                      : 'bg-sage-100 dark:bg-sage-700/30'
+                      : 'bg-teal-100 dark:bg-teal-700/30'
                   }`}
                 >
                   {a}
@@ -88,7 +88,7 @@ export default function Settings() {
             </div>
 
             <div className="mt-5">
-              <label htmlFor="settings-name" className="mb-1 block text-sm font-medium text-ink-800 dark:text-sand-100">
+              <label htmlFor="settings-name" className="mb-1 block text-sm font-medium text-navy-800 dark:text-sand-100">
                 Prénom ou pseudo
               </label>
               <div className="flex items-center gap-2">
@@ -98,7 +98,7 @@ export default function Settings() {
                   value={settings.displayName}
                   onChange={(e) => update({ displayName: e.target.value })}
                   placeholder="Ex : Alex"
-                  className="flex-1 rounded-2xl border-2 border-sage-200 bg-transparent px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:text-sand-100"
+                  className="flex-1 rounded-2xl border-2 border-teal-200 bg-transparent px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:text-sand-100"
                 />
                 <EyeToggle
                   hidden={settings.displayNameHidden}
@@ -108,7 +108,7 @@ export default function Settings() {
             </div>
 
             <div className="mt-3">
-              <label htmlFor="settings-age" className="mb-1 block text-sm font-medium text-ink-800 dark:text-sand-100">
+              <label htmlFor="settings-age" className="mb-1 block text-sm font-medium text-navy-800 dark:text-sand-100">
                 Âge
               </label>
               <div className="flex items-center gap-2">
@@ -120,7 +120,7 @@ export default function Settings() {
                   value={settings.age}
                   onChange={(e) => update({ age: e.target.value })}
                   placeholder="Ex : 24"
-                  className="flex-1 rounded-2xl border-2 border-sage-200 bg-transparent px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:text-sand-100"
+                  className="flex-1 rounded-2xl border-2 border-teal-200 bg-transparent px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:text-sand-100"
                 />
                 <EyeToggle
                   hidden={settings.ageHidden}
@@ -131,7 +131,7 @@ export default function Settings() {
 
             <div className="mt-4">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-ink-800 dark:text-sand-100">Genre</p>
+                <p className="text-sm font-semibold text-navy-800 dark:text-sand-100">Genre</p>
                 <EyeToggle
                   hidden={settings.genderHidden}
                   onToggle={() => update({ genderHidden: !settings.genderHidden })}
@@ -146,7 +146,7 @@ export default function Settings() {
                     className={`rounded-full border-2 px-4 py-2 text-sm font-medium ${
                       settings.gender === g
                         ? 'border-coral-500 bg-coral-100/60 text-coral-600 dark:bg-coral-500/10 dark:text-coral-300'
-                        : 'border-sage-200 text-ink-800/70 dark:border-sage-700 dark:text-sand-100/70'
+                        : 'border-teal-200 text-navy-800/70 dark:border-teal-700 dark:text-sand-100/70'
                     }`}
                   >
                     {g}
@@ -157,11 +157,11 @@ export default function Settings() {
           </section>
         )}
 
-        <section className="mt-4 rounded-2xl bg-white p-5 dark:bg-ink-800">
-          <p className="text-sm font-semibold text-sage-600 dark:text-sage-400">
+        <section className="mt-4 rounded-2xl bg-white p-5 dark:bg-navy-800">
+          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
             Profil dans la communauté
           </p>
-          <p className="mt-1 text-xs text-ink-800/50 dark:text-sand-100/50">
+          <p className="mt-1 text-xs text-navy-800/50 dark:text-sand-100/50">
             Réglage indépendant de tes infos ci-dessus — tu peux être identifiable ici même en
             mode anonyme complet, ou l'inverse.
           </p>
@@ -173,11 +173,11 @@ export default function Settings() {
               className={`rounded-2xl border-2 px-4 py-3 text-left text-sm ${
                 !settings.communityPublic
                   ? 'border-coral-500 bg-coral-100/60 dark:bg-coral-500/10'
-                  : 'border-sage-200 dark:border-sage-700'
+                  : 'border-teal-200 dark:border-teal-700'
               }`}
             >
-              <span className="font-medium text-ink-800 dark:text-sand-100">Anonyme</span>
-              <span className="block text-ink-800/60 dark:text-sand-100/60">
+              <span className="font-medium text-navy-800 dark:text-sand-100">Anonyme</span>
+              <span className="block text-navy-800/60 dark:text-sand-100/60">
                 Affiché comme "{settings.communityPseudo || 'Anonyme#0000'}"
               </span>
             </button>
@@ -187,10 +187,10 @@ export default function Settings() {
               className={`rounded-2xl border-2 px-4 py-3 text-left text-sm ${
                 settings.communityPublic
                   ? 'border-coral-500 bg-coral-100/60 dark:bg-coral-500/10'
-                  : 'border-sage-200 dark:border-sage-700'
+                  : 'border-teal-200 dark:border-teal-700'
               }`}
             >
-              <span className="font-medium text-ink-800 dark:text-sand-100">
+              <span className="font-medium text-navy-800 dark:text-sand-100">
                 Public (pseudo visible)
               </span>
             </button>
@@ -198,7 +198,7 @@ export default function Settings() {
 
           {settings.communityPublic && (
             <div className="mt-3">
-              <label htmlFor="settings-pseudo" className="mb-1 block text-sm font-medium text-ink-800 dark:text-sand-100">
+              <label htmlFor="settings-pseudo" className="mb-1 block text-sm font-medium text-navy-800 dark:text-sand-100">
                 Pseudo public
               </label>
               <input
@@ -207,7 +207,7 @@ export default function Settings() {
                 value={settings.communityPseudo}
                 onChange={(e) => update({ communityPseudo: e.target.value })}
                 placeholder="Ton pseudo public"
-                className="w-full rounded-2xl border-2 border-sage-200 bg-transparent px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:text-sand-100"
+                className="w-full rounded-2xl border-2 border-teal-200 bg-transparent px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:text-sand-100"
               />
             </div>
           )}
@@ -220,7 +220,7 @@ export default function Settings() {
           <button
             type="button"
             onClick={() => navigate('/quiz')}
-            className="mt-3 w-full text-center text-sm text-ink-800/50 dark:text-sand-100/50"
+            className="mt-3 w-full text-center text-sm text-navy-800/50 dark:text-sand-100/50"
           >
             Passer pour l'instant
           </button>

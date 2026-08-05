@@ -69,24 +69,24 @@ export default function Home() {
   }
 
   return (
-    <main className="relative overflow-hidden bg-gradient-to-b from-sage-50 to-sand-50 px-6 py-8 dark:from-ink-900 dark:to-ink-900">
+    <main className="relative overflow-hidden bg-gradient-to-b from-teal-50 to-sand-50 px-6 py-8 dark:from-navy-900 dark:to-navy-900">
       <div
         className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-coral-200/30 blur-3xl dark:bg-coral-500/10"
         aria-hidden="true"
       />
       <div className="relative mx-auto max-w-md">
-        <p className="text-sm text-ink-800/60 dark:text-sand-100/60">Content de te revoir</p>
-        <h1 className="mt-1 text-2xl font-bold text-ink-800 dark:text-sand-100">
+        <p className="text-sm text-navy-800/60 dark:text-sand-100/60">Content de te revoir</p>
+        <h1 className="mt-1 text-2xl font-bold text-navy-800 dark:text-sand-100">
           Comment tu te sens aujourd'hui ?
         </h1>
 
-        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-ink-800">
+        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-sage-600 dark:text-sage-400">
+              <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
                 Ta pratique cette semaine
               </p>
-              <p className="mt-1 text-2xl font-bold text-ink-800 dark:text-sand-100">
+              <p className="mt-1 text-2xl font-bold text-navy-800 dark:text-sand-100">
                 {stats.practicedThisWeek}/{stats.totalWeekDays} jours
               </p>
               {stats.streak > 0 && (
@@ -95,11 +95,11 @@ export default function Home() {
                 </p>
               )}
             </div>
-            <div className="h-14 w-14 rounded-full bg-sage-100 flex items-center justify-center text-xl font-bold text-sage-600 dark:bg-sage-700/30 dark:text-sage-300">
+            <div className="h-14 w-14 rounded-full bg-teal-100 flex items-center justify-center text-xl font-bold text-teal-600 dark:bg-teal-700/30 dark:text-teal-300">
               {Math.round((stats.practicedThisWeek / stats.totalWeekDays) * 100)}%
             </div>
           </div>
-          <p className="mt-2 text-xs text-ink-800/50 dark:text-sand-100/50">
+          <p className="mt-2 text-xs text-navy-800/50 dark:text-sand-100/50">
             Un jour manqué ne remet rien à zéro — on regarde la tendance, pas l'instant.
           </p>
 
@@ -125,11 +125,11 @@ export default function Home() {
         </div>
 
         {nextEpisode && (
-          <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-ink-800">
-            <p className="text-sm font-semibold text-sage-600 dark:text-sage-400">
+          <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
+            <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
               {primarySeason.title} · {primaryBehavior.label}
             </p>
-            <p className="mt-1 font-semibold text-ink-800 dark:text-sand-100">{nextEpisode.title}</p>
+            <p className="mt-1 font-semibold text-navy-800 dark:text-sand-100">{nextEpisode.title}</p>
             <Button
               variant="secondary"
               className="mt-3 w-full"
@@ -140,26 +140,26 @@ export default function Home() {
           </section>
         )}
 
-        <section className="mt-6 flex items-start gap-3 rounded-2xl bg-sage-100/60 p-5 dark:bg-sage-700/10">
+        <section className="mt-6 flex items-start gap-3 rounded-2xl bg-teal-100/60 p-5 dark:bg-teal-700/10">
           <Mascot size="md" className="shrink-0" />
           <div>
-            <p className="text-sm font-semibold text-sage-700 dark:text-sage-300">
+            <p className="text-sm font-semibold text-teal-700 dark:text-teal-300">
               Ta pensée du jour
             </p>
-            <p className="mt-1 text-sm leading-relaxed text-ink-800/80 dark:text-sand-100/80">
+            <p className="mt-1 text-sm leading-relaxed text-navy-800/80 dark:text-sand-100/80">
               {thoughtOfTheDay()}
             </p>
           </div>
         </section>
 
-        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-ink-800">
-          <p className="text-sm font-semibold text-sage-600 dark:text-sage-400">
+        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
+          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
             Exercice du jour
           </p>
-          <p className="mt-1 font-semibold text-ink-800 dark:text-sand-100">
+          <p className="mt-1 font-semibold text-navy-800 dark:text-sand-100">
             {todayExercise.title}
           </p>
-          <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
+          <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
             {todayExercise.detail}
           </p>
           <Button
@@ -173,13 +173,13 @@ export default function Home() {
         </section>
 
         {topTrigger && (
-          <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-ink-800">
-            <p className="text-sm font-semibold text-sage-600 dark:text-sage-400">
+          <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
+            <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
               Ce que le tracker remarque
             </p>
-            <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
+            <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
               Cette semaine, tes moments difficiles reviennent surtout dans un contexte de{' '}
-              <strong className="text-ink-800 dark:text-sand-100">
+              <strong className="text-navy-800 dark:text-sand-100">
                 {topTriggerLabel?.toLowerCase()}
               </strong>
               . Ça peut valoir le coup de préparer un exercice spécifique pour ces moments-là.
@@ -191,32 +191,32 @@ export default function Home() {
           <button
             type="button"
             onClick={() => navigate('/journal')}
-            className="flex flex-col items-center gap-1 rounded-2xl bg-white p-3 text-center dark:bg-ink-800"
+            className="flex flex-col items-center gap-1 rounded-2xl bg-white p-3 text-center dark:bg-navy-800"
           >
             <span className="text-xl">💭</span>
-            <span className="text-xs font-medium text-ink-800 dark:text-sand-100">Journal</span>
+            <span className="text-xs font-medium text-navy-800 dark:text-sand-100">Journal</span>
           </button>
           <button
             type="button"
             onClick={() => navigate('/library')}
-            className="flex flex-col items-center gap-1 rounded-2xl bg-white p-3 text-center dark:bg-ink-800"
+            className="flex flex-col items-center gap-1 rounded-2xl bg-white p-3 text-center dark:bg-navy-800"
           >
             <span className="text-xl">📚</span>
-            <span className="text-xs font-medium text-ink-800 dark:text-sand-100">Bibliothèque</span>
+            <span className="text-xs font-medium text-navy-800 dark:text-sand-100">Bibliothèque</span>
           </button>
           <button
             type="button"
             onClick={() => navigate('/community')}
-            className="flex flex-col items-center gap-1 rounded-2xl bg-white p-3 text-center dark:bg-ink-800"
+            className="flex flex-col items-center gap-1 rounded-2xl bg-white p-3 text-center dark:bg-navy-800"
           >
             <span className="text-xl">🤝</span>
-            <span className="text-xs font-medium text-ink-800 dark:text-sand-100">Communauté</span>
+            <span className="text-xs font-medium text-navy-800 dark:text-sand-100">Communauté</span>
           </button>
         </div>
 
         {recentEpisodes.length > 0 && (
           <section className="mt-8 pb-4">
-            <h2 className="text-lg font-semibold text-ink-800 dark:text-sand-100">
+            <h2 className="text-lg font-semibold text-navy-800 dark:text-sand-100">
               Derniers moments difficiles
             </h2>
             <div className="mt-3 flex flex-col gap-2">
@@ -225,12 +225,12 @@ export default function Home() {
                 return (
                   <div
                     key={ep.id}
-                    className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 text-sm dark:bg-ink-800"
+                    className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 text-sm dark:bg-navy-800"
                   >
-                    <span className="text-ink-800 dark:text-sand-100">
+                    <span className="text-navy-800 dark:text-sand-100">
                       {behavior?.label ?? 'Moment difficile'}
                     </span>
-                    <span className="text-ink-800/50 dark:text-sand-100/50">
+                    <span className="text-navy-800/50 dark:text-sand-100/50">
                       {relativeTime(ep.createdAt)}
                     </span>
                   </div>

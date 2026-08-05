@@ -28,7 +28,7 @@ export default function EpisodePlayer() {
   if (!behavior || !season || !episode) {
     return (
       <main className="flex min-h-svh flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
-        <p className="text-ink-800 dark:text-sand-100">Cet épisode est introuvable.</p>
+        <p className="text-navy-800 dark:text-sand-100">Cet épisode est introuvable.</p>
         <Button onClick={() => navigate('/tracker')}>Retour au tracker</Button>
       </main>
     )
@@ -47,19 +47,19 @@ export default function EpisodePlayer() {
           ← Retour au tracker
         </Button>
 
-        <p className="mt-4 text-sm font-semibold text-sage-600 dark:text-sage-400">
+        <p className="mt-4 text-sm font-semibold text-teal-600 dark:text-teal-400">
           {season.title} · Épisode {index + 1}/{season.episodes.length}
         </p>
 
         <div className="mt-2 flex items-center gap-2">
-          <span className="rounded-full bg-sage-100 px-3 py-1 text-xs font-medium text-sage-700 dark:bg-sage-700/30 dark:text-sage-300">
+          <span className="rounded-full bg-teal-100 px-3 py-1 text-xs font-medium text-teal-700 dark:bg-teal-700/30 dark:text-teal-300">
             {TYPE_LABELS[episode.type]}
           </span>
-          <span className="text-xs text-ink-800/50 dark:text-sand-100/50">{episode.duration}</span>
+          <span className="text-xs text-navy-800/50 dark:text-sand-100/50">{episode.duration}</span>
         </div>
 
-        <h1 className="mt-3 text-2xl font-bold text-ink-800 dark:text-sand-100">{episode.title}</h1>
-        <p className="mt-4 leading-relaxed text-ink-800/80 dark:text-sand-100/80">{episode.content}</p>
+        <h1 className="mt-3 text-2xl font-bold text-navy-800 dark:text-sand-100">{episode.title}</h1>
+        <p className="mt-4 leading-relaxed text-navy-800/80 dark:text-sand-100/80">{episode.content}</p>
 
         <Button
           className="mt-8 w-full"

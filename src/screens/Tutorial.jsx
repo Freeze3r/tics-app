@@ -45,11 +45,11 @@ export default function Tutorial() {
   }
 
   return (
-    <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-sage-50 px-6 py-10 text-center dark:bg-ink-900">
+    <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-teal-50 px-6 py-10 text-center dark:bg-navy-900">
       <Mascot size="lg" bounce />
 
-      <div className="mt-6 max-w-sm rounded-3xl rounded-tl-none bg-white p-5 dark:bg-ink-800">
-        <p className="text-ink-800 dark:text-sand-100">{STEPS[step].text}</p>
+      <div className="mt-6 max-w-sm rounded-3xl rounded-tl-none bg-white p-5 dark:bg-navy-800">
+        <p className="text-navy-800 dark:text-sand-100">{STEPS[step].text}</p>
       </div>
 
       <div className="mt-8">
@@ -61,7 +61,7 @@ export default function Tutorial() {
         <button
           type="button"
           onClick={finish}
-          className="text-center text-sm text-ink-800/50 dark:text-sand-100/50"
+          className="text-center text-sm text-navy-800/50 dark:text-sand-100/50"
         >
           Passer
         </button>

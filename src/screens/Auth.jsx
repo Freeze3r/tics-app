@@ -81,12 +81,12 @@ export default function Auth() {
   if (checkingSession) return null
 
   return (
-    <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-sage-50 px-6 py-12 dark:bg-ink-900">
+    <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-teal-50 px-6 py-12 dark:bg-navy-900">
       <div className="w-full max-w-sm">
-        <h1 className="text-center text-2xl font-bold text-ink-800 dark:text-sand-100">
+        <h1 className="text-center text-2xl font-bold text-navy-800 dark:text-sand-100">
           {mode === 'signup' ? 'Crée ton compte' : 'Bon retour'}
         </h1>
-        <p className="mt-2 text-center text-ink-800/60 dark:text-sand-100/60">
+        <p className="mt-2 text-center text-navy-800/60 dark:text-sand-100/60">
           {mode === 'signup'
             ? 'Pour garder ton plan et ta progression en sécurité, où que tu te connectes.'
             : 'Connecte-toi pour retrouver ton plan et ta progression.'}
@@ -99,9 +99,9 @@ export default function Auth() {
             </Button>
 
             <div className="my-5 flex items-center gap-3">
-              <div className="h-px flex-1 bg-sage-200 dark:bg-sage-700" />
-              <span className="text-xs text-ink-800/40 dark:text-sand-100/40">ou</span>
-              <div className="h-px flex-1 bg-sage-200 dark:bg-sage-700" />
+              <div className="h-px flex-1 bg-teal-200 dark:bg-teal-700" />
+              <span className="text-xs text-navy-800/40 dark:text-sand-100/40">ou</span>
+              <div className="h-px flex-1 bg-teal-200 dark:bg-teal-700" />
             </div>
           </>
         )}
@@ -110,7 +110,7 @@ export default function Auth() {
           <div>
             <label
               htmlFor="auth-email"
-              className="mb-1 block text-sm font-medium text-ink-800 dark:text-sand-100"
+              className="mb-1 block text-sm font-medium text-navy-800 dark:text-sand-100"
             >
               Email
             </label>
@@ -121,14 +121,14 @@ export default function Auth() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="toi@exemple.com"
-              className="w-full rounded-2xl border-2 border-sage-200 bg-white px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:bg-ink-800 dark:text-sand-100"
+              className="w-full rounded-2xl border-2 border-teal-200 bg-white px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:bg-navy-800 dark:text-sand-100"
             />
           </div>
 
           <div>
             <label
               htmlFor="auth-password"
-              className="mb-1 block text-sm font-medium text-ink-800 dark:text-sand-100"
+              className="mb-1 block text-sm font-medium text-navy-800 dark:text-sand-100"
             >
               Mot de passe
             </label>
@@ -140,7 +140,7 @@ export default function Auth() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="6 caractères minimum"
-              className="w-full rounded-2xl border-2 border-sage-200 bg-white px-4 py-3 text-sm text-ink-800 placeholder:text-ink-800/40 focus:border-sage-400 focus:outline-none dark:border-sage-700 dark:bg-ink-800 dark:text-sand-100"
+              className="w-full rounded-2xl border-2 border-teal-200 bg-white px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:bg-navy-800 dark:text-sand-100"
             />
           </div>
 
@@ -157,7 +157,7 @@ export default function Auth() {
             setMode((m) => (m === 'signup' ? 'login' : 'signup'))
             setError(null)
           }}
-          className="mt-5 w-full text-center text-sm text-sage-600 dark:text-sage-400"
+          className="mt-5 w-full text-center text-sm text-teal-600 dark:text-teal-400"
         >
           {mode === 'signup' ? 'Déjà un compte ? Se connecter' : "Pas encore de compte ? Créer un compte"}
         </button>

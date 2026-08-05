@@ -7,34 +7,40 @@
 @theme {
   --font-sans: "Nunito", system-ui, "Segoe UI", Roboto, sans-serif;
 
-  /* sauge */
-  --color-sage-50: #f4f7f4;
-  --color-sage-100: #e4ece3;
-  --color-sage-200: #cadbc8;
-  --color-sage-300: #a6c2a3;
-  --color-sage-400: #82a67e;
-  --color-sage-500: #648c60;
-  --color-sage-600: #4d704a;
-  --color-sage-700: #3f5a3d;
+  /* turquoise — couleur principale, fraîche et apaisante mais vivante */
+  --color-teal-50: #eefaf9;
+  --color-teal-100: #d2f2ef;
+  --color-teal-200: #a3e4de;
+  --color-teal-300: #6ecdc5;
+  --color-teal-400: #3fb3a9;
+  --color-teal-500: #23968c;
+  --color-teal-600: #1a7871;
+  --color-teal-700: #175f5a;
 
-  /* sable */
+  /* sable — neutre chaud complémentaire */
   --color-sand-50: #fbf8f3;
   --color-sand-100: #f4ecdd;
   --color-sand-200: #e8d8bc;
   --color-sand-300: #dabf92;
   --color-sand-400: #cba76a;
 
-  /* corail / terracotta doux - accent */
+  /* corail — accent chaleureux pour les CTA */
   --color-coral-100: #fbe4dc;
   --color-coral-300: #f2b3a0;
   --color-coral-400: #ea9179;
   --color-coral-500: #de7259;
   --color-coral-600: #c05c45;
 
-  /* neutres chauds pour le dark mode */
-  --color-ink-50: #f7f5f2;
-  --color-ink-800: #2b2622;
-  --color-ink-900: #1e1b18;
+  /* jaune doux — second accent, à utiliser avec parcimonie (badges, mise en avant) */
+  --color-amber-100: #fef3d6;
+  --color-amber-300: #fbdb8a;
+  --color-amber-500: #f0b429;
+  --color-amber-600: #c8901a;
+
+  /* bleu nuit — dark mode teinté, jamais noir pur */
+  --color-navy-50: #f3f6f8;
+  --color-navy-800: #1c2b3a;
+  --color-navy-900: #0f1c28;
 }
 
 :root {
@@ -44,12 +50,12 @@
 body {
   margin: 0;
   font-family: var(--font-sans);
-  background: var(--color-sage-50);
-  color: var(--color-ink-800);
+  background: var(--color-teal-50);
+  color: var(--color-navy-800);
 }
 
 .dark body {
-  background: var(--color-ink-900);
+  background: var(--color-navy-900);
   color: var(--color-sand-100);
 }
 
