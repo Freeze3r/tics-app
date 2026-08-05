@@ -102,7 +102,7 @@ export default function Home() {
             J'ai une envie forte
           </Button>
           <Button variant="secondary" className="w-full" onClick={() => navigate('/tracker?log=1')}>
-            Noter un épisode
+            Noter un moment difficile
           </Button>
         </div>
 
@@ -119,7 +119,7 @@ export default function Home() {
               Ce que le tracker remarque
             </p>
             <p className="mt-1 text-sm text-ink-800/70 dark:text-sand-100/70">
-              Cette semaine, tes épisodes reviennent surtout dans un contexte de{' '}
+              Cette semaine, tes moments difficiles reviennent surtout dans un contexte de{' '}
               <strong className="text-ink-800 dark:text-sand-100">
                 {topTriggerLabel?.toLowerCase()}
               </strong>
@@ -158,7 +158,7 @@ export default function Home() {
         {recentEpisodes.length > 0 && (
           <section className="mt-8">
             <h2 className="text-lg font-semibold text-ink-800 dark:text-sand-100">
-              Derniers épisodes
+              Derniers moments difficiles
             </h2>
             <div className="mt-3 flex flex-col gap-2">
               {recentEpisodes.map((ep) => {
@@ -169,7 +169,7 @@ export default function Home() {
                     className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 text-sm dark:bg-ink-800"
                   >
                     <span className="text-ink-800 dark:text-sand-100">
-                      {behavior?.label ?? 'Épisode'}
+                      {behavior?.label ?? 'Moment difficile'}
                     </span>
                     <span className="text-ink-800/50 dark:text-sand-100/50">
                       {relativeTime(ep.createdAt)}

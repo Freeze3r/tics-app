@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
-import Chip from '../components/Chip.jsx'
 import { loadProfile } from '../lib/profile.js'
 import { TRANSVERSAL_EXERCISES } from '../data/behaviors.js'
 
@@ -11,12 +10,12 @@ export default function Sos() {
   const navigate = useNavigate()
   const [profile] = useState(() => loadProfile())
   const behaviors = profile?.plan.behaviors ?? []
-  const [behaviorId, setBehaviorId] = useState(behaviors[0]?.id)
-  const [phase, setPhase] = useState('running') // running | done
+  const [behaviorId, setBehaviorId] = useState(behaviors.length === 1 ? behaviors[0]?.id : null)
+  const [phase, setPhase] = useState(behaviors.length === 1 ? 'instruction' : 'select')
   const [secondsLeft, setSecondsLeft] = useState(EXERCISE_SECONDS)
   const vibrated = useRef(false)
 
-  const behavior = behaviors.find((b) => b.id === behaviorId) ?? behaviors[0]
+  const behavior = behaviors.find((b) => b.id === behaviorId)
   const exercise = behavior?.exercises?.[0]
   const compassion = useMemo(
     () => TRANSVERSAL_EXERCISES.find((e) => e.title === 'Auto-compassion guidée'),
@@ -24,6 +23,7 @@ export default function Sos() {
   )
 
   useEffect(() => {
+    if (phase !== 'running') return
     if (!vibrated.current && 'vibrate' in navigator) {
       try {
         navigator.vibrate(80)
@@ -32,7 +32,7 @@ export default function Sos() {
       }
     }
     vibrated.current = true
-  }, [])
+  }, [phase])
 
   useEffect(() => {
     if (phase !== 'running') return
@@ -49,22 +49,68 @@ export default function Sos() {
     return null
   }
 
+  function selectBehavior(id) {
+    setBehaviorId(id)
+    setPhase('instruction')
+  }
+
+  function startTimer() {
+    setSecondsLeft(EXERCISE_SECONDS)
+    vibrated.current = false
+    setPhase('running')
+  }
+
   const progress = 1 - secondsLeft / EXERCISE_SECONDS
 
   return (
     <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-sage-50 px-6 py-10 text-center dark:bg-ink-900">
+      {phase === 'select' && (
+        <>
+          <h1 className="text-xl font-bold text-ink-800 dark:text-sand-100">
+            Qu'est-ce qui se passe là ?
+          </h1>
+          <p className="mt-2 max-w-sm text-ink-800/60 dark:text-sand-100/60">
+            Choisis le comportement concerné, on te donne l'exercice adapté.
+          </p>
+          <div className="mt-6 flex w-full max-w-sm flex-col gap-3">
+            {behaviors.map((b) => (
+              <button
+                key={b.id}
+                type="button"
+                onClick={() => selectBehavior(b.id)}
+                className="w-full rounded-2xl border-2 border-sage-200 bg-white px-5 py-4 text-left font-semibold text-ink-800 transition-colors hover:border-sage-300 dark:border-sage-700 dark:bg-ink-800 dark:text-sand-100"
+              >
+                {b.label}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+
+      {phase === 'instruction' && exercise && (
+        <>
+          <p className="text-sm font-semibold text-sage-600 dark:text-sage-400">{behavior.label}</p>
+          <h1 className="mt-2 max-w-sm text-xl font-bold text-ink-800 dark:text-sand-100">
+            {exercise.title}
+          </h1>
+          <p className="mt-3 max-w-sm text-ink-800/70 dark:text-sand-100/70">{exercise.detail}</p>
+          <p className="mt-4 text-sm text-ink-800/50 dark:text-sand-100/50">
+            Lis bien l'exercice, installe-toi, puis lance le chrono quand tu es prêt·e.
+          </p>
+
+          <Button className="mt-8 w-full max-w-sm" onClick={startTimer}>
+            Je suis prêt·e, lancer
+          </Button>
+          {behaviors.length > 1 && (
+            <Button variant="ghost" className="mt-3" onClick={() => setPhase('select')}>
+              Changer de comportement
+            </Button>
+          )}
+        </>
+      )}
+
       {phase === 'running' && exercise && (
         <>
-          {behaviors.length > 1 && (
-            <div className="mb-6 flex flex-wrap justify-center gap-2">
-              {behaviors.map((b) => (
-                <Chip key={b.id} selected={behaviorId === b.id} onClick={() => setBehaviorId(b.id)}>
-                  {b.label}
-                </Chip>
-              ))}
-            </div>
-          )}
-
           <div className="relative flex h-48 w-48 items-center justify-center">
             <svg className="absolute h-full w-full -rotate-90" viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="45" fill="none" stroke="var(--color-sage-200)" strokeWidth="6" />
@@ -127,7 +173,7 @@ export default function Sos() {
               variant="secondary"
               onClick={() => navigate(`/tracker?log=1&behavior=${behaviorId ?? ''}`)}
             >
-              Noter cet épisode
+              Noter ce moment
             </Button>
           </div>
         </>

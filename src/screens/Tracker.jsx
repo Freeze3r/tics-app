@@ -6,6 +6,8 @@ import { loadProfile } from '../lib/profile.js'
 import { logEpisode, listEpisodes, frequencyByContext } from '../lib/episodes.js'
 import { TRIGGER_CONTEXTS, getBehavior } from '../data/behaviors.js'
 import { EMOTIONS, DURATIONS } from '../data/episodeOptions.js'
+import { getSeasons } from '../lib/seasons.js'
+import { getSeasonProgress, getNextEpisode } from '../lib/seasonProgress.js'
 
 function relativeTime(iso) {
   const diffMs = Date.now() - new Date(iso).getTime()
@@ -43,6 +45,55 @@ function FrequencyChart({ counts }) {
           <span className="w-4 text-xs text-ink-800/60 dark:text-sand-100/60">{e.count}</span>
         </div>
       ))}
+    </div>
+  )
+}
+
+function BehaviorSeasonCard({ behavior, navigate }) {
+  const seasons = getSeasons(behavior)
+  const activeSeason = seasons[0]
+  const progress = getSeasonProgress(behavior.id, activeSeason)
+  const nextEpisode = getNextEpisode(behavior.id, activeSeason)
+  const percent = progress.total === 0 ? 0 : Math.round((progress.completed / progress.total) * 100)
+
+  return (
+    <div className="rounded-2xl bg-white p-4 dark:bg-ink-800">
+      <div className="flex items-center justify-between">
+        <span className="font-semibold text-ink-800 dark:text-sand-100">{behavior.label}</span>
+        <span className="text-xs text-ink-800/50 dark:text-sand-100/50">
+          {activeSeason.title} · {progress.completed}/{progress.total}
+        </span>
+      </div>
+
+      <div className="mt-2 h-2 rounded-full bg-sage-100 dark:bg-sage-700/30">
+        <div className="h-2 rounded-full bg-coral-500" style={{ width: `${percent}%` }} />
+      </div>
+
+      {nextEpisode ? (
+        <Button
+          className="mt-3 w-full"
+          variant="secondary"
+          onClick={() => navigate(`/episode/${behavior.id}/${nextEpisode.id}`)}
+        >
+          Épisode {activeSeason.episodes.findIndex((e) => e.id === nextEpisode.id) + 1}/
+          {activeSeason.episodes.length} · {nextEpisode.title}
+        </Button>
+      ) : (
+        <p className="mt-3 text-sm text-sage-600 dark:text-sage-400">
+          Saison 1 terminée ✓ La suite arrive bientôt.
+        </p>
+      )}
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        {seasons.slice(1).map((s) => (
+          <span
+            key={s.id}
+            className="rounded-full bg-sage-100 px-3 py-1 text-xs text-ink-800/50 dark:bg-sage-700/20 dark:text-sand-100/50"
+          >
+            🔒 {s.title} · bientôt
+          </span>
+        ))}
+      </div>
     </div>
   )
 }
@@ -92,13 +143,21 @@ export default function Tracker() {
       <div className="mx-auto max-w-md">
         <h1 className="text-2xl font-bold text-ink-800 dark:text-sand-100">Tracker</h1>
         <p className="mt-1 text-ink-800/60 dark:text-sand-100/60">
-          Chaque épisode noté t'aide à repérer tes déclencheurs. Aucun jugement, juste des
-          données.
+          Ta progression saison par saison, et tes moments difficiles sans jugement.
         </p>
 
+        <section className="mt-6">
+          <h2 className="text-lg font-semibold text-ink-800 dark:text-sand-100">Tes saisons</h2>
+          <div className="mt-3 flex flex-col gap-3">
+            {behaviors.map((b) => (
+              <BehaviorSeasonCard key={b.id} behavior={b} navigate={navigate} />
+            ))}
+          </div>
+        </section>
+
         {!formOpen && (
-          <Button className="mt-6 w-full" onClick={openForm}>
-            J'ai eu un épisode
+          <Button className="mt-8 w-full" onClick={openForm}>
+            J'ai eu un moment difficile
           </Button>
         )}
 
@@ -182,7 +241,7 @@ export default function Tracker() {
           <h2 className="text-lg font-semibold text-ink-800 dark:text-sand-100">Historique</h2>
           {episodes.length === 0 ? (
             <p className="mt-3 text-sm text-ink-800/50 dark:text-sand-100/50">
-              Aucun épisode noté pour l'instant.
+              Aucun moment difficile noté pour l'instant.
             </p>
           ) : (
             <div className="mt-3 flex flex-col gap-2">
@@ -194,7 +253,7 @@ export default function Tracker() {
                   <div key={ep.id} className="rounded-2xl bg-white p-4 text-sm dark:bg-ink-800">
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-ink-800 dark:text-sand-100">
-                        {behavior?.label ?? 'Épisode'}
+                        {behavior?.label ?? 'Moment difficile'}
                       </span>
                       <span className="text-xs text-ink-800/50 dark:text-sand-100/50">
                         {relativeTime(ep.createdAt)}

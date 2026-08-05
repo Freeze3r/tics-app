@@ -15,6 +15,7 @@ import Community from './screens/Community.jsx'
 import Profile from './screens/Profile.jsx'
 import Premium from './screens/Premium.jsx'
 import DeepQuiz from './screens/DeepQuiz.jsx'
+import EpisodePlayer from './screens/EpisodePlayer.jsx'
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
           <Route element={<AppShell />}>
             <Route path="/home" element={<Home />} />
             <Route path="/tracker" element={<Tracker />} />
+            <Route path="/episode/:behaviorId/:episodeId" element={<EpisodePlayer />} />
             <Route path="/sos" element={<Sos />} />
             <Route path="/coach" element={<Coach />} />
             <Route path="/journal" element={<Journal />} />
