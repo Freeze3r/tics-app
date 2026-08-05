@@ -34,13 +34,23 @@ export function loadDeepAnswers() {
   }
 }
 
-function todayKey(date = new Date()) {
-  return date.toISOString().slice(0, 10)
+// Basé sur le fuseau horaire local de l'utilisateur (dates calendaires), pas sur
+// un intervalle glissant de 24h — une connexion à 23:59 puis à 00:01 le lendemain
+// compte comme deux jours calendaires distincts, comme prévu (brief v2 section 14).
+export function todayKey(date = new Date()) {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
 }
 
 export function markPracticeToday() {
+  addPracticeDate(todayKey())
+}
+
+export function addPracticeDate(dateKey) {
   const days = new Set(getPracticeDays())
-  days.add(todayKey())
+  days.add(dateKey)
   localStorage.setItem(PRACTICE_KEY, JSON.stringify([...days]))
 }
 

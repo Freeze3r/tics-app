@@ -5,6 +5,8 @@ import { loadProfile, getPracticeStats, markPracticeToday, isPracticedToday } fr
 import { listEpisodes, topTriggerContext } from '../lib/episodes.js'
 import { getBehavior, TRIGGER_CONTEXTS } from '../data/behaviors.js'
 import { thoughtOfTheDay } from '../data/dailyThoughts.js'
+import { canRestoreStreak, restoreStreak } from '../lib/streak.js'
+import { isPremiumActive } from '../lib/subscription.js'
 
 function dayOfYear() {
   const now = new Date()
@@ -27,6 +29,7 @@ export default function Home() {
   const [profile] = useState(() => loadProfile())
   const [stats, setStats] = useState(() => getPracticeStats())
   const [practicedToday, setPracticedToday] = useState(() => isPracticedToday())
+  const [canRestore, setCanRestore] = useState(() => canRestoreStreak())
   const recentEpisodes = useMemo(() => listEpisodes().slice(0, 3), [])
   const topTrigger = useMemo(() => topTriggerContext(), [])
   const topTriggerLabel = TRIGGER_CONTEXTS.find((t) => t.id === topTrigger?.id)?.label
@@ -48,6 +51,14 @@ export default function Home() {
     markPracticeToday()
     setPracticedToday(true)
     setStats(getPracticeStats())
+    setCanRestore(canRestoreStreak())
+  }
+
+  function handleRestore() {
+    if (restoreStreak()) {
+      setStats(getPracticeStats())
+      setCanRestore(false)
+    }
   }
 
   return (
@@ -67,6 +78,11 @@ export default function Home() {
               <p className="mt-1 text-2xl font-bold text-ink-800 dark:text-sand-100">
                 {stats.practicedThisWeek}/{stats.totalWeekDays} jours
               </p>
+              {stats.streak > 0 && (
+                <p className="mt-1 text-sm text-coral-600 dark:text-coral-300">
+                  🔥 {stats.streak} jour{stats.streak > 1 ? 's' : ''} d'affilée
+                </p>
+              )}
             </div>
             <div className="h-14 w-14 rounded-full bg-sage-100 flex items-center justify-center text-xl font-bold text-sage-600 dark:bg-sage-700/30 dark:text-sage-300">
               {Math.round((stats.practicedThisWeek / stats.totalWeekDays) * 100)}%
@@ -75,6 +91,17 @@ export default function Home() {
           <p className="mt-2 text-xs text-ink-800/50 dark:text-sand-100/50">
             Un jour manqué ne remet rien à zéro — on regarde la tendance, pas l'instant.
           </p>
+
+          {canRestore && (
+            <div className="mt-3 rounded-2xl bg-coral-100/60 p-3 dark:bg-coral-500/10">
+              <p className="text-sm text-coral-600 dark:text-coral-300">
+                Tu as raté hier ? Tu peux restaurer ta série ({isPremiumActive() ? '1x/semaine' : '1x/mois'}).
+              </p>
+              <Button variant="secondary" className="mt-2" onClick={handleRestore}>
+                Restaurer ma série
+              </Button>
+            </div>
+          )}
         </section>
 
         <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-ink-800">
