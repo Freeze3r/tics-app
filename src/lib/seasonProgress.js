@@ -1,7 +1,9 @@
+import { scopedKey } from './authScope.js'
+
 const KEY = 'ticsSeasonProgress'
 
 function readAll() {
-  const raw = localStorage.getItem(KEY)
+  const raw = localStorage.getItem(scopedKey(KEY))
   if (!raw) return {}
   try {
     return JSON.parse(raw)
@@ -11,7 +13,7 @@ function readAll() {
 }
 
 function writeAll(all) {
-  localStorage.setItem(KEY, JSON.stringify(all))
+  localStorage.setItem(scopedKey(KEY), JSON.stringify(all))
 }
 
 export function getCompletedEpisodeIds(behaviorId) {

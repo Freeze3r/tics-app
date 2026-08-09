@@ -1,9 +1,10 @@
 import { supabase, getCurrentUser } from './supabase.js'
+import { scopedKey } from './authScope.js'
 
 const LOCAL_KEY = 'ticsJournal'
 
 function readLocal() {
-  const raw = localStorage.getItem(LOCAL_KEY)
+  const raw = localStorage.getItem(scopedKey(LOCAL_KEY))
   if (!raw) return []
   try {
     return JSON.parse(raw)
@@ -13,7 +14,7 @@ function readLocal() {
 }
 
 function writeLocal(entries) {
-  localStorage.setItem(LOCAL_KEY, JSON.stringify(entries))
+  localStorage.setItem(scopedKey(LOCAL_KEY), JSON.stringify(entries))
 }
 
 export async function addJournalEntry({ mood, note }) {

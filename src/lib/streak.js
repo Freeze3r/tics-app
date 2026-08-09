@@ -1,5 +1,6 @@
 import { getPracticeDays, addPracticeDate, todayKey } from './profile.js'
 import { isPremiumActive } from './subscription.js'
+import { scopedKey } from './authScope.js'
 
 const RESTORE_KEY = 'ticsStreakRestores'
 const FREE_WINDOW_DAYS = 30
@@ -7,7 +8,7 @@ const PREMIUM_WINDOW_DAYS = 7
 const DAY_MS = 24 * 60 * 60 * 1000
 
 function getRestores() {
-  const raw = localStorage.getItem(RESTORE_KEY)
+  const raw = localStorage.getItem(scopedKey(RESTORE_KEY))
   if (!raw) return []
   try {
     return JSON.parse(raw)
@@ -19,7 +20,7 @@ function getRestores() {
 function recordRestore() {
   const restores = getRestores()
   restores.push(new Date().toISOString())
-  localStorage.setItem(RESTORE_KEY, JSON.stringify(restores))
+  localStorage.setItem(scopedKey(RESTORE_KEY), JSON.stringify(restores))
 }
 
 // Le jour manqué qu'on peut restaurer : hier, s'il n'a pas été marqué pratiqué —

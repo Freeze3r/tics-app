@@ -1,4 +1,5 @@
 import { supabase, getCurrentUser } from './supabase.js'
+import { scopedKey } from './authScope.js'
 
 const KEY = 'ticsUserSettings'
 
@@ -23,7 +24,7 @@ function randomPseudoSuffix() {
 }
 
 export function getUserSettings() {
-  const raw = localStorage.getItem(KEY)
+  const raw = localStorage.getItem(scopedKey(KEY))
   if (!raw) return { ...DEFAULTS }
   try {
     return { ...DEFAULTS, ...JSON.parse(raw) }
@@ -46,7 +47,7 @@ export async function saveUserSettings(partial) {
     next.communityPseudo = `Anonyme#${randomPseudoSuffix()}`
   }
 
-  localStorage.setItem(KEY, JSON.stringify(next))
+  localStorage.setItem(scopedKey(KEY), JSON.stringify(next))
 
   if (supabase) {
     try {

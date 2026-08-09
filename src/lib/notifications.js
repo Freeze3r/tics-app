@@ -2,6 +2,8 @@
 // ça ne fonctionne que tant que l'app est ouverte quelque part (onglet actif ou
 // en arrière-plan) — un vrai système de notifications quand l'app est totalement
 // fermée demanderait un service worker + push serveur, hors scope pour l'instant.
+import { scopedKey } from './authScope.js'
+
 const FIRED_KEY = 'ticsReminderFired'
 
 export function isNotificationSupported() {
@@ -21,7 +23,7 @@ function todayKey() {
 }
 
 function readFired() {
-  const raw = localStorage.getItem(FIRED_KEY)
+  const raw = localStorage.getItem(scopedKey(FIRED_KEY))
   if (!raw) return {}
   try {
     return JSON.parse(raw)
@@ -37,7 +39,7 @@ function firedToday(period) {
 
 function markFired(period) {
   const today = todayKey()
-  localStorage.setItem(FIRED_KEY, JSON.stringify({ [today]: [...(readFired()[today] ?? []), period] }))
+  localStorage.setItem(scopedKey(FIRED_KEY), JSON.stringify({ [today]: [...(readFired()[today] ?? []), period] }))
 }
 
 export function checkAndFireReminders(settings) {

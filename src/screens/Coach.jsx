@@ -5,6 +5,7 @@ import { getCoachReply } from '../lib/coachResponses.js'
 import { askCoach, canSendMessage, getRemainingMessages, getDailyLimit } from '../lib/coachApi.js'
 import { loadProfile } from '../lib/profile.js'
 import { isPremiumActive } from '../lib/subscription.js'
+import { scopedKey } from '../lib/authScope.js'
 
 const HISTORY_KEY = 'ticsCoachHistory'
 const CRISIS_RESOURCE =
@@ -18,7 +19,7 @@ const SUGGESTED_TOPICS = [
 ]
 
 function loadHistory() {
-  const raw = localStorage.getItem(HISTORY_KEY)
+  const raw = localStorage.getItem(scopedKey(HISTORY_KEY))
   if (!raw) return null
   try {
     return JSON.parse(raw)
@@ -28,7 +29,7 @@ function loadHistory() {
 }
 
 function saveHistory(messages) {
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(messages.slice(-40)))
+  localStorage.setItem(scopedKey(HISTORY_KEY), JSON.stringify(messages.slice(-40)))
 }
 
 const INTRO = {
@@ -59,7 +60,7 @@ export default function Coach() {
     setMessages((prev) => [...prev, userMsg])
     setInput('')
     setSending(true)
-    localStorage.setItem('ticsCoachUsed', '1')
+    localStorage.setItem(scopedKey('ticsCoachUsed'), '1')
 
     const profile = loadProfile()
     const context = { behaviors: profile?.plan.behaviors.map((b) => b.label) ?? [] }

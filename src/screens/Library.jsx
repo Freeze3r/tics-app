@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { BEHAVIORS } from '../data/behaviors.js'
 import { loadProfile } from '../lib/profile.js'
 import { isChecked, toggleChecked } from '../lib/checklist.js'
+import { scopedKey } from '../lib/authScope.js'
 import Chip from '../components/Chip.jsx'
 
 function BehaviorCard({ behavior }) {
@@ -86,7 +87,7 @@ export default function Library() {
   const [filter, setFilter] = useState('all')
 
   useEffect(() => {
-    localStorage.setItem('ticsLibraryVisited', '1')
+    localStorage.setItem(scopedKey('ticsLibraryVisited'), '1')
   }, [])
 
   const ownIds = new Set(profile?.plan.behaviors.map((b) => b.id) ?? [])

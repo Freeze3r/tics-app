@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Button from '../components/Button.jsx'
-import { supabase, getCurrentUser, signUpWithEmail, signInWithEmail, signInWithGoogle } from '../lib/supabase.js'
+import { supabase, signUpWithEmail, signInWithEmail, signInWithGoogle } from '../lib/supabase.js'
+import { resolveAuthScope } from '../lib/authScope.js'
 import { loadProfile } from '../lib/profile.js'
 
 const ERROR_MESSAGES = {
@@ -25,7 +26,7 @@ export default function Auth() {
   const [checkingSession, setCheckingSession] = useState(true)
 
   useEffect(() => {
-    getCurrentUser().then((user) => {
+    resolveAuthScope().then((user) => {
       if (user) {
         navigate(loadProfile() ? '/home' : '/quiz', { replace: true })
       } else {
@@ -50,7 +51,7 @@ export default function Auth() {
       } else {
         await signInWithEmail(email, password)
       }
-      const user = await getCurrentUser()
+      const user = await resolveAuthScope()
       if (!user) {
         setError('Vérifie ta boîte mail pour confirmer ton compte, puis reviens te connecter.')
         return

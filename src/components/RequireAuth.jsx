@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
-import { supabase, getCurrentUser } from '../lib/supabase.js'
+import { supabase } from '../lib/supabase.js'
+import { resolveAuthScope } from '../lib/authScope.js'
 
 export default function RequireAuth() {
   const [status, setStatus] = useState('checking') // checking | authed | anon
 
   useEffect(() => {
     let active = true
-    getCurrentUser().then((user) => {
+    // resolveAuthScope() doit être attendu ici avant que les écrans enfants
+    // (Home, Profil, etc.) ne lisent leurs données locales scopées par compte.
+    resolveAuthScope().then((user) => {
       if (!active) return
       setStatus(user ? 'authed' : 'anon')
     })

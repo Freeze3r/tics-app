@@ -11,6 +11,7 @@ import { isPremiumActive, getSubscription, cancelSubscription } from '../lib/sub
 import { getSeasons } from '../lib/seasons.js'
 import { getSeasonProgress, getNextEpisode } from '../lib/seasonProgress.js'
 import { signOut } from '../lib/supabase.js'
+import { scopedKey } from '../lib/authScope.js'
 
 const THEME_OPTIONS = [
   { id: 'light', label: 'Clair', icon: '☀️' },
@@ -89,7 +90,7 @@ export default function Profile() {
 
   function handleReset() {
     if (confirmText.trim().toLowerCase() !== 'supprimer') return
-    LOCAL_KEYS.forEach((k) => localStorage.removeItem(k))
+    LOCAL_KEYS.forEach((k) => localStorage.removeItem(scopedKey(k)))
     navigate('/', { replace: true })
   }
 

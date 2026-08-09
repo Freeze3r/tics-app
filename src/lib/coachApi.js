@@ -1,4 +1,5 @@
 import { isPremiumActive } from './subscription.js'
+import { scopedKey } from './authScope.js'
 
 const LIMIT_KEY = 'ticsCoachDailyCount'
 const FREE_DAILY_LIMIT = 15
@@ -9,7 +10,7 @@ function todayKey() {
 }
 
 function readCount() {
-  const raw = localStorage.getItem(LIMIT_KEY)
+  const raw = localStorage.getItem(scopedKey(LIMIT_KEY))
   if (!raw) return { date: todayKey(), count: 0 }
   try {
     const parsed = JSON.parse(raw)
@@ -22,7 +23,7 @@ function readCount() {
 function bumpCount() {
   const current = readCount()
   const next = { date: todayKey(), count: current.count + 1 }
-  localStorage.setItem(LIMIT_KEY, JSON.stringify(next))
+  localStorage.setItem(scopedKey(LIMIT_KEY), JSON.stringify(next))
   return next.count
 }
 

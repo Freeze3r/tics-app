@@ -1,7 +1,9 @@
+import { scopedKey } from './authScope.js'
+
 const KEY = 'ticsChecklist'
 
 function readAll() {
-  const raw = localStorage.getItem(KEY)
+  const raw = localStorage.getItem(scopedKey(KEY))
   if (!raw) return {}
   try {
     return JSON.parse(raw)
@@ -19,7 +21,7 @@ export function toggleChecked(behaviorId, item) {
   const all = readAll()
   all[behaviorId] = all[behaviorId] ?? {}
   all[behaviorId][item] = !all[behaviorId][item]
-  localStorage.setItem(KEY, JSON.stringify(all))
+  localStorage.setItem(scopedKey(KEY), JSON.stringify(all))
   return all[behaviorId][item]
 }
 

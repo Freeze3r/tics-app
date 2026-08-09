@@ -1,10 +1,11 @@
 import { SEED_POSTS } from '../data/communityPosts.js'
 import { getCommunityDisplayName } from './userSettings.js'
+import { scopedKey } from './authScope.js'
 
 const LOCAL_KEY = 'ticsCommunityPosts'
 
 function readLocalPosts() {
-  const raw = localStorage.getItem(LOCAL_KEY)
+  const raw = localStorage.getItem(scopedKey(LOCAL_KEY))
   if (!raw) return []
   try {
     return JSON.parse(raw)
@@ -14,7 +15,7 @@ function readLocalPosts() {
 }
 
 function writeLocalPosts(posts) {
-  localStorage.setItem(LOCAL_KEY, JSON.stringify(posts))
+  localStorage.setItem(scopedKey(LOCAL_KEY), JSON.stringify(posts))
 }
 
 // Démo locale, pas de vrai backend multi-utilisateurs : les posts "seed" simulent

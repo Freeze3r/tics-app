@@ -5,6 +5,7 @@ import { countChecked } from './checklist.js'
 import { listPosts } from './community.js'
 import { getSeasons } from './seasons.js'
 import { getCompletedEpisodeIds } from './seasonProgress.js'
+import { scopedKey } from './authScope.js'
 
 function countCompletedContentEpisodes() {
   const profile = loadProfile()
@@ -24,8 +25,8 @@ export function getBadges() {
   const episodes = listEpisodes().length
   const journalEntries = listJournalEntries().length
   const checkedBarriers = countChecked()
-  const coachUsed = localStorage.getItem('ticsCoachUsed') === '1'
-  const libraryVisited = localStorage.getItem('ticsLibraryVisited') === '1'
+  const coachUsed = localStorage.getItem(scopedKey('ticsCoachUsed')) === '1'
+  const libraryVisited = localStorage.getItem(scopedKey('ticsLibraryVisited')) === '1'
   const myPosts = listPosts().filter((p) => p.isMine).length
   const completedContentEpisodes = countCompletedContentEpisodes()
 

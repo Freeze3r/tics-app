@@ -2,14 +2,7 @@ import { useEffect } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { getUserSettings } from '../lib/userSettings.js'
 import { checkAndFireReminders } from '../lib/notifications.js'
-
-const NAV_ITEMS = [
-  { to: '/home', label: 'Accueil', icon: '🏠' },
-  { to: '/tracker', label: 'Tracker', icon: '📝' },
-  { to: '/sos', label: 'SOS', icon: '🌿', emphasis: true },
-  { to: '/coach', label: 'Coach', icon: '💬' },
-  { to: '/profil', label: 'Profil', icon: '🙂' },
-]
+import { NAV_ITEMS } from '../data/navItems.js'
 
 export default function AppShell() {
   useEffect(() => {

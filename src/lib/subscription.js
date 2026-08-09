@@ -1,3 +1,5 @@
+import { scopedKey } from './authScope.js'
+
 // Abonnement "mock" — aucun vrai paiement n'est traité (Stripe sera branché plus tard,
 // une fois le produit validé). Cette couche existe pour pouvoir tester tout le flow
 // (essai, fidélité, gating premium) avant d'intégrer un vrai processeur de paiement.
@@ -15,7 +17,7 @@ const LOYALTY_WINDOW_END_DAYS = 33 // + 3 jours de fenêtre
 const LOYALTY_PRICE = 29.99 // 34.99 - 3 (mois déjà payé) - 2 (fidélité)
 
 function read() {
-  const raw = localStorage.getItem(KEY)
+  const raw = localStorage.getItem(scopedKey(KEY))
   if (!raw) return null
   try {
     return JSON.parse(raw)
@@ -25,7 +27,7 @@ function read() {
 }
 
 function write(sub) {
-  localStorage.setItem(KEY, JSON.stringify(sub))
+  localStorage.setItem(scopedKey(KEY), JSON.stringify(sub))
 }
 
 export function getSubscription() {

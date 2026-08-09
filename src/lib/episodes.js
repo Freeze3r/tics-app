@@ -1,9 +1,10 @@
 import { supabase, getCurrentUser } from './supabase.js'
+import { scopedKey } from './authScope.js'
 
 const LOCAL_KEY = 'ticsEpisodes'
 
 function readLocal() {
-  const raw = localStorage.getItem(LOCAL_KEY)
+  const raw = localStorage.getItem(scopedKey(LOCAL_KEY))
   if (!raw) return []
   try {
     return JSON.parse(raw)
@@ -13,7 +14,7 @@ function readLocal() {
 }
 
 function writeLocal(episodes) {
-  localStorage.setItem(LOCAL_KEY, JSON.stringify(episodes))
+  localStorage.setItem(scopedKey(LOCAL_KEY), JSON.stringify(episodes))
 }
 
 // Toujours écrit en local d'abord (l'app doit rester utilisable sans connexion),
