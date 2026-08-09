@@ -1,5 +1,6 @@
 // Fonction serverless Vercel : proxy sécurisé vers Groq (la clé API ne doit jamais
 // être exposée côté navigateur). Gère aussi les garde-fous de sécurité du coach.
+import { createClient } from '@supabase/supabase-js'
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
 const MODEL = 'llama-3.3-70b-versatile'
@@ -42,6 +43,26 @@ export default async function handler(req, res) {
   const apiKey = process.env.GROQ_API_KEY
   if (!apiKey) {
     res.status(503).json({ error: 'Coach non configuré' })
+    return
+  }
+
+  // Sans cette vérification, n'importe qui pouvait appeler cet endpoint
+  // directement (script, curl) sans jamais passer par l'app, contournant la
+  // limite de messages gratuits et consommant le budget Groq à volonté.
+  const supabaseUrl = process.env.VITE_SUPABASE_URL
+  const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY
+  const authHeader = req.headers.authorization ?? ''
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null
+
+  if (!supabaseUrl || !supabaseAnonKey || !token) {
+    res.status(401).json({ error: 'Authentification requise' })
+    return
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseAnonKey)
+  const { data: userData, error: userError } = await supabase.auth.getUser(token)
+  if (userError || !userData?.user) {
+    res.status(401).json({ error: 'Authentification invalide' })
     return
   }
 

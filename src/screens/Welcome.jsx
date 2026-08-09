@@ -35,6 +35,18 @@ export default function Welcome() {
           2 minutes, tes données restent privées
         </p>
       </div>
+
+      <div className="mt-10 flex gap-4 text-xs text-navy-800/40 dark:text-sand-100/40">
+        <button type="button" onClick={() => navigate('/legal/mentions-legales')}>
+          Mentions légales
+        </button>
+        <button type="button" onClick={() => navigate('/legal/cgu')}>
+          CGU
+        </button>
+        <button type="button" onClick={() => navigate('/legal/confidentialite')}>
+          Confidentialité
+        </button>
+      </div>
     </main>
   )
 }

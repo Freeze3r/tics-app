@@ -41,6 +41,20 @@ export async function signOut() {
   await supabase.auth.signOut()
 }
 
+export async function requestPasswordReset(email) {
+  if (!supabase) throw new Error('Supabase non configuré')
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/reset-password`,
+  })
+  if (error) throw error
+}
+
+export async function updatePassword(newPassword) {
+  if (!supabase) throw new Error('Supabase non configuré')
+  const { error } = await supabase.auth.updateUser({ password: newPassword })
+  if (error) throw error
+}
+
 // Enregistre les réponses au quiz + le plan généré, rattachés à l'utilisateur connecté.
 export async function savePlan(answers, plan) {
   if (!supabase) return { skipped: true }

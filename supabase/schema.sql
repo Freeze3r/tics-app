@@ -19,6 +19,10 @@ create policy "users can read their own responses"
   on public.quiz_responses for select
   using (auth.uid() = user_id);
 
+create policy "users can delete their own responses"
+  on public.quiz_responses for delete
+  using (auth.uid() = user_id);
+
 create table if not exists public.episodes (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users (id) on delete cascade,
@@ -39,6 +43,10 @@ create policy "users can read their own episodes"
   on public.episodes for select
   using (auth.uid() = user_id);
 
+create policy "users can delete their own episodes"
+  on public.episodes for delete
+  using (auth.uid() = user_id);
+
 create table if not exists public.journal_entries (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users (id) on delete cascade,
@@ -55,6 +63,10 @@ create policy "users can insert their own journal entries"
 
 create policy "users can read their own journal entries"
   on public.journal_entries for select
+  using (auth.uid() = user_id);
+
+create policy "users can delete their own journal entries"
+  on public.journal_entries for delete
   using (auth.uid() = user_id);
 
 -- Profil interne (personnalisation, jamais visible par les autres utilisateurs) +

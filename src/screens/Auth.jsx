@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Button from '../components/Button.jsx'
-import { supabase, signUpWithEmail, signInWithEmail, signInWithGoogle } from '../lib/supabase.js'
+import { supabase, signUpWithEmail, signInWithEmail, requestPasswordReset } from '../lib/supabase.js'
 import { resolveAuthScope } from '../lib/authScope.js'
 import { loadProfile } from '../lib/profile.js'
 
@@ -22,6 +22,7 @@ export default function Auth() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
+  const [resetSent, setResetSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [checkingSession, setCheckingSession] = useState(true)
 
@@ -70,16 +71,82 @@ export default function Auth() {
     }
   }
 
-  async function handleGoogle() {
+  async function handleResetRequest(e) {
+    e.preventDefault()
     setError(null)
+    if (!supabase) {
+      setError("La connexion n'est pas encore configurée sur cet environnement.")
+      return
+    }
+    setLoading(true)
     try {
-      await signInWithGoogle()
+      await requestPasswordReset(email)
+      setResetSent(true)
     } catch (err) {
-      setError("La connexion Google n'est pas encore activée sur cette app.")
+      setError(friendlyError(err.message))
+    } finally {
+      setLoading(false)
     }
   }
 
   if (checkingSession) return null
+
+  if (mode === 'reset') {
+    return (
+      <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-teal-50 px-6 py-12 dark:bg-navy-900">
+        <div className="w-full max-w-sm">
+          <h1 className="text-center text-2xl font-bold text-navy-800 dark:text-sand-100">
+            Mot de passe oublié
+          </h1>
+          <p className="mt-2 text-center text-navy-800/60 dark:text-sand-100/60">
+            {resetSent
+              ? 'Si un compte existe avec cet email, un lien de réinitialisation vient de partir — vérifie ta boîte mail.'
+              : 'Indique ton email, on t\'envoie un lien pour choisir un nouveau mot de passe.'}
+          </p>
+
+          {!resetSent && (
+            <form onSubmit={handleResetRequest} className="mt-6 flex flex-col gap-4">
+              <div>
+                <label
+                  htmlFor="reset-email"
+                  className="mb-1 block text-sm font-medium text-navy-800 dark:text-sand-100"
+                >
+                  Email
+                </label>
+                <input
+                  id="reset-email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="toi@exemple.com"
+                  className="w-full rounded-2xl border-2 border-teal-200 bg-white px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:bg-navy-800 dark:text-sand-100"
+                />
+              </div>
+
+              {error && <p className="text-sm text-coral-600 dark:text-coral-300">{error}</p>}
+
+              <Button type="submit" className="mt-1 w-full" disabled={loading}>
+                {loading ? 'Un instant…' : 'Envoyer le lien'}
+              </Button>
+            </form>
+          )}
+
+          <button
+            type="button"
+            onClick={() => {
+              setMode('login')
+              setError(null)
+              setResetSent(false)
+            }}
+            className="mt-5 w-full text-center text-sm text-teal-600 dark:text-teal-400"
+          >
+            ← Retour à la connexion
+          </button>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-teal-50 px-6 py-12 dark:bg-navy-900">
@@ -92,20 +159,6 @@ export default function Auth() {
             ? 'Pour garder ton plan et ta progression en sécurité, où que tu te connectes.'
             : 'Connecte-toi pour retrouver ton plan et ta progression.'}
         </p>
-
-        {mode === 'login' && (
-          <>
-            <Button variant="secondary" className="mt-8 w-full" onClick={handleGoogle}>
-              Continuer avec Google
-            </Button>
-
-            <div className="my-5 flex items-center gap-3">
-              <div className="h-px flex-1 bg-teal-200 dark:bg-teal-700" />
-              <span className="text-xs text-navy-800/40 dark:text-sand-100/40">ou</span>
-              <div className="h-px flex-1 bg-teal-200 dark:bg-teal-700" />
-            </div>
-          </>
-        )}
 
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
           <div>
@@ -144,6 +197,19 @@ export default function Auth() {
               className="w-full rounded-2xl border-2 border-teal-200 bg-white px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:bg-navy-800 dark:text-sand-100"
             />
           </div>
+
+          {mode === 'login' && (
+            <button
+              type="button"
+              onClick={() => {
+                setMode('reset')
+                setError(null)
+              }}
+              className="-mt-2 self-end text-xs text-teal-600 dark:text-teal-400"
+            >
+              Mot de passe oublié ?
+            </button>
+          )}
 
           {error && <p className="text-sm text-coral-600 dark:text-coral-300">{error}</p>}
 

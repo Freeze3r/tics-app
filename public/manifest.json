@@ -1,0 +1,17 @@
+{
+  "name": "Sooth — reprends le contrôle, sans honte",
+  "short_name": "Sooth",
+  "description": "Accompagnement bienveillant pour les comportements répétitifs centrés sur le corps (BFRB).",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#eefaf9",
+  "theme_color": "#23968c",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

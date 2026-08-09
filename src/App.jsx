@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Welcome from './screens/Welcome.jsx'
 import Auth from './screens/Auth.jsx'
+import ResetPassword from './screens/ResetPassword.jsx'
+import Legal from './screens/Legal.jsx'
 import Quiz from './screens/Quiz.jsx'
 import Plan from './screens/Plan.jsx'
 import AppShell from './components/AppShell.jsx'
@@ -26,6 +28,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/legal/:doc" element={<Legal />} />
 
         <Route element={<RequireAuth />}>
           <Route path="/quiz" element={<Quiz />} />

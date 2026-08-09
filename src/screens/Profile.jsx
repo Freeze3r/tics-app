@@ -10,7 +10,7 @@ import { getAccountCreatedAt, getUnlockedTitles, TENURE_TITLES } from '../lib/te
 import { isPremiumActive, getSubscription, cancelSubscription } from '../lib/subscription.js'
 import { getSeasons } from '../lib/seasons.js'
 import { getSeasonProgress, getNextEpisode } from '../lib/seasonProgress.js'
-import { signOut } from '../lib/supabase.js'
+import { signOut, supabase } from '../lib/supabase.js'
 import { scopedKey } from '../lib/authScope.js'
 
 const THEME_OPTIONS = [
@@ -88,8 +88,26 @@ export default function Profile() {
     setPremium(isPremiumActive())
   }
 
-  function handleReset() {
+  async function handleReset() {
     if (confirmText.trim().toLowerCase() !== 'supprimer') return
+
+    if (supabase) {
+      try {
+        const { data } = await supabase.auth.getSession()
+        const token = data.session?.access_token
+        if (token) {
+          await fetch('/api/delete-account', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+          })
+        }
+      } catch {
+        // La suppression côté serveur peut échouer (ex: pas encore configurée) —
+        // on efface quand même les données locales pour ne rien laisser sur cet appareil.
+      }
+      await signOut()
+    }
+
     LOCAL_KEYS.forEach((k) => localStorage.removeItem(scopedKey(k)))
     navigate('/', { replace: true })
   }
@@ -409,8 +427,9 @@ export default function Profile() {
                 Zone à risque
               </p>
               <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
-                Réinitialise ton plan, ta progression, tes badges et tes réglages sur cet appareil.
-                Action irréversible.
+                Supprime définitivement ton compte et toutes tes données (plan, progression,
+                badges, réglages), sur cet appareil et sur nos serveurs. Action irréversible — tu
+                devras créer un nouveau compte pour réutiliser l'app.
               </p>
               <label
                 htmlFor="reset-confirm"
@@ -432,7 +451,7 @@ export default function Profile() {
                 disabled={confirmText.trim().toLowerCase() !== 'supprimer'}
                 onClick={handleReset}
               >
-                Réinitialiser mes données
+                Supprimer mon compte
               </Button>
             </div>
           )}

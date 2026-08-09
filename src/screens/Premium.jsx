@@ -196,7 +196,15 @@ export default function Premium() {
         </section>
 
         <p className="mt-6 text-center text-xs text-navy-800/40 dark:text-sand-100/40">
-          Annulable à tout moment, en un tap depuis ton profil.
+          Annulable à tout moment, en un tap depuis ton profil. En t'abonnant, tu acceptes les{' '}
+          <button
+            type="button"
+            onClick={() => navigate('/legal/cgv')}
+            className="underline"
+          >
+            conditions générales de vente
+          </button>
+          .
         </p>
       </div>
     </main>

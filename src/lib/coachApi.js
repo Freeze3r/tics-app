@@ -1,5 +1,6 @@
 import { isPremiumActive } from './subscription.js'
 import { scopedKey } from './authScope.js'
+import { supabase } from './supabase.js'
 
 const LIMIT_KEY = 'ticsCoachDailyCount'
 const FREE_DAILY_LIMIT = 15
@@ -41,12 +42,18 @@ export function getDailyLimit() {
 }
 
 // Appelle le coach via la fonction serverless (clé Groq jamais exposée au client).
+// Le token de session est transmis pour que le serveur vérifie l'authentification
+// avant d'appeler Groq (sinon l'endpoint serait ouvert à n'importe qui).
 export async function askCoach(messages, context) {
   if (!isPremiumActive()) bumpCount()
 
+  const { data } = supabase ? await supabase.auth.getSession() : { data: {} }
+  const token = data.session?.access_token
+  if (!token) throw new Error('coach_unavailable')
+
   const res = await fetch('/api/coach', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({ messages, context }),
   })
 
