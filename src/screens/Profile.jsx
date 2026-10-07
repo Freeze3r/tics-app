@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Navigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import { loadProfile, getPracticeStats, addBehaviorToProfile, removeBehaviorFromProfile } from '../lib/profile.js'
 import { BEHAVIORS } from '../data/behaviors.js'
@@ -70,10 +70,7 @@ export default function Profile() {
     setTheme(id)
   }
 
-  if (!profile) {
-    navigate('/', { replace: true })
-    return null
-  }
+  if (!profile) return <Navigate to="/quiz" replace />
 
   async function handleReset() {
     if (confirmText.trim().toLowerCase() !== 'supprimer') return

@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useMemo, useState } from 'react'
+import { useNavigate, Navigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import Mascot from '../components/Mascot.jsx'
 import { loadProfile, getPracticeStats, markPracticeToday, isPracticedToday } from '../lib/profile.js'
@@ -38,11 +38,7 @@ export default function Home() {
   const topTrigger = useMemo(() => topTriggerContext(), [])
   const topTriggerLabel = TRIGGER_CONTEXTS.find((t) => t.id === topTrigger?.id)?.label
 
-  useEffect(() => {
-    if (!profile) navigate('/', { replace: true })
-  }, [profile, navigate])
-
-  if (!profile) return null
+  if (!profile) return <Navigate to="/quiz" replace />
 
   const { plan } = profile
   const dailyPool = [

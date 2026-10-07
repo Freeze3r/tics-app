@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams, Navigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import Chip from '../components/Chip.jsx'
 import { loadProfile } from '../lib/profile.js'
@@ -112,12 +112,11 @@ export default function Tracker() {
   const [emotion, setEmotion] = useState(null)
   const [duration, setDuration] = useState(null)
 
+  // episodes sert de signal de rechargement : frequencyByContext() relit le stockage local
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const counts = useMemo(() => frequencyByContext(), [episodes])
 
-  if (!profile) {
-    navigate('/', { replace: true })
-    return null
-  }
+  if (!profile) return <Navigate to="/quiz" replace />
 
   const behaviors = profile.plan.behaviors
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Navigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import { loadProfile } from '../lib/profile.js'
 import { TRANSVERSAL_EXERCISES } from '../data/behaviors.js'
@@ -44,10 +44,7 @@ export default function Sos() {
     return () => clearTimeout(t)
   }, [phase, secondsLeft])
 
-  if (!profile) {
-    navigate('/', { replace: true })
-    return null
-  }
+  if (!profile) return <Navigate to="/quiz" replace />
 
   function selectBehavior(id) {
     setBehaviorId(id)
@@ -124,18 +121,18 @@ export default function Sos() {
         <>
           <div className="relative flex h-48 w-48 items-center justify-center">
             <svg className="absolute h-full w-full -rotate-90" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="45" fill="none" stroke="var(--color-teal-200)" strokeWidth="6" />
+              <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(127,160,170,0.25)" strokeWidth="6" />
               <circle
                 cx="50"
                 cy="50"
                 r="45"
                 fill="none"
-                stroke="var(--color-coral-500)"
+                stroke="var(--color-neon-400)"
                 strokeWidth="6"
                 strokeLinecap="round"
                 strokeDasharray={2 * Math.PI * 45}
                 strokeDashoffset={2 * Math.PI * 45 * (1 - progress)}
-                style={{ transition: 'stroke-dashoffset 1s linear' }}
+                style={{ transition: 'stroke-dashoffset 1s linear', filter: 'drop-shadow(0 0 6px rgba(31,209,191,0.8))' }}
               />
             </svg>
             <span className="text-3xl font-bold text-navy-800 dark:text-sand-100">{secondsLeft}</span>

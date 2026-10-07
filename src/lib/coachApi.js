@@ -47,8 +47,6 @@ export function getDailyLimit() {
 // Le token de session est transmis pour que le serveur vérifie l'authentification
 // avant d'appeler Groq (sinon l'endpoint serait ouvert à n'importe qui).
 export async function askCoach(messages, context) {
-  if (!isPremiumActive()) bumpCount()
-
   const { data } = supabase ? await supabase.auth.getSession() : { data: {} }
   const token = data.session?.access_token
   if (!token) throw new Error('coach_unavailable')
@@ -63,5 +61,6 @@ export async function askCoach(messages, context) {
     throw new Error('coach_unavailable')
   }
 
+  if (!isPremiumActive()) bumpCount()
   return res.json()
 }

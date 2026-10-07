@@ -37,6 +37,9 @@ export async function signInWithGoogle() {
 }
 
 export async function signOut() {
+  // Les réponses du quiz transitent par sessionStorage : on les efface pour qu'une autre
+  // personne utilisant le même onglet ne retrouve pas le plan de la précédente.
+  sessionStorage.removeItem('quizAnswers')
   if (!supabase) return
   await supabase.auth.signOut()
 }

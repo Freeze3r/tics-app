@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Welcome from './screens/Welcome.jsx'
 import Auth from './screens/Auth.jsx'
 import ResetPassword from './screens/ResetPassword.jsx'
@@ -7,6 +7,7 @@ import Quiz from './screens/Quiz.jsx'
 import Plan from './screens/Plan.jsx'
 import AppShell from './components/AppShell.jsx'
 import RequireAuth from './components/RequireAuth.jsx'
+import RequireProfile from './components/RequireProfile.jsx'
 import Home from './screens/Home.jsx'
 import Tracker from './screens/Tracker.jsx'
 import Sos from './screens/Sos.jsx'
@@ -39,19 +40,24 @@ export default function App() {
           <Route path="/deep-quiz" element={<DeepQuiz />} />
           <Route path="/tutorial" element={<Tutorial />} />
 
-          <Route element={<AppShell />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/tracker" element={<Tracker />} />
-            <Route path="/episode/:behaviorId/:episodeId" element={<EpisodePlayer />} />
-            <Route path="/routine/:period" element={<RoutineExercise />} />
-            <Route path="/sos" element={<Sos />} />
-            <Route path="/coach" element={<Coach />} />
-            <Route path="/journal" element={<Journal />} />
-            <Route path="/library" element={<Library />} />
-            <Route path="/community" element={<Community />} />
-            <Route path="/profil" element={<Profile />} />
+          <Route element={<RequireProfile />}>
+            <Route element={<AppShell />}>
+              <Route path="/home" element={<Home />} />
+              <Route path="/tracker" element={<Tracker />} />
+              <Route path="/episode/:behaviorId/:episodeId" element={<EpisodePlayer />} />
+              <Route path="/routine/:period" element={<RoutineExercise />} />
+              <Route path="/sos" element={<Sos />} />
+              <Route path="/coach" element={<Coach />} />
+              <Route path="/journal" element={<Journal />} />
+              <Route path="/library" element={<Library />} />
+              <Route path="/community" element={<Community />} />
+              <Route path="/profil" element={<Profile />} />
+            </Route>
           </Route>
+
         </Route>
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   )
