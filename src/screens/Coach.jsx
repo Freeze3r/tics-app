@@ -159,10 +159,10 @@ export default function Coach() {
           {limitReached ? (
             <div className="mx-auto flex max-w-md items-center justify-between gap-3 text-sm">
               <span className="text-navy-800/60 dark:text-sand-100/60">
-                Limite quotidienne atteinte.
+                Limite quotidienne atteinte — on se retrouve demain 💛
               </span>
-              <Button variant="secondary" onClick={() => navigate('/premium')}>
-                Passer en Premium
+              <Button variant="secondary" onClick={() => navigate('/sos')}>
+                Exercice SOS
               </Button>
             </div>
           ) : (

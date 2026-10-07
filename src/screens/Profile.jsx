@@ -7,7 +7,6 @@ import { getBadges } from '../lib/badges.js'
 import { getTheme, applyTheme } from '../lib/theme.js'
 import { getUserSettings, saveUserSettings } from '../lib/userSettings.js'
 import { getAccountCreatedAt, getUnlockedTitles, TENURE_TITLES } from '../lib/tenure.js'
-import { isPremiumActive, getSubscription, cancelSubscription } from '../lib/subscription.js'
 import { getSeasons } from '../lib/seasons.js'
 import { getSeasonProgress, getNextEpisode } from '../lib/seasonProgress.js'
 import { signOut, supabase } from '../lib/supabase.js'
@@ -63,8 +62,6 @@ export default function Profile() {
   const unlockedCount = badges.filter((b) => b.unlocked).length
   const [theme, setTheme] = useState(() => getTheme())
   const [expandedBadge, setExpandedBadge] = useState(null)
-  const [premium, setPremium] = useState(() => isPremiumActive())
-  const [subscription, setSubscription] = useState(() => getSubscription())
   const [showAdvanced, setShowAdvanced] = useState(false)
   const [confirmText, setConfirmText] = useState('')
 
@@ -76,16 +73,6 @@ export default function Profile() {
   if (!profile) {
     navigate('/', { replace: true })
     return null
-  }
-
-  function handleCancelSubscription() {
-    const confirmed = window.confirm(
-      "Annuler ton abonnement Premium ? Tu gardes l'accès jusqu'à la fin de la période en cours."
-    )
-    if (!confirmed) return
-    cancelSubscription()
-    setSubscription(getSubscription())
-    setPremium(isPremiumActive())
   }
 
   async function handleReset() {
@@ -152,11 +139,6 @@ export default function Profile() {
               {selectedTitle && (
                 <span className="rounded-full bg-teal-100 px-2 py-0.5 text-xs font-semibold text-teal-700 dark:bg-teal-700/30 dark:text-teal-300">
                   {selectedTitle.icon} {selectedTitle.label}
-                </span>
-              )}
-              {premium && (
-                <span className="rounded-full bg-coral-100 px-2 py-0.5 text-xs font-semibold text-coral-600 dark:bg-coral-500/10 dark:text-coral-300">
-                  ⭐ Premium
                 </span>
               )}
             </div>
@@ -373,37 +355,15 @@ export default function Profile() {
         </section>
 
         <section className="mt-6 rounded-2xl bg-coral-100/60 p-5 dark:bg-coral-500/10">
-          {premium ? (
-            <>
-              <p className="font-semibold text-coral-600 dark:text-coral-300">
-                Premium actif · {subscription?.plan === 'yearly' ? 'Annuel' : 'Mensuel'}
-                {subscription?.cancelledAt && ' (annulé, actif jusqu’à la fin de l’essai)'}
-              </p>
-              <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
-                Merci de soutenir l'app. Tu profites de tout ce que Premium débloque.
-              </p>
-              <div className="mt-3 flex flex-wrap gap-3">
-                <Button variant="secondary" onClick={() => navigate('/premium')}>
-                  Changer d'offre
-                </Button>
-                {!subscription?.cancelledAt && (
-                  <Button variant="ghost" onClick={handleCancelSubscription}>
-                    Annuler mon abonnement
-                  </Button>
-                )}
-              </div>
-            </>
-          ) : (
-            <>
-              <p className="font-semibold text-coral-600 dark:text-coral-300">Passer en Premium</p>
-              <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
-                Coach illimité, communauté complète, suivi photo, statistiques avancées.
-              </p>
-              <Button className="mt-3" onClick={() => navigate('/premium')}>
-                Voir l'offre
-              </Button>
-            </>
-          )}
+          <p className="font-semibold text-coral-600 dark:text-coral-300">
+            Premium · bientôt disponible
+          </p>
+          <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
+            Tout Sooth est gratuit pour l'instant. Découvre ce qui est prévu pour la suite.
+          </p>
+          <Button className="mt-3" variant="secondary" onClick={() => navigate('/premium')}>
+            Voir ce qui arrive
+          </Button>
         </section>
 
         <section className="mt-8">

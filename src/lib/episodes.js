@@ -1,6 +1,7 @@
-import { supabase, getCurrentUser } from './supabase.js'
 import { scopedKey } from './authScope.js'
 
+// Données de santé : elles restent uniquement sur l'appareil de la personne,
+// jamais envoyées à un serveur (minimisation des données, RGPD art. 9).
 const LOCAL_KEY = 'ticsEpisodes'
 
 function readLocal() {
@@ -32,24 +33,6 @@ export async function logEpisode({ behaviorId, triggerContext, emotion, duration
   const episodes = readLocal()
   episodes.unshift(episode)
   writeLocal(episodes)
-
-  if (supabase) {
-    try {
-      const user = await getCurrentUser()
-      if (!user) return episode
-      await supabase.from('episodes').insert({
-        user_id: user.id,
-        behavior_id: episode.behaviorId,
-        trigger_context: episode.triggerContext,
-        emotion: episode.emotion,
-        duration: episode.duration,
-        created_at: episode.createdAt,
-      })
-    } catch {
-      // pas grave : l'épisode reste enregistré localement
-    }
-  }
-
   return episode
 }
 

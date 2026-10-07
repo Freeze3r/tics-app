@@ -54,24 +54,3 @@ export async function updatePassword(newPassword) {
   const { error } = await supabase.auth.updateUser({ password: newPassword })
   if (error) throw error
 }
-
-// Enregistre les réponses au quiz + le plan généré, rattachés à l'utilisateur connecté.
-export async function savePlan(answers, plan) {
-  if (!supabase) return { skipped: true }
-  const user = await getCurrentUser()
-  if (!user) return { skipped: true }
-
-  const { error } = await supabase.from('quiz_responses').insert({
-    user_id: user.id,
-    answers,
-    plan_summary: {
-      durationDays: plan.durationDays,
-      behaviors: plan.behaviors.map((b) => b.id),
-      goal: plan.goal,
-      suggestProfessional: plan.suggestProfessional,
-    },
-  })
-
-  if (error) throw error
-  return { skipped: false }
-}

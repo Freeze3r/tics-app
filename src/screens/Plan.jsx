@@ -1,14 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import { generatePlan } from '../lib/planGenerator.js'
-import { savePlan } from '../lib/supabase.js'
 import { saveProfile } from '../lib/profile.js'
+import { nextAfterOnboarding } from '../lib/tutorial.js'
 
 export default function Plan() {
   const location = useLocation()
   const navigate = useNavigate()
-  const [saveState, setSaveState] = useState('idle')
 
   const answers = useMemo(() => {
     if (location.state?.answers) return location.state.answers
@@ -20,11 +19,8 @@ export default function Plan() {
 
   useEffect(() => {
     if (!plan) return
+    // Réponses au quiz = données de santé : gardées uniquement sur l'appareil.
     saveProfile(answers, plan)
-    setSaveState('saving')
-    savePlan(answers, plan)
-      .then((result) => setSaveState(result.skipped ? 'local-only' : 'saved'))
-      .catch(() => setSaveState('error'))
   }, [plan, answers])
 
   if (!answers || !plan) {
@@ -94,14 +90,11 @@ export default function Plan() {
         </section>
 
         <div className="mt-10 flex justify-center">
-          <Button onClick={() => navigate('/premium')}>Continuer vers l'app</Button>
+          <Button onClick={() => navigate(nextAfterOnboarding())}>Continuer vers l'app</Button>
         </div>
 
         <p className="mt-4 text-center text-xs text-navy-800/40 dark:text-sand-100/40">
-          {saveState === 'saved' && 'Plan enregistré.'}
-          {saveState === 'saving' && 'Enregistrement…'}
-          {saveState === 'error' && 'Pas de connexion — ton plan reste disponible ici.'}
-          {saveState === 'local-only' && 'Plan disponible sur cet appareil uniquement.'}
+          Ton plan et tes réponses restent uniquement sur cet appareil.
         </p>
       </div>
     </main>

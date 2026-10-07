@@ -3,7 +3,9 @@
 import { createClient } from '@supabase/supabase-js'
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
-const MODEL = 'llama-3.3-70b-versatile'
+// llama-3.3-70b-versatile a été retiré de Groq (le coach renvoyait 502). Modèle à
+// raisonnement : reasoning_effort bas + max_tokens large (le raisonnement consomme des jetons).
+const MODEL = 'openai/gpt-oss-120b'
 const MAX_HISTORY_MESSAGES = 12
 
 const CRISIS_KEYWORDS = [
@@ -95,8 +97,9 @@ export default async function handler(req, res) {
           { role: 'system', content: `${SYSTEM_PROMPT}\n\n${contextLine}` },
           ...trimmedHistory,
         ],
-        max_tokens: 300,
+        max_tokens: 600,
         temperature: 0.7,
+        reasoning_effort: 'low',
       }),
     })
 

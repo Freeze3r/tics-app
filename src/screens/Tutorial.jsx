@@ -41,7 +41,7 @@ const STEPS = [
     icon: '🙂',
     menu: 'Profil',
     title: 'Profil',
-    text: 'Tes badges, ton titre, tes réglages de confidentialité, ton abonnement. Tout se passe là si tu veux ajuster quelque chose.',
+    text: 'Tes badges, ton titre, tes réglages de confidentialité, tes données. Tout se passe là si tu veux ajuster quelque chose.',
   },
 ]
 

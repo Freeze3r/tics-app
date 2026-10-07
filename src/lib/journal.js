@@ -1,6 +1,7 @@
-import { supabase, getCurrentUser } from './supabase.js'
 import { scopedKey } from './authScope.js'
 
+// Données de santé/humeur : elles restent uniquement sur l'appareil de la personne,
+// jamais envoyées à un serveur (minimisation des données, RGPD art. 9).
 const LOCAL_KEY = 'ticsJournal'
 
 function readLocal() {
@@ -28,22 +29,6 @@ export async function addJournalEntry({ mood, note }) {
   const entries = readLocal()
   entries.unshift(entry)
   writeLocal(entries)
-
-  if (supabase) {
-    try {
-      const user = await getCurrentUser()
-      if (!user) return entry
-      await supabase.from('journal_entries').insert({
-        user_id: user.id,
-        mood: entry.mood,
-        note: entry.note,
-        created_at: entry.createdAt,
-      })
-    } catch {
-      // l'entrée reste enregistrée localement
-    }
-  }
-
   return entry
 }
 

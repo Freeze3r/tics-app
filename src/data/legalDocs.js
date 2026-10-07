@@ -68,6 +68,10 @@ export const LEGAL_DOCS = {
     title: 'Conditions générales de vente',
     sections: [
       {
+        heading: 'Statut',
+        body: `L'offre Premium n'est pas encore disponible : Sooth est entièrement gratuit pour le moment. Ces conditions entreront en vigueur uniquement à l'ouverture de l'offre payante, avec information préalable des utilisateurs.`,
+      },
+      {
         heading: 'Objet',
         body: `Les présentes CGV encadrent la souscription à l'offre payante "Premium" de Sooth, régie par ailleurs par les Conditions générales d'utilisation.`,
       },
@@ -110,7 +114,7 @@ export const LEGAL_DOCS = {
       },
       {
         heading: 'Données collectées',
-        body: `Email et mot de passe (compte), réponses au quiz et plan généré, comportements suivis, historique de pratique, entrées de journal, historique de conversation avec le coach, préférences de profil (prénom, âge, genre — optionnels).`,
+        body: `Sur nos serveurs : uniquement ton email et ton mot de passe (chiffré), pour te permettre de te connecter.\nSur ton appareil uniquement : réponses au quiz, plan, comportements suivis, historique de pratique, journal, moments difficiles, historique de conversation avec le coach, préférences de profil (prénom, âge, genre — optionnels). Ces données de santé et de bien-être ne sont jamais envoyées à nos serveurs.`,
       },
       {
         heading: 'Finalités',
@@ -118,11 +122,15 @@ export const LEGAL_DOCS = {
       },
       {
         heading: 'Sous-traitants',
-        body: `Supabase (hébergement base de données et authentification), Vercel (hébergement de l'application), Groq (traitement des messages envoyés au coach conversationnel — les messages sont transmis pour générer une réponse, sans finalité publicitaire).`,
+        body: `Supabase (authentification et stockage de l'email), Vercel (hébergement de l'application), Groq (traitement des messages que tu écris au coach : ils sont transmis pour générer une réponse, sans finalité publicitaire, et ne sont pas conservés par Sooth sur nos serveurs). Évite d'y écrire des informations qui permettent de t'identifier.`,
+      },
+      {
+        heading: 'Conséquence du stockage sur ton appareil',
+        body: `Comme tes données de santé restent sur ton appareil, elles ne sont pas récupérables si tu perds ton téléphone, vides les données du navigateur ou changes d'appareil. En contrepartie, personne d'autre que toi n'y a accès.`,
       },
       {
         heading: 'Durée de conservation',
-        body: `Tes données sont conservées tant que ton compte est actif. Tu peux les supprimer intégralement à tout moment depuis Profil > Réglages avancés > Supprimer mon compte.`,
+        body: `Ton email est conservé tant que ton compte est actif. Les données stockées sur ton appareil sont effacées en vidant les données du navigateur ou en supprimant ton compte. Tu peux tout supprimer à tout moment depuis Profil > Réglages avancés > Supprimer mon compte.`,
       },
       {
         heading: 'Tes droits',

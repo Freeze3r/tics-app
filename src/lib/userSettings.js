@@ -1,4 +1,3 @@
-import { supabase, getCurrentUser } from './supabase.js'
 import { scopedKey } from './authScope.js'
 
 const KEY = 'ticsUserSettings'
@@ -47,32 +46,8 @@ export async function saveUserSettings(partial) {
     next.communityPseudo = `Anonyme#${randomPseudoSuffix()}`
   }
 
+  // Prénom, âge, genre : gardés uniquement sur l'appareil (jamais envoyés au serveur).
   localStorage.setItem(scopedKey(KEY), JSON.stringify(next))
-
-  if (supabase) {
-    try {
-      const user = await getCurrentUser()
-      if (user) {
-        await supabase.from('profiles').upsert({
-          id: user.id,
-          display_name: next.displayName || null,
-          display_name_hidden: next.displayNameHidden,
-          age: next.age ? Number(next.age) : null,
-          age_hidden: next.ageHidden,
-          gender: next.gender || null,
-          gender_hidden: next.genderHidden,
-          anonymous_mode: next.anonymousMode,
-          community_public: next.communityPublic,
-          community_pseudo: next.communityPseudo,
-          avatar_emoji: next.avatarEmoji,
-          updated_at: new Date().toISOString(),
-        })
-      }
-    } catch {
-      // les réglages restent enregistrés localement
-    }
-  }
-
   return next
 }
 

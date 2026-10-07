@@ -65,7 +65,13 @@ export function cancelSubscription() {
   return sub
 }
 
+// Premium n'est pas encore lancé : tout est gratuit pour l'instant. Tant que ce
+// drapeau est à false, personne n'est "premium" (même avec un vieil abonnement de
+// test resté en local). À passer à true le jour où Stripe sera branché.
+export const PREMIUM_LAUNCHED = false
+
 export function isPremiumActive() {
+  if (!PREMIUM_LAUNCHED) return false
   const sub = read()
   if (!sub) return false
   if (!sub.cancelledAt) return true

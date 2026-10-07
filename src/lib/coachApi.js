@@ -3,7 +3,9 @@ import { scopedKey } from './authScope.js'
 import { supabase } from './supabase.js'
 
 const LIMIT_KEY = 'ticsCoachDailyCount'
-const FREE_DAILY_LIMIT = 15
+// Tout est gratuit pour l'instant : ce plafond n'est qu'un garde-fou technique pour ne
+// pas épuiser le quota gratuit de l'IA (il est large, un usage normal ne l'atteint pas).
+const FREE_DAILY_LIMIT = 60
 
 function todayKey() {
   const d = new Date()
