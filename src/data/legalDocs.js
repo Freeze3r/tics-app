@@ -1,9 +1,6 @@
-// Squelettes de documents légaux — brouillons génériques, PAS relus par un
-// professionnel du droit. Les passages marqués [À COMPLÉTER] nécessitent des
-// informations que seul l'éditeur de l'app peut fournir (statut juridique,
-// SIRET, adresse, etc.). À faire valider par un juriste avant publication
-// réelle, en particulier pour les CGV (service payant) vu le sujet sensible
-// (santé/bien-être) de l'app.
+// Documents légaux de Sooth — brouillons génériques, PAS relus par un professionnel
+// du droit. Éditeur : particulier (non professionnel). Les CGV ne s'appliqueront
+// qu'à l'ouverture de l'offre payante : à faire relire par un juriste à ce moment-là.
 
 export const LEGAL_DOCS = {
   'mentions-legales': {
@@ -11,11 +8,13 @@ export const LEGAL_DOCS = {
     sections: [
       {
         heading: 'Éditeur',
-        body: `[À COMPLÉTER — nom ou raison sociale, statut (auto-entrepreneur, société...), numéro SIRET, adresse postale, email de contact]`,
+        body: `PANYCH David, personne physique, éditeur non professionnel.
+Conformément à l'article 6-III-2 de la loi pour la confiance dans l'économie numérique (LCEN), l'adresse personnelle de l'éditeur n'est pas publiée : elle est communiquée à l'hébergeur, qui peut la transmettre aux autorités si nécessaire.
+Contact : southprofr@gmail.com`,
       },
       {
         heading: 'Directeur de la publication',
-        body: `[À COMPLÉTER]`,
+        body: `PANYCH David`,
       },
       {
         heading: 'Hébergement',
@@ -23,7 +22,7 @@ export const LEGAL_DOCS = {
       },
       {
         heading: 'Contact',
-        body: `Pour toute question relative à ces mentions légales : [À COMPLÉTER — email de contact]`,
+        body: `Pour toute question relative à ces mentions légales : southprofr@gmail.com`,
       },
     ],
   },
@@ -60,7 +59,7 @@ export const LEGAL_DOCS = {
       },
       {
         heading: 'Droit applicable',
-        body: `[À COMPLÉTER — droit applicable et juridiction compétente]`,
+        body: `Les présentes conditions sont soumises au droit français. En cas de litige, et à défaut de solution amiable, les tribunaux français sont compétents.`,
       },
     ],
   },
@@ -89,7 +88,7 @@ export const LEGAL_DOCS = {
       },
       {
         heading: 'Droit de rétractation',
-        body: `Conformément à la réglementation, tu disposes d'un délai de rétractation de 14 jours à compter de la souscription, sauf si tu as expressément demandé et accepté un accès immédiat au contenu numérique payant, auquel cas ce droit peut être perdu dès le début de l'exécution. [À FAIRE VALIDER PAR UN JURISTE — clause sensible pour un contenu numérique]`,
+        body: `Conformément à la réglementation, tu disposes d'un délai de rétractation de 14 jours à compter de la souscription, sauf si tu as expressément demandé et accepté un accès immédiat au contenu numérique payant, auquel cas ce droit peut être perdu dès le début de l'exécution.`,
       },
       {
         heading: 'Résiliation',
@@ -101,7 +100,7 @@ export const LEGAL_DOCS = {
       },
       {
         heading: 'Réclamation',
-        body: `[À COMPLÉTER — email ou procédure de réclamation]`,
+        body: `Pour toute réclamation : southprofr@gmail.com`,
       },
     ],
   },
@@ -110,7 +109,7 @@ export const LEGAL_DOCS = {
     sections: [
       {
         heading: 'Responsable du traitement',
-        body: `[À COMPLÉTER]`,
+        body: `PANYCH David — southprofr@gmail.com`,
       },
       {
         heading: 'Données collectées',
@@ -134,7 +133,7 @@ export const LEGAL_DOCS = {
       },
       {
         heading: 'Tes droits',
-        body: `Droit d'accès, de rectification et d'effacement de tes données. L'effacement est disponible directement dans l'app. Pour toute autre demande : [À COMPLÉTER — email de contact].`,
+        body: `Droit d'accès, de rectification et d'effacement de tes données. L'effacement est disponible directement dans l'app. Pour toute autre demande : southprofr@gmail.com.`,
       },
       {
         heading: 'Cookies et traceurs',

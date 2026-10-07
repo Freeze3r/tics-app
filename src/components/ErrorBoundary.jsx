@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import { reportError } from '../lib/errorReporting.js'
 
 // Sans ça, une erreur de rendu dans n'importe quel écran fait planter toute
 // l'app en page blanche silencieuse, sans aucun recours pour l'utilisateur.
@@ -14,6 +15,7 @@ export default class ErrorBoundary extends Component {
 
   componentDidCatch(error, info) {
     console.error('Erreur non gérée', error, info)
+    reportError(error)
   }
 
   handleReload = () => {
