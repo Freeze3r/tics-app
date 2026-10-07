@@ -125,7 +125,7 @@ Contact : southprofr@gmail.com`,
       },
       {
         heading: 'Conséquence du stockage sur ton appareil',
-        body: `Comme tes données de santé restent sur ton appareil, elles ne sont pas récupérables si tu perds ton téléphone, vides les données du navigateur ou changes d'appareil. En contrepartie, personne d'autre que toi n'y a accès.`,
+        body: `Comme tes données de santé restent sur ton appareil, elles ne sont pas récupérables si tu perds ton téléphone, vides les données du navigateur ou changes d'appareil. Tu peux télécharger une sauvegarde depuis Profil > Sauvegarde de tes données, et la restaurer sur un autre appareil. En contrepartie, personne d'autre que toi n'a accès à tes données.`,
       },
       {
         heading: 'Durée de conservation',

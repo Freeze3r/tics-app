@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import { loadProfile, getPracticeStats, addBehaviorToProfile, removeBehaviorFromProfile } from '../lib/profile.js'
@@ -10,7 +10,7 @@ import { getAccountCreatedAt, getUnlockedTitles, TENURE_TITLES } from '../lib/te
 import { getSeasons } from '../lib/seasons.js'
 import { getSeasonProgress, getNextEpisode } from '../lib/seasonProgress.js'
 import { signOut, supabase } from '../lib/supabase.js'
-import { scopedKey } from '../lib/authScope.js'
+import { downloadBackup, importUserData, eraseUserData } from '../lib/dataBackup.js'
 
 const THEME_OPTIONS = [
   { id: 'light', label: 'Clair', icon: '☀️' },
@@ -24,24 +24,6 @@ const GOAL_LABELS = {
   damage: 'Gérer les cicatrices / dégâts visibles',
   confidence: 'Reprendre confiance en moi',
 }
-
-const LOCAL_KEYS = [
-  'ticsProfile',
-  'ticsPracticeDays',
-  'ticsEpisodes',
-  'ticsJournal',
-  'ticsChecklist',
-  'ticsCommunityPosts',
-  'ticsCoachUsed',
-  'ticsLibraryVisited',
-  'ticsSeasonProgress',
-  'ticsSubscription',
-  'ticsDeepAnswers',
-  'ticsUserSettings',
-  'ticsStreakRestores',
-  'ticsTutorialSeen',
-  'quizAnswers',
-]
 
 export default function Profile() {
   const navigate = useNavigate()
@@ -64,6 +46,8 @@ export default function Profile() {
   const [expandedBadge, setExpandedBadge] = useState(null)
   const [showAdvanced, setShowAdvanced] = useState(false)
   const [confirmText, setConfirmText] = useState('')
+  const [backupMessage, setBackupMessage] = useState(null) // { ok, text }
+  const fileInputRef = useRef(null)
 
   function handleThemeChange(id) {
     applyTheme(id)
@@ -71,6 +55,24 @@ export default function Profile() {
   }
 
   if (!profile) return <Navigate to="/quiz" replace />
+
+  function handleDownloadBackup() {
+    downloadBackup()
+    setBackupMessage({ ok: true, text: 'Sauvegarde téléchargée. Garde-la dans un endroit sûr.' })
+  }
+
+  async function handleRestoreFile(event) {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
+    try {
+      const count = importUserData(await file.text())
+      setBackupMessage({ ok: true, text: `Sauvegarde restaurée (${count} éléments). Rechargement…` })
+      setTimeout(() => window.location.assign('/home'), 900)
+    } catch (err) {
+      setBackupMessage({ ok: false, text: err.message ?? 'La restauration a échoué.' })
+    }
+  }
 
   async function handleReset() {
     if (confirmText.trim().toLowerCase() !== 'supprimer') return
@@ -92,7 +94,7 @@ export default function Profile() {
       await signOut()
     }
 
-    LOCAL_KEYS.forEach((k) => localStorage.removeItem(scopedKey(k)))
+    eraseUserData()
     navigate('/', { replace: true })
   }
 
@@ -361,6 +363,41 @@ export default function Profile() {
           <Button className="mt-3" variant="secondary" onClick={() => navigate('/premium')}>
             Voir ce qui arrive
           </Button>
+        </section>
+
+        <section className="mt-6 rounded-2xl surface p-5">
+          <p className="text-sm font-semibold text-teal-600 dark:text-neon-400">
+            Sauvegarde de tes données
+          </p>
+          <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
+            Ton plan, ton journal et ta progression restent uniquement sur cet appareil. Télécharge
+            une sauvegarde de temps en temps : si tu changes de téléphone ou perds tes données, tu
+            pourras tout retrouver.
+          </p>
+          <div className="mt-3 flex flex-col gap-2">
+            <Button variant="secondary" className="w-full" onClick={handleDownloadBackup}>
+              Télécharger ma sauvegarde
+            </Button>
+            <Button variant="ghost" className="w-full" onClick={() => fileInputRef.current?.click()}>
+              Restaurer depuis un fichier
+            </Button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="application/json,.json"
+              className="hidden"
+              onChange={handleRestoreFile}
+              aria-label="Choisir un fichier de sauvegarde Sooth"
+            />
+          </div>
+          {backupMessage && (
+            <p
+              role="status"
+              className={`mt-3 text-sm ${backupMessage.ok ? 'text-teal-600 dark:text-neon-400' : 'text-coral-600 dark:text-coral-300'}`}
+            >
+              {backupMessage.text}
+            </p>
+          )}
         </section>
 
         <section className="mt-8">
