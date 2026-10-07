@@ -40,7 +40,7 @@ export default function ResetPassword() {
   }
 
   return (
-    <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-teal-50 px-6 py-12 dark:bg-navy-900">
+    <main className="flex min-h-svh flex-1 flex-col items-center justify-center px-6 py-12">
       <div className="w-full max-w-sm">
         <h1 className="text-center text-2xl font-bold text-navy-800 dark:text-sand-100">
           Nouveau mot de passe
@@ -77,7 +77,7 @@ export default function ResetPassword() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="6 caractères minimum"
-                className="w-full rounded-2xl border-2 border-teal-200 bg-white px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:bg-navy-800 dark:text-sand-100"
+                className="field w-full rounded-2xl px-4 py-3 text-sm"
               />
             </div>
 

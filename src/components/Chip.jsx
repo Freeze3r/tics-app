@@ -3,10 +3,8 @@ export default function Chip({ selected, onClick, children }) {
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border-2 px-4 py-2 text-sm font-medium transition-colors duration-150 ${
-        selected
-          ? 'border-coral-500 bg-coral-100/60 text-coral-600 dark:bg-coral-500/10 dark:text-coral-300'
-          : 'border-teal-200 text-navy-800/70 hover:border-teal-300 dark:border-teal-700 dark:text-sand-100/70'
+      className={`chip rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
+        selected ? 'chip-selected' : ''
       }`}
     >
       {children}

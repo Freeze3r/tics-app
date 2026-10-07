@@ -15,10 +15,10 @@ function OptionCard({ selected, onClick, label, sublabel }) {
     <button
       type="button"
       onClick={onClick}
-      className={`w-full rounded-2xl border-2 px-5 py-4 text-left transition-colors duration-150 ${
+      className={`w-full rounded-2xl px-5 py-4 text-left transition-colors duration-150 ${
         selected
-          ? 'border-coral-500 bg-coral-100/60 dark:bg-coral-500/10'
-          : 'border-teal-200 hover:border-teal-300 dark:border-teal-700 dark:hover:border-teal-600'
+          ? 'choice-selected'
+          : 'choice'
       }`}
     >
       <div className="font-semibold text-navy-800 dark:text-sand-100">{label}</div>
@@ -70,7 +70,7 @@ export default function Quiz() {
   }
 
   return (
-    <main className="flex min-h-svh flex-1 flex-col bg-teal-50 px-6 py-8 dark:bg-navy-900">
+    <main className="flex min-h-svh flex-1 flex-col px-6 py-8">
       <div className="mx-auto flex w-full max-w-md flex-1 flex-col">
         <ProgressDots total={QUIZ_QUESTIONS.length} current={step} />
 
@@ -87,7 +87,7 @@ export default function Quiz() {
                 onChange={(e) => setSingle(question.key, e.target.value)}
                 placeholder="Par exemple : je tire sur la peau autour de mes ongles quand je stresse…"
                 rows={4}
-                className="w-full resize-none rounded-2xl border-2 border-teal-200 bg-transparent p-4 text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:text-sand-100 dark:placeholder:text-sand-100/40"
+                className="field w-full resize-none rounded-2xl p-4"
               />
             ) : question.type === 'boolean' ? (
               <div className="flex gap-3">

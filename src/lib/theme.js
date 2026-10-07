@@ -5,7 +5,7 @@ function systemPrefersDark() {
 }
 
 export function getTheme() {
-  return localStorage.getItem(KEY) || 'system'
+  return localStorage.getItem(KEY) || 'dark'
 }
 
 export function applyTheme(theme) {

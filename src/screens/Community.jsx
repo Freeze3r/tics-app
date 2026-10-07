@@ -62,7 +62,7 @@ export default function Community() {
             Partager une petite victoire
           </Button>
         ) : (
-          <section className="mt-4 rounded-2xl bg-white p-4 dark:bg-navy-800">
+          <section className="mt-4 rounded-2xl surface p-4">
             <div className="mb-3 flex flex-wrap gap-2">
               {categories.map((b) => (
                 <Chip key={b.id} selected={behaviorId === b.id} onClick={() => setBehaviorId(b.id)}>
@@ -75,7 +75,7 @@ export default function Community() {
               onChange={(e) => setText(e.target.value)}
               placeholder="Une petite victoire, un déclic, un truc qui a marché…"
               rows={3}
-              className="w-full resize-none rounded-2xl border-2 border-teal-200 bg-transparent p-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:text-sand-100"
+              className="field w-full resize-none rounded-2xl p-3 text-sm"
             />
             <div className="mt-3 flex gap-3">
               <Button variant="ghost" onClick={() => setFormOpen(false)}>
@@ -92,9 +92,9 @@ export default function Community() {
           {filtered.map((post) => {
             const behavior = getBehavior(post.behaviorId)
             return (
-              <div key={post.id} className="rounded-2xl bg-white p-4 dark:bg-navy-800">
+              <div key={post.id} className="rounded-2xl surface p-4">
                 <div className="flex items-center justify-between text-xs text-navy-800/50 dark:text-sand-100/50">
-                  <span className="font-medium text-teal-600 dark:text-teal-400">
+                  <span className="font-medium text-teal-600 dark:text-neon-400">
                     {post.author} {post.isMine && '· toi'}
                     {post.isMine && isPremiumActive() && (
                       <span className="ml-1 rounded-full bg-coral-100 px-2 py-0.5 text-coral-600 dark:bg-coral-500/10 dark:text-coral-300">

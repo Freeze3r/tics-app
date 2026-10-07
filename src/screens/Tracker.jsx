@@ -57,16 +57,17 @@ function BehaviorSeasonCard({ behavior, navigate }) {
   const percent = progress.total === 0 ? 0 : Math.round((progress.completed / progress.total) * 100)
 
   return (
-    <div className="rounded-2xl bg-white p-4 dark:bg-navy-800">
-      <div className="flex items-center justify-between">
-        <span className="font-semibold text-navy-800 dark:text-sand-100">{behavior.label}</span>
-        <span className="text-xs text-navy-800/50 dark:text-sand-100/50">
-          {activeSeason.title} · {progress.completed}/{progress.total}
-        </span>
-      </div>
+    <div className="rounded-2xl surface p-4">
+      <p className="font-semibold text-navy-800 dark:text-sand-100">{behavior.label}</p>
+      <p className="mt-0.5 text-xs text-navy-800/55 dark:text-sand-100/55">
+        {activeSeason.title} · {progress.completed}/{progress.total} épisodes
+      </p>
 
-      <div className="mt-2 h-2 rounded-full bg-teal-100 dark:bg-teal-700/30">
-        <div className="h-2 rounded-full bg-coral-500" style={{ width: `${percent}%` }} />
+      <div className="mt-3 h-2 rounded-full bg-teal-100 dark:bg-white/10">
+        <div
+          className="h-2 rounded-full bg-linear-to-r from-neon-400 to-coral-400 shadow-[0_0_10px_rgba(31,209,191,0.6)]"
+          style={{ width: `${percent}%` }}
+        />
       </div>
 
       {nextEpisode ? (
@@ -79,7 +80,7 @@ function BehaviorSeasonCard({ behavior, navigate }) {
           {activeSeason.episodes.length} · {nextEpisode.title}
         </Button>
       ) : (
-        <p className="mt-3 text-sm text-teal-600 dark:text-teal-400">
+        <p className="mt-3 text-sm text-teal-600 dark:text-neon-400">
           Saison 1 terminée ✓ La suite arrive bientôt.
         </p>
       )}
@@ -162,7 +163,7 @@ export default function Tracker() {
         )}
 
         {formOpen && (
-          <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
+          <section className="mt-6 rounded-2xl surface p-5">
             {behaviors.length > 1 && (
               <div className="mb-4">
                 <p className="mb-2 text-sm font-semibold text-navy-800 dark:text-sand-100">
@@ -232,7 +233,7 @@ export default function Tracker() {
           <h2 className="text-lg font-semibold text-navy-800 dark:text-sand-100">
             Tes déclencheurs cette semaine
           </h2>
-          <div className="mt-3 rounded-2xl bg-white p-4 dark:bg-navy-800">
+          <div className="mt-3 rounded-2xl surface p-4">
             <FrequencyChart counts={counts} />
           </div>
         </section>
@@ -250,7 +251,7 @@ export default function Tracker() {
                 const context = TRIGGER_CONTEXTS.find((t) => t.id === ep.triggerContext)
                 const emo = EMOTIONS.find((e) => e.id === ep.emotion)
                 return (
-                  <div key={ep.id} className="rounded-2xl bg-white p-4 text-sm dark:bg-navy-800">
+                  <div key={ep.id} className="rounded-2xl surface p-4 text-sm">
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-navy-800 dark:text-sand-100">
                         {behavior?.label ?? 'Moment difficile'}

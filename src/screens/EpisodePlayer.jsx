@@ -70,12 +70,12 @@ export default function EpisodePlayer() {
           ← Retour au tracker
         </Button>
 
-        <p className="mt-4 text-sm font-semibold text-teal-600 dark:text-teal-400">
+        <p className="mt-4 text-sm font-semibold text-teal-600 dark:text-neon-400">
           {season.title} · Épisode {index + 1}/{season.episodes.length}
         </p>
 
         <div className="mt-2 flex items-center gap-2">
-          <span className="rounded-full bg-teal-100 px-3 py-1 text-xs font-medium text-teal-700 dark:bg-teal-700/30 dark:text-teal-300">
+          <span className="rounded-full bg-teal-100 px-3 py-1 text-xs font-medium text-teal-700 dark:bg-teal-700/30 dark:text-neon-300">
             {TYPE_LABELS[episode.type]}
           </span>
           <span className="text-xs text-navy-800/50 dark:text-sand-100/50">{episode.duration}</span>
@@ -90,7 +90,7 @@ export default function EpisodePlayer() {
         {episode.steps && (
           <ol className="mt-5 flex flex-col gap-2">
             {episode.steps.map((step, i) => (
-              <li key={i} className="flex gap-3 rounded-2xl bg-white p-3 text-sm dark:bg-navy-800">
+              <li key={i} className="flex gap-3 rounded-2xl surface p-3 text-sm">
                 <span className="shrink-0 font-semibold text-coral-500">{i + 1}.</span>
                 <span className="text-navy-800/80 dark:text-sand-100/80">{step}</span>
               </li>
@@ -99,7 +99,7 @@ export default function EpisodePlayer() {
         )}
 
         {episode.timerSeconds && (
-          <div className="mt-6 flex flex-col items-center rounded-2xl bg-white p-6 dark:bg-navy-800">
+          <div className="mt-6 flex flex-col items-center rounded-2xl surface p-6">
             {timerRunning ? (
               <>
                 <div className="relative flex h-32 w-32 items-center justify-center">
@@ -121,7 +121,7 @@ export default function EpisodePlayer() {
                   <span className="text-2xl font-bold text-navy-800 dark:text-sand-100">{secondsLeft}</span>
                 </div>
                 {secondsLeft === 0 && (
-                  <p className="mt-3 text-sm font-medium text-teal-600 dark:text-teal-400">
+                  <p className="mt-3 text-sm font-medium text-teal-600 dark:text-neon-400">
                     Terminé — bien joué.
                   </p>
                 )}

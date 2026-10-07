@@ -4,7 +4,8 @@ import Button from '../components/Button.jsx'
 import Mascot from '../components/Mascot.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { markTutorialSeen } from '../lib/tutorial.js'
-import { NAV_ITEMS } from '../data/navItems.js'
+import { NAV_ITEMS, navItemClass } from '../data/navItems.js'
+import { NavFrame } from '../components/NavBar.jsx'
 
 const STEPS = [
   {
@@ -65,10 +66,10 @@ export default function Tutorial() {
   }
 
   return (
-    <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-teal-50 px-6 py-10 pb-32 text-center dark:bg-navy-900">
+    <main className="flex min-h-svh flex-1 flex-col items-center justify-center px-6 py-10 pb-32 text-center">
       <Mascot size="lg" bounce />
 
-      <div className="mt-6 max-w-sm rounded-3xl rounded-tl-none bg-white p-5 dark:bg-navy-800">
+      <div className="mt-6 max-w-sm surface rounded-3xl rounded-tl-none p-5">
         <div className="flex items-center justify-center gap-2">
           <span className="text-xl">{current.icon}</span>
           <p className="font-semibold text-navy-800 dark:text-sand-100">{current.title}</p>
@@ -94,30 +95,26 @@ export default function Tutorial() {
       {/* Maquette de la vraie barre de nav : la mascotte doit pointer vers un
           menu qu'on voit réellement à l'écran, pas juste en décrire un dans le
           vide — l'item correspondant à l'étape courante s'illumine. */}
-      <nav className="fixed inset-x-0 bottom-0 border-t border-teal-200 bg-white/95 backdrop-blur dark:border-teal-700 dark:bg-navy-800/95">
-        <div className="mx-auto flex max-w-md items-center justify-around px-2 py-2">
-          {NAV_ITEMS.map((item) => {
-            const isActive = item.label === current.menu
-            return (
-              <div
-                key={item.to}
-                className={`flex flex-col items-center gap-0.5 rounded-2xl px-2.5 py-1.5 text-xs font-medium transition-all duration-300 ${
-                  isActive
-                    ? 'scale-110 bg-coral-500 text-white shadow-lg shadow-coral-500/40 animate-pulse'
-                    : item.emphasis
-                      ? 'bg-coral-500/15 text-coral-600 dark:text-coral-300'
-                      : 'text-navy-800/30 dark:text-sand-100/30'
-                }`}
-              >
-                <span className="text-lg" aria-hidden="true">
-                  {item.icon}
-                </span>
-                {item.label}
-              </div>
-            )
-          })}
-        </div>
-      </nav>
+      <NavFrame>
+        {NAV_ITEMS.map((item) => {
+          const isActive = item.label === current.menu
+          return (
+            <div
+              key={item.to}
+              className={`${navItemClass({ active: false, emphasis: item.emphasis })} ${
+                isActive
+                  ? "nav-item-spotlight"
+                  : "opacity-60"
+              }`}
+            >
+              <span className="text-lg" aria-hidden="true">
+                {item.icon}
+              </span>
+              {item.label}
+            </div>
+          )
+        })}
+      </NavFrame>
     </main>
   )
 }

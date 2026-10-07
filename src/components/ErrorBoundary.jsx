@@ -27,7 +27,7 @@ export default class ErrorBoundary extends Component {
     if (!this.state.hasError) return this.props.children
 
     return (
-      <main className="flex min-h-svh flex-1 flex-col items-center justify-center gap-4 bg-teal-50 px-6 py-12 text-center dark:bg-navy-900">
+      <main className="flex min-h-svh flex-1 flex-col items-center justify-center gap-4 px-6 py-12 text-center">
         <span className="text-4xl" aria-hidden="true">
           🌱
         </span>

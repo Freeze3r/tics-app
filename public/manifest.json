@@ -4,8 +4,8 @@
   "description": "Accompagnement bienveillant pour les comportements répétitifs centrés sur le corps (BFRB).",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#eefaf9",
-  "theme_color": "#23968c",
+  "background_color": "#070d17",
+  "theme_color": "#070d17",
   "icons": [
     {
       "src": "/favicon.svg",

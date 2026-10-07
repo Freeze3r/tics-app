@@ -10,7 +10,7 @@ function BehaviorCard({ behavior }) {
   const [, forceRender] = useState(0)
 
   return (
-    <div className="rounded-2xl bg-white p-4 dark:bg-navy-800">
+    <div className="rounded-2xl surface p-4">
       <button
         type="button"
         className="flex w-full items-center justify-between text-left"
@@ -25,8 +25,8 @@ function BehaviorCard({ behavior }) {
 
       {open && (
         <div className="mt-4 flex flex-col gap-4">
-          <div className="rounded-2xl bg-teal-50 p-3 dark:bg-navy-900/40">
-            <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-teal-700 dark:text-teal-300">
+          <div className="surface-inset rounded-2xl p-3">
+            <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-teal-700 dark:text-neon-300">
               🧠 Comprendre
             </p>
             <p className="text-sm leading-relaxed text-navy-800/70 dark:text-sand-100/70">
@@ -50,7 +50,7 @@ function BehaviorCard({ behavior }) {
           </div>
 
           <div>
-            <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-teal-600 dark:text-teal-400">
+            <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-teal-600 dark:text-neon-400">
               🛡️ Barrières physiques à essayer
             </p>
             <div className="flex flex-col gap-2">
@@ -102,7 +102,7 @@ export default function Library() {
           Comprendre ce qui se passe, sans jugement.
         </p>
 
-        <section className="mt-6 rounded-2xl bg-white p-4 dark:bg-navy-800">
+        <section className="mt-6 rounded-2xl surface p-4">
           <p className="text-sm font-semibold text-navy-800 dark:text-sand-100">
             Les BFRB, c'est quoi au juste ?
           </p>
@@ -117,7 +117,7 @@ export default function Library() {
         </section>
 
         <section className="mt-4 rounded-2xl bg-teal-100/60 p-4 dark:bg-teal-700/10">
-          <p className="text-sm font-semibold text-teal-700 dark:text-teal-300">
+          <p className="text-sm font-semibold text-teal-700 dark:text-neon-300">
             HRT &amp; CBIT, c'est quoi ?
           </p>
           <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
@@ -146,7 +146,7 @@ export default function Library() {
           ))}
         </section>
 
-        <section className="mt-6 rounded-2xl bg-white p-4 dark:bg-navy-800">
+        <section className="mt-6 rounded-2xl surface p-4">
           <p className="text-sm font-semibold text-navy-800 dark:text-sand-100">
             Quand consulter un professionnel ?
           </p>

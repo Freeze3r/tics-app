@@ -47,9 +47,9 @@ export default function DeepQuiz() {
   }
 
   return (
-    <main className="flex min-h-svh flex-1 flex-col bg-teal-50 px-6 py-8 dark:bg-navy-900">
+    <main className="flex min-h-svh flex-1 flex-col px-6 py-8">
       <div className="mx-auto flex w-full max-w-md flex-1 flex-col">
-        <p className="text-center text-sm font-semibold text-teal-600 dark:text-teal-400">
+        <p className="text-center text-sm font-semibold text-teal-600 dark:text-neon-400">
           Ton plan détaillé
         </p>
         <div className="mt-3">
@@ -64,7 +64,7 @@ export default function DeepQuiz() {
             onChange={(e) => setAnswers((prev) => ({ ...prev, [question.key]: e.target.value }))}
             placeholder={question.placeholder}
             rows={6}
-            className="mt-6 w-full resize-none rounded-2xl border-2 border-teal-200 bg-transparent p-4 text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:text-sand-100 dark:placeholder:text-sand-100/40"
+            className="field mt-6 w-full resize-none rounded-2xl p-4"
           />
         </div>
 

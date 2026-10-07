@@ -32,7 +32,7 @@ export default function Legal() {
         <div className="mt-6 flex flex-col gap-5">
           {content.sections.map((s) => (
             <section key={s.heading}>
-              <h2 className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+              <h2 className="text-sm font-semibold text-teal-600 dark:text-neon-400">
                 {s.heading}
               </h2>
               <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-navy-800/80 dark:text-sand-100/80">

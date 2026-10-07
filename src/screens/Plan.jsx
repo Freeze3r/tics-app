@@ -25,7 +25,7 @@ export default function Plan() {
 
   if (!answers || !plan) {
     return (
-      <main className="flex min-h-svh flex-1 flex-col items-center justify-center gap-4 bg-teal-50 px-6 text-center dark:bg-navy-900">
+      <main className="flex min-h-svh flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
         <p className="text-navy-800 dark:text-sand-100">On n'a pas retrouvé tes réponses.</p>
         <Button onClick={() => navigate('/quiz')}>Refaire le quiz</Button>
       </main>
@@ -33,9 +33,9 @@ export default function Plan() {
   }
 
   return (
-    <main className="min-h-svh flex-1 bg-teal-50 px-6 py-10 dark:bg-navy-900">
+    <main className="min-h-svh flex-1 px-6 py-10">
       <div className="mx-auto max-w-md">
-        <p className="text-sm font-semibold uppercase tracking-wide text-teal-600 dark:text-teal-400">
+        <p className="text-sm font-semibold uppercase tracking-wide text-teal-600 dark:text-neon-400">
           Ton plan personnalisé
         </p>
         <h1 className="mt-1 text-2xl font-bold text-navy-800 dark:text-sand-100">
@@ -58,7 +58,7 @@ export default function Plan() {
           </h2>
           <div className="mt-3 flex flex-col gap-4">
             {plan.exercisesByBehavior.map(({ behavior, exercises }) => (
-              <div key={behavior.id} className="rounded-2xl bg-white p-4 dark:bg-navy-800">
+              <div key={behavior.id} className="rounded-2xl surface p-4">
                 <div className="font-semibold text-navy-800 dark:text-sand-100">{behavior.label}</div>
                 <ul className="mt-2 flex flex-col gap-2">
                   {exercises.map((ex) => (
@@ -80,7 +80,7 @@ export default function Plan() {
           </h2>
           <div className="mt-3 flex flex-col gap-2">
             {plan.dailyTraining.map((ex) => (
-              <div key={ex.title} className="rounded-2xl bg-white p-4 text-sm dark:bg-navy-800">
+              <div key={ex.title} className="rounded-2xl surface p-4 text-sm">
                 <span className="font-medium text-navy-800 dark:text-sand-100">{ex.title}</span>
                 {' — '}
                 <span className="text-navy-800/70 dark:text-sand-100/70">{ex.detail}</span>

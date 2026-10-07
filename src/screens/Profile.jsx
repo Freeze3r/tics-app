@@ -137,7 +137,7 @@ export default function Profile() {
                 {settings.displayName || 'Ton profil'}
               </h1>
               {selectedTitle && (
-                <span className="rounded-full bg-teal-100 px-2 py-0.5 text-xs font-semibold text-teal-700 dark:bg-teal-700/30 dark:text-teal-300">
+                <span className="rounded-full bg-teal-100 px-2 py-0.5 text-xs font-semibold text-teal-700 dark:bg-teal-700/30 dark:text-neon-300">
                   {selectedTitle.icon} {selectedTitle.label}
                 </span>
               )}
@@ -152,8 +152,8 @@ export default function Profile() {
         </Button>
 
         {unlockedTitles.length > 0 && (
-          <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
-            <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+          <section className="mt-6 rounded-2xl surface p-5">
+            <p className="text-sm font-semibold text-teal-600 dark:text-neon-400">
               Ton titre d'ancienneté
             </p>
             <p className="mt-1 text-xs text-navy-800/50 dark:text-sand-100/50">
@@ -165,10 +165,10 @@ export default function Profile() {
                   key={t.id}
                   type="button"
                   onClick={() => handleSelectTitle(t.id)}
-                  className={`rounded-full border-2 px-3 py-1.5 text-xs font-medium ${
+                  className={`rounded-full px-3 py-1.5 text-xs font-medium ${
                     settings.selectedTitleId === t.id
-                      ? 'border-coral-500 bg-coral-100/60 text-coral-600 dark:bg-coral-500/10 dark:text-coral-300'
-                      : 'border-teal-200 text-navy-800/70 dark:border-teal-700 dark:text-sand-100/70'
+                      ? 'choice-selected'
+                      : 'choice'
                   }`}
                 >
                   {t.icon} {t.label}
@@ -178,8 +178,8 @@ export default function Profile() {
           </section>
         )}
 
-        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
-          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">Ton plan</p>
+        <section className="mt-6 rounded-2xl surface p-5">
+          <p className="text-sm font-semibold text-teal-600 dark:text-neon-400">Ton plan</p>
           <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
             {profile.plan.durationDays} jours · objectif : {GOAL_LABELS[profile.plan.goal] ?? profile.plan.goal}
           </p>
@@ -194,7 +194,7 @@ export default function Profile() {
               const next = getNextEpisode(b.id, season)
               const percent = progress.total === 0 ? 0 : Math.round((progress.completed / progress.total) * 100)
               return (
-                <div key={b.id} className="rounded-2xl bg-teal-50 p-3 dark:bg-navy-900/40">
+                <div key={b.id} className="surface-inset rounded-2xl p-3">
                   <div className="flex items-center justify-between text-sm">
                     <span className="font-medium text-navy-800 dark:text-sand-100">{b.label}</span>
                     <div className="flex items-center gap-2">
@@ -214,13 +214,13 @@ export default function Profile() {
                     </div>
                   </div>
                   <div className="mt-1.5 h-1.5 rounded-full bg-teal-200 dark:bg-teal-700/40">
-                    <div className="h-1.5 rounded-full bg-coral-500" style={{ width: `${percent}%` }} />
+                    <div className="h-1.5 rounded-full bg-linear-to-r from-neon-400 to-coral-400" style={{ width: `${percent}%` }} />
                   </div>
                   {next && (
                     <button
                       type="button"
                       onClick={() => navigate(`/episode/${b.id}/${next.id}`)}
-                      className="mt-2 text-xs font-medium text-teal-600 dark:text-teal-400"
+                      className="mt-2 text-xs font-medium text-teal-600 dark:text-neon-400"
                     >
                       Prochain : {next.title} →
                     </button>
@@ -236,7 +236,7 @@ export default function Profile() {
                 <button
                   type="button"
                   onClick={() => setShowAddBehavior(true)}
-                  className="text-sm font-medium text-teal-600 dark:text-teal-400"
+                  className="text-sm font-medium text-teal-600 dark:text-neon-400"
                 >
                   + Ajouter un comportement
                 </button>
@@ -247,7 +247,7 @@ export default function Profile() {
                       key={b.id}
                       type="button"
                       onClick={() => handleAddBehavior(b.id)}
-                      className="rounded-full border-2 border-teal-200 px-3 py-1.5 text-xs text-navy-800/70 dark:border-teal-700 dark:text-sand-100/70"
+                      className="choice rounded-full px-3 py-1.5 text-xs"
                     >
                       + {b.label}
                     </button>
@@ -279,7 +279,7 @@ export default function Profile() {
                 type="button"
                 onClick={() => setExpandedBadge((cur) => (cur === b.id ? null : b.id))}
                 className={`rounded-2xl p-4 text-center transition-opacity ${
-                  b.unlocked ? 'bg-white dark:bg-navy-800' : 'bg-white/50 opacity-60 dark:bg-navy-800/50'
+                  b.unlocked ? 'surface' : 'surface opacity-60'
                 }`}
               >
                 <div className="text-2xl">{b.icon}</div>
@@ -307,7 +307,7 @@ export default function Profile() {
                       Condition : {b.detail}
                     </p>
                     <div className="mt-2 h-1.5 rounded-full bg-teal-200 dark:bg-teal-700/40">
-                      <div className="h-1.5 rounded-full bg-coral-500" style={{ width: `${percent}%` }} />
+                      <div className="h-1.5 rounded-full bg-linear-to-r from-neon-400 to-coral-400" style={{ width: `${percent}%` }} />
                     </div>
                     <p className="mt-1 text-xs text-navy-800/50 dark:text-sand-100/50">
                       Progression : {b.progress.current}/{b.progress.target}
@@ -319,8 +319,8 @@ export default function Profile() {
           )}
         </section>
 
-        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
-          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+        <section className="mt-6 rounded-2xl surface p-5">
+          <p className="text-sm font-semibold text-teal-600 dark:text-neon-400">
             Confidentialité communauté
           </p>
           <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
@@ -333,18 +333,18 @@ export default function Profile() {
           </Button>
         </section>
 
-        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
-          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">Apparence</p>
+        <section className="mt-6 rounded-2xl surface p-5">
+          <p className="text-sm font-semibold text-teal-600 dark:text-neon-400">Apparence</p>
           <div className="mt-3 grid grid-cols-3 gap-2">
             {THEME_OPTIONS.map((opt) => (
               <button
                 key={opt.id}
                 type="button"
                 onClick={() => handleThemeChange(opt.id)}
-                className={`flex flex-col items-center gap-1 rounded-2xl border-2 py-3 text-xs font-medium transition-colors ${
+                className={`flex flex-col items-center gap-1 rounded-2xl py-3 text-xs font-medium transition-colors ${
                   theme === opt.id
-                    ? 'border-coral-500 bg-coral-100/60 text-coral-600 dark:bg-coral-500/10 dark:text-coral-300'
-                    : 'border-teal-200 text-navy-800/70 dark:border-teal-700 dark:text-sand-100/70'
+                    ? 'choice-selected'
+                    : 'choice'
                 }`}
               >
                 <span className="text-lg">{opt.icon}</span>
@@ -382,7 +382,7 @@ export default function Profile() {
           </button>
 
           {showAdvanced && (
-            <div className="mt-3 rounded-2xl border-2 border-coral-200 p-4 dark:border-coral-500/20">
+            <div className="mt-3 rounded-2xl border border-coral-400/40 bg-coral-500/5 p-4">
               <p className="text-sm font-semibold text-coral-600 dark:text-coral-300">
                 Zone à risque
               </p>
@@ -403,7 +403,7 @@ export default function Profile() {
                 value={confirmText}
                 onChange={(e) => setConfirmText(e.target.value)}
                 placeholder="supprimer"
-                className="mt-1 w-full rounded-2xl border-2 border-teal-200 bg-transparent px-4 py-2 text-sm text-navy-800 placeholder:text-navy-800/30 focus:border-coral-400 focus:outline-none dark:border-teal-700 dark:text-sand-100"
+                className="field mt-1 w-full rounded-2xl px-4 py-2 text-sm"
               />
               <Button
                 variant="secondary"

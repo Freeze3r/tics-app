@@ -50,7 +50,7 @@ export default function RoutineExercise() {
           ← Retour à l'accueil
         </Button>
 
-        <p className="mt-4 text-sm font-semibold text-teal-600 dark:text-teal-400">
+        <p className="mt-4 text-sm font-semibold text-teal-600 dark:text-neon-400">
           {routine.icon} Routine du {routine.label.toLowerCase()}
         </p>
         <h1 className="mt-1 text-2xl font-bold text-navy-800 dark:text-sand-100">{routine.title}</h1>
@@ -58,14 +58,14 @@ export default function RoutineExercise() {
 
         <ol className="mt-5 flex flex-col gap-2">
           {routine.steps.map((step, i) => (
-            <li key={i} className="flex gap-3 rounded-2xl bg-white p-3 text-sm dark:bg-navy-800">
+            <li key={i} className="flex gap-3 rounded-2xl surface p-3 text-sm">
               <span className="shrink-0 font-semibold text-coral-500">{i + 1}.</span>
               <span className="text-navy-800/80 dark:text-sand-100/80">{step}</span>
             </li>
           ))}
         </ol>
 
-        <div className="mt-6 flex flex-col items-center rounded-2xl bg-white p-6 dark:bg-navy-800">
+        <div className="mt-6 flex flex-col items-center rounded-2xl surface p-6">
           {timerRunning ? (
             <div className="relative flex h-32 w-32 items-center justify-center">
               <svg className="absolute h-full w-full -rotate-90" viewBox="0 0 100 100">

@@ -63,7 +63,7 @@ export default function Sos() {
   const progress = 1 - secondsLeft / EXERCISE_SECONDS
 
   return (
-    <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-teal-50 px-6 py-10 text-center dark:bg-navy-900">
+    <main className="flex min-h-svh flex-1 flex-col items-center justify-center px-6 py-10 text-center">
       {phase === 'select' && (
         <>
           <h1 className="text-xl font-bold text-navy-800 dark:text-sand-100">
@@ -78,7 +78,7 @@ export default function Sos() {
                 key={b.id}
                 type="button"
                 onClick={() => selectBehavior(b.id)}
-                className="w-full rounded-2xl border-2 border-teal-200 bg-white px-5 py-4 text-left font-semibold text-navy-800 transition-colors hover:border-teal-300 dark:border-teal-700 dark:bg-navy-800 dark:text-sand-100"
+                className="w-full choice rounded-2xl px-5 py-4 text-left font-semibold"
               >
                 {b.label}
               </button>
@@ -89,7 +89,7 @@ export default function Sos() {
 
       {phase === 'instruction' && exercise && (
         <>
-          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">{behavior.label}</p>
+          <p className="text-sm font-semibold text-teal-600 dark:text-neon-400">{behavior.label}</p>
           <h1 className="mt-2 max-w-sm text-xl font-bold text-navy-800 dark:text-sand-100">
             {exercise.title}
           </h1>

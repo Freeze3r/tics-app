@@ -8,7 +8,7 @@ const SIZES = {
 export default function Mascot({ size = 'md', bounce = false, className = '' }) {
   return (
     <div
-      className={`${SIZES[size]} ${className}`}
+      className={`aura ${SIZES[size]} ${className}`}
       style={bounce ? { animation: 'mascotBounce 2.6s ease-in-out infinite' } : undefined}
       aria-hidden="true"
     >

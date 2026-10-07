@@ -108,7 +108,7 @@ export default function Coach() {
                 key={topic}
                 type="button"
                 onClick={() => sendMessage(topic)}
-                className="rounded-full border-2 border-teal-200 px-3 py-1.5 text-xs text-navy-800/70 dark:border-teal-700 dark:text-sand-100/70"
+                className="choice rounded-full px-3 py-1.5 text-xs"
               >
                 {topic}
               </button>
@@ -123,7 +123,7 @@ export default function Coach() {
                 <div
                   className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
                     m.from === 'coach'
-                      ? 'bg-white text-navy-800 dark:bg-navy-800 dark:text-sand-100'
+                      ? 'surface'
                       : 'ml-auto bg-coral-500 text-white'
                   }`}
                 >
@@ -147,7 +147,7 @@ export default function Coach() {
               </div>
             ))}
             {sending && (
-              <div className="max-w-[85%] rounded-2xl bg-white px-4 py-2.5 text-sm text-navy-800/50 dark:bg-navy-800 dark:text-sand-100/50">
+              <div className="max-w-[85%] rounded-2xl surface px-4 py-2.5 text-sm text-navy-800/50 dark:text-sand-100/50">
                 …
               </div>
             )}
@@ -155,7 +155,7 @@ export default function Coach() {
           </div>
         </div>
 
-        <div className="fixed inset-x-0 bottom-16 border-t border-teal-200 bg-teal-50/95 px-6 py-3 backdrop-blur dark:border-teal-700 dark:bg-navy-900/95">
+        <div className="fixed inset-x-0 bottom-[5.25rem] glass-bar px-6 py-3">
           {limitReached ? (
             <div className="mx-auto flex max-w-md items-center justify-between gap-3 text-sm">
               <span className="text-navy-800/60 dark:text-sand-100/60">
@@ -172,7 +172,7 @@ export default function Coach() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && sendMessage(input.trim())}
                 placeholder="Écris ce que tu ressens…"
-                className="flex-1 rounded-full border-2 border-teal-200 bg-white px-4 py-2 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:bg-navy-800 dark:text-sand-100"
+                className="field flex-1 rounded-full px-4 py-2 text-sm"
               />
               <Button onClick={() => sendMessage(input.trim())} disabled={!input.trim() || sending}>
                 Envoyer

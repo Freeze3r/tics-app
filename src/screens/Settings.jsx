@@ -60,7 +60,7 @@ export default function Settings() {
           visibles par les autres.
         </p>
 
-        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
+        <section className="mt-6 rounded-2xl surface p-5">
           <label className="flex items-center justify-between">
             <span className="text-sm font-semibold text-navy-800 dark:text-sand-100">
               Mode anonyme complet
@@ -78,8 +78,8 @@ export default function Settings() {
         </section>
 
         {!settings.anonymousMode && (
-          <section className="mt-4 rounded-2xl bg-white p-5 dark:bg-navy-800">
-            <p className="mb-3 text-sm font-semibold text-teal-600 dark:text-teal-400">
+          <section className="mt-4 rounded-2xl surface p-5">
+            <p className="mb-3 text-sm font-semibold text-teal-600 dark:text-neon-400">
               Avatar
             </p>
             <div className="flex flex-wrap gap-2">
@@ -110,7 +110,7 @@ export default function Settings() {
                   value={settings.displayName}
                   onChange={(e) => update({ displayName: e.target.value })}
                   placeholder="Ex : Alex"
-                  className="flex-1 rounded-2xl border-2 border-teal-200 bg-transparent px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:text-sand-100"
+                  className="field flex-1 rounded-2xl px-4 py-3 text-sm"
                 />
                 <EyeToggle
                   hidden={settings.displayNameHidden}
@@ -132,7 +132,7 @@ export default function Settings() {
                   value={settings.age}
                   onChange={(e) => update({ age: e.target.value })}
                   placeholder="Ex : 24"
-                  className="flex-1 rounded-2xl border-2 border-teal-200 bg-transparent px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:text-sand-100"
+                  className="field flex-1 rounded-2xl px-4 py-3 text-sm"
                 />
                 <EyeToggle
                   hidden={settings.ageHidden}
@@ -155,10 +155,10 @@ export default function Settings() {
                     key={g}
                     type="button"
                     onClick={() => update({ gender: settings.gender === g ? '' : g })}
-                    className={`rounded-full border-2 px-4 py-2 text-sm font-medium ${
+                    className={`rounded-full px-4 py-2 text-sm font-medium ${
                       settings.gender === g
-                        ? 'border-coral-500 bg-coral-100/60 text-coral-600 dark:bg-coral-500/10 dark:text-coral-300'
-                        : 'border-teal-200 text-navy-800/70 dark:border-teal-700 dark:text-sand-100/70'
+                        ? 'choice-selected'
+                        : 'choice'
                     }`}
                   >
                     {g}
@@ -169,8 +169,8 @@ export default function Settings() {
           </section>
         )}
 
-        <section className="mt-4 rounded-2xl bg-white p-5 dark:bg-navy-800">
-          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+        <section className="mt-4 rounded-2xl surface p-5">
+          <p className="text-sm font-semibold text-teal-600 dark:text-neon-400">
             Profil dans la communauté
           </p>
           <p className="mt-1 text-xs text-navy-800/50 dark:text-sand-100/50">
@@ -182,10 +182,10 @@ export default function Settings() {
             <button
               type="button"
               onClick={() => update({ communityPublic: false })}
-              className={`rounded-2xl border-2 px-4 py-3 text-left text-sm ${
+              className={`rounded-2xl px-4 py-3 text-left text-sm ${
                 !settings.communityPublic
-                  ? 'border-coral-500 bg-coral-100/60 dark:bg-coral-500/10'
-                  : 'border-teal-200 dark:border-teal-700'
+                  ? 'choice-selected'
+                  : 'choice'
               }`}
             >
               <span className="font-medium text-navy-800 dark:text-sand-100">Anonyme</span>
@@ -196,10 +196,10 @@ export default function Settings() {
             <button
               type="button"
               onClick={() => update({ communityPublic: true })}
-              className={`rounded-2xl border-2 px-4 py-3 text-left text-sm ${
+              className={`rounded-2xl px-4 py-3 text-left text-sm ${
                 settings.communityPublic
-                  ? 'border-coral-500 bg-coral-100/60 dark:bg-coral-500/10'
-                  : 'border-teal-200 dark:border-teal-700'
+                  ? 'choice-selected'
+                  : 'choice'
               }`}
             >
               <span className="font-medium text-navy-800 dark:text-sand-100">
@@ -219,16 +219,16 @@ export default function Settings() {
                 value={settings.communityPseudo}
                 onChange={(e) => update({ communityPseudo: e.target.value })}
                 placeholder="Ton pseudo public"
-                className="w-full rounded-2xl border-2 border-teal-200 bg-transparent px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:text-sand-100"
+                className="field w-full rounded-2xl px-4 py-3 text-sm"
               />
             </div>
           )}
         </section>
 
         {isNotificationSupported() && (
-          <section className="mt-4 rounded-2xl bg-white p-5 dark:bg-navy-800">
+          <section className="mt-4 rounded-2xl surface p-5">
             <label className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+              <span className="text-sm font-semibold text-teal-600 dark:text-neon-400">
                 Rappels quotidiens
               </span>
               <input
@@ -259,7 +259,7 @@ export default function Settings() {
                       onChange={(e) =>
                         update({ reminderTimes: { ...settings.reminderTimes, [slot.key]: e.target.value } })
                       }
-                      className="rounded-xl border-2 border-teal-200 bg-transparent px-2 py-1 text-sm text-navy-800 dark:border-teal-700 dark:text-sand-100"
+                      className="field rounded-xl px-2 py-1 text-sm"
                     />
                   </div>
                 ))}

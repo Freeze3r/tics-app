@@ -72,7 +72,7 @@ export default function Home() {
   }
 
   return (
-    <main className="relative overflow-hidden bg-gradient-to-b from-teal-50 to-sand-50 px-6 py-8 dark:from-navy-900 dark:to-navy-900">
+    <main className="relative overflow-hidden px-6 py-8">
       <div
         className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-coral-200/30 blur-3xl dark:bg-coral-500/10"
         aria-hidden="true"
@@ -83,10 +83,10 @@ export default function Home() {
           Comment tu te sens aujourd'hui ?
         </h1>
 
-        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
+        <section className="mt-6 rounded-2xl surface p-5">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+              <p className="text-sm font-semibold text-teal-600 dark:text-neon-400">
                 Ta pratique cette semaine
               </p>
               <p className="mt-1 text-2xl font-bold text-navy-800 dark:text-sand-100">
@@ -98,8 +98,15 @@ export default function Home() {
                 </p>
               )}
             </div>
-            <div className="h-14 w-14 rounded-full bg-teal-100 flex items-center justify-center text-xl font-bold text-teal-600 dark:bg-teal-700/30 dark:text-teal-300">
-              {Math.round((stats.practicedThisWeek / stats.totalWeekDays) * 100)}%
+            <div
+              className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full shadow-[0_0_24px_-4px_rgba(31,209,191,0.6)]"
+              style={{
+                background: `conic-gradient(var(--color-neon-400) ${Math.round((stats.practicedThisWeek / stats.totalWeekDays) * 360)}deg, rgba(127,160,170,0.22) 0deg)`,
+              }}
+            >
+              <div className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#f4fcfb] dark:bg-[#0c1622] text-sm font-bold text-teal-600 dark:text-neon-300">
+                {Math.round((stats.practicedThisWeek / stats.totalWeekDays) * 100)}%
+              </div>
             </div>
           </div>
           <p className="mt-2 text-xs text-navy-800/50 dark:text-sand-100/50">
@@ -119,16 +126,16 @@ export default function Home() {
         </section>
 
         <div className="mt-6 grid grid-cols-2 gap-3">
-          <Button variant="primary" className="w-full" onClick={() => navigate('/sos')}>
+          <Button variant="primary" className="w-full px-4 text-sm" onClick={() => navigate("/sos")}>
             J'ai une envie forte
           </Button>
-          <Button variant="secondary" className="w-full" onClick={() => navigate('/tracker?log=1')}>
+          <Button variant="secondary" className="w-full px-4 text-sm" onClick={() => navigate("/tracker?log=1")}>
             Noter un moment difficile
           </Button>
         </div>
 
-        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
-          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+        <section className="mt-6 rounded-2xl surface p-5">
+          <p className="text-sm font-semibold text-teal-600 dark:text-neon-400">
             {routine.icon} Routine du {routine.label.toLowerCase()}
           </p>
           <p className="mt-1 font-semibold text-navy-800 dark:text-sand-100">{routine.title}</p>
@@ -139,8 +146,8 @@ export default function Home() {
         </section>
 
         {nextEpisode && (
-          <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
-            <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+          <section className="mt-6 rounded-2xl surface p-5">
+            <p className="text-sm font-semibold text-teal-600 dark:text-neon-400">
               {primarySeason.title} · {primaryBehavior.label}
             </p>
             <p className="mt-1 font-semibold text-navy-800 dark:text-sand-100">{nextEpisode.title}</p>
@@ -157,7 +164,7 @@ export default function Home() {
         <section className="mt-6 flex items-start gap-3 rounded-2xl bg-teal-100/60 p-5 dark:bg-teal-700/10">
           <Mascot size="md" className="shrink-0" />
           <div>
-            <p className="text-sm font-semibold text-teal-700 dark:text-teal-300">
+            <p className="text-sm font-semibold text-teal-700 dark:text-neon-300">
               Ta pensée du jour
             </p>
             <p className="mt-1 text-sm leading-relaxed text-navy-800/80 dark:text-sand-100/80">
@@ -166,8 +173,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
-          <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+        <section className="mt-6 rounded-2xl surface p-5">
+          <p className="text-sm font-semibold text-teal-600 dark:text-neon-400">
             Exercice du jour
           </p>
           <p className="mt-1 font-semibold text-navy-800 dark:text-sand-100">
@@ -187,8 +194,8 @@ export default function Home() {
         </section>
 
         {topTrigger && (
-          <section className="mt-6 rounded-2xl bg-white p-5 dark:bg-navy-800">
-            <p className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+          <section className="mt-6 rounded-2xl surface p-5">
+            <p className="text-sm font-semibold text-teal-600 dark:text-neon-400">
               Ce que le tracker remarque
             </p>
             <p className="mt-1 text-sm text-navy-800/70 dark:text-sand-100/70">
@@ -205,7 +212,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => navigate('/journal')}
-            className="flex flex-col items-center gap-1 rounded-2xl bg-white p-3 text-center dark:bg-navy-800"
+            className="flex flex-col items-center gap-1 rounded-2xl surface p-3 text-center"
           >
             <span className="text-xl">💭</span>
             <span className="text-xs font-medium text-navy-800 dark:text-sand-100">Journal</span>
@@ -213,7 +220,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => navigate('/library')}
-            className="flex flex-col items-center gap-1 rounded-2xl bg-white p-3 text-center dark:bg-navy-800"
+            className="flex flex-col items-center gap-1 rounded-2xl surface p-3 text-center"
           >
             <span className="text-xl">📚</span>
             <span className="text-xs font-medium text-navy-800 dark:text-sand-100">Bibliothèque</span>
@@ -221,7 +228,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => navigate('/community')}
-            className="flex flex-col items-center gap-1 rounded-2xl bg-white p-3 text-center dark:bg-navy-800"
+            className="flex flex-col items-center gap-1 rounded-2xl surface p-3 text-center"
           >
             <span className="text-xl">🤝</span>
             <span className="text-xs font-medium text-navy-800 dark:text-sand-100">Communauté</span>
@@ -239,7 +246,7 @@ export default function Home() {
                 return (
                   <div
                     key={ep.id}
-                    className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 text-sm dark:bg-navy-800"
+                    className="flex items-center justify-between rounded-2xl surface px-4 py-3 text-sm"
                   >
                     <span className="text-navy-800 dark:text-sand-100">
                       {behavior?.label ?? 'Moment difficile'}

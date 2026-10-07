@@ -47,13 +47,13 @@ export default function Premium() {
           <button
             type="button"
             onClick={() => setShowComparison((s) => !s)}
-            className="mt-4 text-sm font-medium text-teal-600 dark:text-teal-400"
+            className="mt-4 text-sm font-medium text-teal-600 dark:text-neon-400"
           >
             {showComparison ? 'Masquer le comparatif' : 'Voir le comparatif complet →'}
           </button>
 
           {showComparison && (
-            <div className="mt-4 overflow-x-auto rounded-2xl bg-white dark:bg-navy-800">
+            <div className="mt-4 overflow-x-auto rounded-2xl surface">
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-teal-100 dark:border-teal-700/40">

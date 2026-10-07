@@ -93,7 +93,7 @@ export default function Auth() {
 
   if (mode === 'reset') {
     return (
-      <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-teal-50 px-6 py-12 dark:bg-navy-900">
+      <main className="flex min-h-svh flex-1 flex-col items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm">
           <h1 className="text-center text-2xl font-bold text-navy-800 dark:text-sand-100">
             Mot de passe oublié
@@ -120,7 +120,7 @@ export default function Auth() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="toi@exemple.com"
-                  className="w-full rounded-2xl border-2 border-teal-200 bg-white px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:bg-navy-800 dark:text-sand-100"
+                  className="field w-full rounded-2xl px-4 py-3 text-sm"
                 />
               </div>
 
@@ -139,7 +139,7 @@ export default function Auth() {
               setError(null)
               setResetSent(false)
             }}
-            className="mt-5 w-full text-center text-sm text-teal-600 dark:text-teal-400"
+            className="mt-5 w-full text-center text-sm text-teal-600 dark:text-neon-400"
           >
             ← Retour à la connexion
           </button>
@@ -149,7 +149,7 @@ export default function Auth() {
   }
 
   return (
-    <main className="flex min-h-svh flex-1 flex-col items-center justify-center bg-teal-50 px-6 py-12 dark:bg-navy-900">
+    <main className="flex min-h-svh flex-1 flex-col items-center justify-center px-6 py-12">
       <div className="w-full max-w-sm">
         <h1 className="text-center text-2xl font-bold text-navy-800 dark:text-sand-100">
           {mode === 'signup' ? 'Crée ton compte' : 'Bon retour'}
@@ -175,7 +175,7 @@ export default function Auth() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="toi@exemple.com"
-              className="w-full rounded-2xl border-2 border-teal-200 bg-white px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:bg-navy-800 dark:text-sand-100"
+              className="field w-full rounded-2xl px-4 py-3 text-sm"
             />
           </div>
 
@@ -194,7 +194,7 @@ export default function Auth() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="6 caractères minimum"
-              className="w-full rounded-2xl border-2 border-teal-200 bg-white px-4 py-3 text-sm text-navy-800 placeholder:text-navy-800/40 focus:border-teal-400 focus:outline-none dark:border-teal-700 dark:bg-navy-800 dark:text-sand-100"
+              className="field w-full rounded-2xl px-4 py-3 text-sm"
             />
           </div>
 
@@ -205,7 +205,7 @@ export default function Auth() {
                 setMode('reset')
                 setError(null)
               }}
-              className="-mt-2 self-end text-xs text-teal-600 dark:text-teal-400"
+              className="-mt-2 self-end text-xs text-teal-600 dark:text-neon-400"
             >
               Mot de passe oublié ?
             </button>
@@ -224,7 +224,7 @@ export default function Auth() {
             setMode((m) => (m === 'signup' ? 'login' : 'signup'))
             setError(null)
           }}
-          className="mt-5 w-full text-center text-sm text-teal-600 dark:text-teal-400"
+          className="mt-5 w-full text-center text-sm text-teal-600 dark:text-neon-400"
         >
           {mode === 'signup' ? 'Déjà un compte ? Se connecter' : "Pas encore de compte ? Créer un compte"}
         </button>
