@@ -7,7 +7,7 @@ import { logEpisode, listEpisodes, frequencyByContext } from '../lib/episodes.js
 import { TRIGGER_CONTEXTS, getBehavior } from '../data/behaviors.js'
 import { EMOTIONS, DURATIONS } from '../data/episodeOptions.js'
 import { getSeasons, getActiveSeason } from '../lib/seasons.js'
-import { getSeasonProgress, getNextEpisode } from '../lib/seasonProgress.js'
+import { getSeasonProgress, getNextEpisode, getCompletedEpisodeIds } from '../lib/seasonProgress.js'
 
 function relativeTime(iso) {
   const diffMs = Date.now() - new Date(iso).getTime()
@@ -50,6 +50,7 @@ function FrequencyChart({ counts }) {
 }
 
 function BehaviorSeasonCard({ behavior, navigate }) {
+  const [openSeasonId, setOpenSeasonId] = useState(null)
   const seasons = getSeasons(behavior)
   const activeSeason = getActiveSeason(behavior)
   const progress = getSeasonProgress(behavior.id, activeSeason)
@@ -81,7 +82,7 @@ function BehaviorSeasonCard({ behavior, navigate }) {
         </Button>
       ) : (
         <p className="mt-3 text-sm text-teal-600 dark:text-neon-400">
-          Saison 1 terminée ✓ La suite arrive bientôt.
+          Programme terminé ✓ Bravo ! Tu peux rejouer n'importe quel épisode ci-dessous.
         </p>
       )}
 
@@ -90,20 +91,51 @@ function BehaviorSeasonCard({ behavior, navigate }) {
           const p = getSeasonProgress(behavior.id, s)
           const finished = p.total > 0 && p.completed === p.total
           const current = s.id === activeSeason.id
+          const open = s.id === openSeasonId
           return (
-            <span
+            <button
               key={s.id}
-              className={`rounded-full px-3 py-1 text-xs ${
-                current
-                  ? 'bg-teal-100 font-semibold text-teal-700 dark:bg-neon-400/15 dark:text-neon-300'
-                  : 'bg-teal-100/60 text-navy-800/55 dark:bg-white/5 dark:text-sand-100/55'
+              type="button"
+              onClick={() => setOpenSeasonId(open ? null : s.id)}
+              aria-expanded={open}
+              className={`rounded-full px-3 py-1 text-xs transition-colors ${
+                open
+                  ? 'bg-neon-400/25 font-semibold text-teal-700 ring-1 ring-neon-400/60 dark:text-neon-300'
+                  : current
+                    ? 'bg-teal-100 font-semibold text-teal-700 dark:bg-neon-400/15 dark:text-neon-300'
+                    : 'bg-teal-100/60 text-navy-800/55 dark:bg-white/5 dark:text-sand-100/55'
               }`}
             >
               {finished ? '✓' : current ? '▶' : '○'} {s.title.split(' : ')[0]} · {p.completed}/{p.total}
-            </span>
+            </button>
           )
         })}
       </div>
+
+      {openSeasonId && (
+        <ul className="mt-3 flex flex-col gap-1.5">
+          {seasons
+            .find((s) => s.id === openSeasonId)
+            .episodes.map((ep, i) => {
+              const done = getCompletedEpisodeIds(behavior.id).includes(ep.id)
+              return (
+                <li key={ep.id}>
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/episode/${behavior.id}/${ep.id}`)}
+                    className="surface-inset flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm"
+                  >
+                    <span className="w-5 shrink-0 text-center text-xs">{done ? '✓' : i + 1}</span>
+                    <span className="min-w-0 flex-1 truncate text-navy-800 dark:text-sand-100">{ep.title}</span>
+                    <span className="shrink-0 text-xs text-navy-800/45 dark:text-sand-100/45">
+                      {ep.type === 'exercise' ? 'Exercice' : 'Leçon'}
+                    </span>
+                  </button>
+                </li>
+              )
+            })}
+        </ul>
+      )}
     </div>
   )
 }

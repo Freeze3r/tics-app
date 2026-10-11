@@ -87,6 +87,18 @@ export function getActiveSeason(behavior) {
   return seasons.find((s) => s.episodes.some((e) => !done.has(e.id))) ?? seasons[seasons.length - 1]
 }
 
+// Épisode qui précède celui-ci (dans la saison, puis à la fin de la saison précédente).
+export function getEpisodeBefore(behavior, episodeId) {
+  const seasons = getSeasons(behavior)
+  for (let i = 0; i < seasons.length; i++) {
+    const idx = seasons[i].episodes.findIndex((e) => e.id === episodeId)
+    if (idx === -1) continue
+    if (idx > 0) return seasons[i].episodes[idx - 1]
+    return seasons[i - 1]?.episodes.at(-1) ?? null
+  }
+  return null
+}
+
 // Épisode qui suit celui-ci (dans la saison, puis au début de la saison suivante).
 export function getEpisodeAfter(behavior, episodeId) {
   const seasons = getSeasons(behavior)

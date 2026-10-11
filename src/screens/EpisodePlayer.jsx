@@ -3,7 +3,7 @@ import { useNavigate, useParams, Navigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import { loadProfile } from '../lib/profile.js'
 import { getBehavior } from '../data/behaviors.js'
-import { getSeasons, getEpisodeAfter } from '../lib/seasons.js'
+import { getSeasons, getEpisodeAfter, getEpisodeBefore } from '../lib/seasons.js'
 import { markEpisodeComplete, getCompletedEpisodeIds } from '../lib/seasonProgress.js'
 import { markPracticeToday } from '../lib/profile.js'
 
@@ -13,7 +13,14 @@ const GOAL_BY_TYPE = {
   lesson: 'But : mieux comprendre ce qui se passe, pour agir avec plus de conscience la prochaine fois.',
 }
 
+// La clé force un composant tout neuf à chaque épisode : sans elle, l'état "terminé" et le
+// minuteur de l'épisode précédent restaient en mémoire quand on passait au suivant.
 export default function EpisodePlayer() {
+  const { episodeId } = useParams()
+  return <EpisodePlayerScreen key={episodeId} />
+}
+
+function EpisodePlayerScreen() {
   const navigate = useNavigate()
   const { behaviorId, episodeId } = useParams()
   const [profile] = useState(() => loadProfile())
@@ -59,6 +66,14 @@ export default function EpisodePlayer() {
   }
 
   const progress = episode.timerSeconds ? 1 - secondsLeft / episode.timerSeconds : 0
+  const nextEpisode = getEpisodeAfter(behavior, episodeId)
+  const previousEpisode = getEpisodeBefore(behavior, episodeId)
+
+  // replace : passer d'un épisode à l'autre ne doit pas empiler l'historique du navigateur
+  // (sinon le bouton "retour" du téléphone repasse par tous les épisodes déjà vus).
+  function goTo(target) {
+    navigate(`/episode/${behaviorId}/${target.id}`, { replace: true })
+  }
 
   return (
     <main className="px-6 py-8">
@@ -141,13 +156,27 @@ export default function EpisodePlayer() {
         {done && (
           <Button
             className="mt-3 w-full"
-            onClick={() => {
-              const next = getEpisodeAfter(behavior, episodeId)
-              navigate(next ? `/episode/${behaviorId}/${next.id}` : '/tracker')
-            }}
+            onClick={() => (nextEpisode ? goTo(nextEpisode) : navigate('/tracker'))}
           >
-            {getEpisodeAfter(behavior, episodeId) ? 'Épisode suivant →' : 'Retour au tracker'}
+            {nextEpisode ? 'Épisode suivant →' : 'Retour au tracker'}
           </Button>
+        )}
+
+        {(previousEpisode || (!done && nextEpisode)) && (
+          <div className="mt-3 flex items-center justify-between gap-2">
+            {previousEpisode ? (
+              <Button variant="ghost" className="px-3 text-sm" onClick={() => goTo(previousEpisode)}>
+                ← Précédent
+              </Button>
+            ) : (
+              <span />
+            )}
+            {!done && nextEpisode && (
+              <Button variant="ghost" className="px-3 text-sm" onClick={() => goTo(nextEpisode)}>
+                Passer →
+              </Button>
+            )}
+          </div>
         )}
       </div>
     </main>
