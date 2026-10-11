@@ -11,8 +11,8 @@ function countCompletedContentEpisodes() {
   const profile = loadProfile()
   if (!profile) return 0
   return profile.plan.behaviors.reduce((sum, b) => {
-    const season = getSeasons(b)[0]
-    const completed = getCompletedEpisodeIds(b.id).filter((id) => season.episodes.some((e) => e.id === id))
+    const allIds = new Set(getSeasons(b).flatMap((s) => s.episodes.map((e) => e.id)))
+    const completed = getCompletedEpisodeIds(b.id).filter((id) => allIds.has(id))
     return sum + completed.length
   }, 0)
 }
@@ -67,7 +67,7 @@ export function getBadges() {
       id: 'episodes-5',
       icon: '🎧',
       label: 'Sur la bonne voie',
-      detail: 'Termine 5 épisodes de ta saison',
+      detail: 'Termine 5 épisodes',
       unlocked: completedContentEpisodes >= 5,
       progress: { current: Math.min(completedContentEpisodes, 5), target: 5 },
     },
@@ -75,7 +75,7 @@ export function getBadges() {
       id: 'episodes-10',
       icon: '🏁',
       label: 'Saison bien avancée',
-      detail: 'Termine 10 épisodes de ta saison',
+      detail: 'Termine 10 épisodes',
       unlocked: completedContentEpisodes >= 10,
       progress: { current: Math.min(completedContentEpisodes, 10), target: 10 },
     },

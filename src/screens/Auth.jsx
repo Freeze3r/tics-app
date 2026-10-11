@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Button from '../components/Button.jsx'
-import { supabase, signUpWithEmail, signInWithEmail, requestPasswordReset } from '../lib/supabase.js'
+import { supabase, signUpWithEmail, signInWithEmail, signInWithGoogle, requestPasswordReset } from '../lib/supabase.js'
 import { resolveAuthScope } from '../lib/authScope.js'
 import { loadProfile } from '../lib/profile.js'
+
+// Le bouton Google n'apparaît que lorsque la connexion Google est configurée (VITE_GOOGLE_AUTH=1).
+const GOOGLE_ENABLED = import.meta.env.VITE_GOOGLE_AUTH === '1'
 
 const ERROR_MESSAGES = {
   'Invalid login credentials': 'Email ou mot de passe incorrect.',
@@ -68,6 +71,15 @@ export default function Auth() {
       setError(friendlyError(err.message))
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function handleGoogle() {
+    setError(null)
+    try {
+      await signInWithGoogle()
+    } catch {
+      setError("La connexion avec Google a échoué, réessaie ou utilise ton email.")
     }
   }
 
@@ -160,7 +172,20 @@ export default function Auth() {
             : 'Connecte-toi pour retrouver ton plan et ta progression.'}
         </p>
 
-        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+        {GOOGLE_ENABLED && (
+          <>
+            <Button variant="secondary" className="mt-6 w-full" onClick={handleGoogle}>
+              Continuer avec Google
+            </Button>
+            <div className="my-4 flex items-center gap-3 text-xs text-navy-800/40 dark:text-sand-100/40">
+              <div className="h-px flex-1 bg-current opacity-30" />
+              ou
+              <div className="h-px flex-1 bg-current opacity-30" />
+            </div>
+          </>
+        )}
+
+        <form onSubmit={handleSubmit} className={`${GOOGLE_ENABLED ? '' : 'mt-6 '}flex flex-col gap-4`}>
           <div>
             <label
               htmlFor="auth-email"

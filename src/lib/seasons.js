@@ -1,4 +1,6 @@
 import { TRANSVERSAL_EXERCISES } from '../data/behaviors.js'
+import { buildSeasonTwoEpisodes, buildSeasonThreeEpisodes } from '../data/seasonContent.js'
+import { getCompletedEpisodeIds } from './seasonProgress.js'
 
 // Construit la Saison 1 d'un comportement à partir du contenu déjà vérifié
 // (mécanisme, barrières, exercices) plutôt que d'inventer 50 contenus cliniques
@@ -53,7 +55,7 @@ function buildSeasonOne(behavior) {
     title: 'Bilan de la saison 1',
     duration: '2 min',
     content:
-      "Tu as vu le mécanisme derrière ce comportement, testé plusieurs réponses concurrentes, et mis en place au moins une barrière physique. C'est la base du HRT/CBIT. La saison 2 ira plus loin — en attendant, continue ce qui a marché pour toi.",
+      "Tu as vu le mécanisme derrière ce comportement, testé plusieurs réponses concurrentes, et mis en place au moins une barrière physique. C'est la base du HRT/CBIT. La saison 2 t'apprend à repérer tes déclencheurs et à te préparer — elle t'attend juste après.",
   })
 
   return {
@@ -66,14 +68,32 @@ function buildSeasonOne(behavior) {
   }
 }
 
-function buildLockedSeason(number, title) {
-  return { id: `s${number}`, number, title, locked: true, comingSoon: true, episodes: [] }
+function buildSeason(number, title, episodes) {
+  return { id: `s${number}`, number, title, locked: false, comingSoon: false, episodes }
 }
 
 export function getSeasons(behavior) {
   return [
     buildSeasonOne(behavior),
-    buildLockedSeason(2, 'Saison 2 : Approfondir'),
-    buildLockedSeason(3, 'Saison 3 : Consolider'),
+    buildSeason(2, 'Saison 2 : Approfondir', buildSeasonTwoEpisodes(behavior.id)),
+    buildSeason(3, 'Saison 3 : Consolider', buildSeasonThreeEpisodes(behavior.id)),
   ]
+}
+
+// La saison "en cours" : la première pas encore terminée (la dernière si tout est fini).
+export function getActiveSeason(behavior) {
+  const seasons = getSeasons(behavior)
+  const done = new Set(getCompletedEpisodeIds(behavior.id))
+  return seasons.find((s) => s.episodes.some((e) => !done.has(e.id))) ?? seasons[seasons.length - 1]
+}
+
+// Épisode qui suit celui-ci (dans la saison, puis au début de la saison suivante).
+export function getEpisodeAfter(behavior, episodeId) {
+  const seasons = getSeasons(behavior)
+  for (let i = 0; i < seasons.length; i++) {
+    const idx = seasons[i].episodes.findIndex((e) => e.id === episodeId)
+    if (idx === -1) continue
+    return seasons[i].episodes[idx + 1] ?? seasons[i + 1]?.episodes[0] ?? null
+  }
+  return null
 }

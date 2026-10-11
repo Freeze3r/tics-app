@@ -11,7 +11,8 @@ export const USER_DATA_KEYS = [
   'ticsChecklist',
   'ticsCommunityPosts',
   'ticsCoachUsed',
-  'ticsCoachHistory',
+  'ticsCoachHistory', // ancien stockage, conservé pour être effacé
+  'ticsCoachSaved',
   'ticsCoachDailyCount',
   'ticsLibraryVisited',
   'ticsSeasonProgress',
@@ -94,4 +95,5 @@ export function importUserData(text) {
 export function eraseUserData() {
   for (const key of USER_DATA_KEYS) localStorage.removeItem(scopedKey(key))
   sessionStorage.removeItem('quizAnswers')
+  sessionStorage.removeItem(scopedKey('ticsCoachCurrent'))
 }

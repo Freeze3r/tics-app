@@ -7,7 +7,7 @@ import { getBadges } from '../lib/badges.js'
 import { getTheme, applyTheme } from '../lib/theme.js'
 import { getUserSettings, saveUserSettings } from '../lib/userSettings.js'
 import { getAccountCreatedAt, getUnlockedTitles, TENURE_TITLES } from '../lib/tenure.js'
-import { getSeasons } from '../lib/seasons.js'
+import { getActiveSeason } from '../lib/seasons.js'
 import { getSeasonProgress, getNextEpisode } from '../lib/seasonProgress.js'
 import { signOut, supabase } from '../lib/supabase.js'
 import { downloadBackup, importUserData, eraseUserData } from '../lib/dataBackup.js'
@@ -188,7 +188,7 @@ export default function Profile() {
 
           <div className="mt-4 flex flex-col gap-3">
             {profile.plan.behaviors.map((b) => {
-              const season = getSeasons(b)[0]
+              const season = getActiveSeason(b)
               const progress = getSeasonProgress(b.id, season)
               const next = getNextEpisode(b.id, season)
               const percent = progress.total === 0 ? 0 : Math.round((progress.completed / progress.total) * 100)

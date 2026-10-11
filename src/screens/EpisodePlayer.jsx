@@ -3,7 +3,7 @@ import { useNavigate, useParams, Navigate } from 'react-router-dom'
 import Button from '../components/Button.jsx'
 import { loadProfile } from '../lib/profile.js'
 import { getBehavior } from '../data/behaviors.js'
-import { getSeasons } from '../lib/seasons.js'
+import { getSeasons, getEpisodeAfter } from '../lib/seasons.js'
 import { markEpisodeComplete, getCompletedEpisodeIds } from '../lib/seasonProgress.js'
 import { markPracticeToday } from '../lib/profile.js'
 
@@ -82,7 +82,7 @@ export default function EpisodePlayer() {
         <p className="mt-2 text-sm italic text-navy-800/60 dark:text-sand-100/60">
           {GOAL_BY_TYPE[episode.type]}
         </p>
-        <p className="mt-4 leading-relaxed text-navy-800/80 dark:text-sand-100/80">{episode.content}</p>
+        <p className="mt-4 whitespace-pre-line leading-relaxed text-navy-800/80 dark:text-sand-100/80">{episode.content}</p>
 
         {episode.steps && (
           <ol className="mt-5 flex flex-col gap-2">
@@ -137,6 +137,18 @@ export default function EpisodePlayer() {
         >
           {done ? 'Terminé ✓' : 'Marquer comme terminé'}
         </Button>
+
+        {done && (
+          <Button
+            className="mt-3 w-full"
+            onClick={() => {
+              const next = getEpisodeAfter(behavior, episodeId)
+              navigate(next ? `/episode/${behaviorId}/${next.id}` : '/tracker')
+            }}
+          >
+            {getEpisodeAfter(behavior, episodeId) ? 'Épisode suivant →' : 'Retour au tracker'}
+          </Button>
+        )}
       </div>
     </main>
   )

@@ -6,7 +6,7 @@ import { loadProfile } from '../lib/profile.js'
 import { logEpisode, listEpisodes, frequencyByContext } from '../lib/episodes.js'
 import { TRIGGER_CONTEXTS, getBehavior } from '../data/behaviors.js'
 import { EMOTIONS, DURATIONS } from '../data/episodeOptions.js'
-import { getSeasons } from '../lib/seasons.js'
+import { getSeasons, getActiveSeason } from '../lib/seasons.js'
 import { getSeasonProgress, getNextEpisode } from '../lib/seasonProgress.js'
 
 function relativeTime(iso) {
@@ -51,7 +51,7 @@ function FrequencyChart({ counts }) {
 
 function BehaviorSeasonCard({ behavior, navigate }) {
   const seasons = getSeasons(behavior)
-  const activeSeason = seasons[0]
+  const activeSeason = getActiveSeason(behavior)
   const progress = getSeasonProgress(behavior.id, activeSeason)
   const nextEpisode = getNextEpisode(behavior.id, activeSeason)
   const percent = progress.total === 0 ? 0 : Math.round((progress.completed / progress.total) * 100)
@@ -86,14 +86,23 @@ function BehaviorSeasonCard({ behavior, navigate }) {
       )}
 
       <div className="mt-3 flex flex-wrap gap-2">
-        {seasons.slice(1).map((s) => (
-          <span
-            key={s.id}
-            className="rounded-full bg-teal-100 px-3 py-1 text-xs text-navy-800/50 dark:bg-teal-700/20 dark:text-sand-100/50"
-          >
-            {`🔒 ${s.title} · bientôt`}
-          </span>
-        ))}
+        {seasons.map((s) => {
+          const p = getSeasonProgress(behavior.id, s)
+          const finished = p.total > 0 && p.completed === p.total
+          const current = s.id === activeSeason.id
+          return (
+            <span
+              key={s.id}
+              className={`rounded-full px-3 py-1 text-xs ${
+                current
+                  ? 'bg-teal-100 font-semibold text-teal-700 dark:bg-neon-400/15 dark:text-neon-300'
+                  : 'bg-teal-100/60 text-navy-800/55 dark:bg-white/5 dark:text-sand-100/55'
+              }`}
+            >
+              {finished ? '✓' : current ? '▶' : '○'} {s.title.split(' : ')[0]} · {p.completed}/{p.total}
+            </span>
+          )
+        })}
       </div>
     </div>
   )

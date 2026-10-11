@@ -8,7 +8,7 @@ import { getBehavior, TRIGGER_CONTEXTS } from '../data/behaviors.js'
 import { thoughtOfTheDay } from '../data/dailyThoughts.js'
 import { canRestoreStreak, restoreStreak } from '../lib/streak.js'
 import { isPremiumActive } from '../lib/subscription.js'
-import { getSeasons } from '../lib/seasons.js'
+import { getActiveSeason } from '../lib/seasons.js'
 import { getNextEpisode } from '../lib/seasonProgress.js'
 import { DAILY_ROUTINE, currentPeriod } from '../data/dailyRoutine.js'
 
@@ -50,7 +50,7 @@ export default function Home() {
   const routine = DAILY_ROUTINE[currentPeriod()]
 
   const primaryBehavior = plan.behaviors[0]
-  const primarySeason = primaryBehavior ? getSeasons(primaryBehavior)[0] : null
+  const primarySeason = primaryBehavior ? getActiveSeason(primaryBehavior) : null
   const nextEpisode = primarySeason ? getNextEpisode(primaryBehavior.id, primarySeason) : null
 
   function handleCheckIn() {

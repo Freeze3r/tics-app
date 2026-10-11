@@ -6,8 +6,17 @@ import { askCoach, canSendMessage, getRemainingMessages, getDailyLimit } from '.
 import { loadProfile } from '../lib/profile.js'
 import { isPremiumActive } from '../lib/subscription.js'
 import { scopedKey } from '../lib/authScope.js'
+import {
+  loadCurrent,
+  persistCurrent,
+  clearCurrent,
+  listSaved,
+  saveConversation,
+  deleteSaved,
+  deleteAllSaved,
+  migrateLegacyHistory,
+} from '../lib/coachHistory.js'
 
-const HISTORY_KEY = 'ticsCoachHistory'
 const CRISIS_RESOURCE =
   "Si tu traverses un moment vraiment difficile, tu peux appeler le 3114 (numéro national de prévention du suicide, gratuit, 24/7) ou en parler à un professionnel. Tu n'es pas seul·e."
 
@@ -18,39 +27,80 @@ const SUGGESTED_TOPICS = [
   'Je veux juste parler de ma journée',
 ]
 
-function loadHistory() {
-  const raw = localStorage.getItem(scopedKey(HISTORY_KEY))
-  if (!raw) return null
-  try {
-    return JSON.parse(raw)
-  } catch {
-    return null
-  }
-}
-
-function saveHistory(messages) {
-  localStorage.setItem(scopedKey(HISTORY_KEY), JSON.stringify(messages.slice(-40)))
-}
-
 const INTRO = {
   id: 'intro',
   from: 'coach',
   text: "Salut, je suis là si tu as besoin d'en parler — d'un épisode, d'une envie, ou juste de comment tu te sens. Aucun jugement ici.",
 }
 
+const newConversation = () => ({ id: crypto.randomUUID(), savedId: null, messages: [INTRO] })
+
+function formatDate(iso) {
+  return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+}
+
 export default function Coach() {
   const navigate = useNavigate()
-  const [messages, setMessages] = useState(() => loadHistory() ?? [INTRO])
+  const [conv, setConv] = useState(() => {
+    migrateLegacyHistory()
+    return loadCurrent() ?? newConversation()
+  })
+  const [saved, setSaved] = useState(() => listSaved())
+  const [showHistory, setShowHistory] = useState(false)
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
   const [remaining, setRemaining] = useState(() => getRemainingMessages())
   const endRef = useRef(null)
   const premium = isPremiumActive()
+  const messages = conv.messages
+
+  const setMessages = (updater) =>
+    setConv((prev) => ({ ...prev, messages: typeof updater === 'function' ? updater(prev.messages) : updater }))
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' })
-    saveHistory(messages)
-  }, [messages])
+    persistCurrent(conv)
+    // Une conversation gardée reste à jour tant qu'on continue de discuter.
+    if (conv.savedId) {
+      saveConversation(conv)
+      setSaved(listSaved())
+    }
+  }, [conv])
+
+  function handleNew() {
+    clearCurrent()
+    setConv(newConversation())
+    setShowHistory(false)
+  }
+
+  function handleToggleKeep() {
+    if (conv.savedId) {
+      deleteSaved(conv.savedId)
+      setConv((c) => ({ ...c, savedId: null }))
+    } else {
+      const id = saveConversation(conv)
+      setConv((c) => ({ ...c, savedId: id }))
+    }
+    setSaved(listSaved())
+  }
+
+  function handleOpen(item) {
+    setConv({ id: item.id, savedId: item.id, messages: item.messages })
+    setShowHistory(false)
+  }
+
+  function handleDelete(item) {
+    deleteSaved(item.id)
+    if (conv.savedId === item.id) setConv((c) => ({ ...c, savedId: null }))
+    setSaved(listSaved())
+  }
+
+  function handleDeleteAll() {
+    if (!window.confirm('Supprimer toutes les conversations gardées ? Cette action est définitive.')) return
+    deleteAllSaved()
+    setConv((c) => ({ ...c, savedId: null }))
+    setSaved([])
+  }
 
   async function sendMessage(text) {
     if (!text || sending) return
@@ -89,6 +139,7 @@ export default function Coach() {
   }
 
   const limitReached = !premium && remaining <= 0
+  const hasConversation = messages.length > 1
 
   return (
     <main className="flex min-h-svh flex-1 flex-col px-6 py-8">
@@ -101,7 +152,81 @@ export default function Coach() {
           En cas de détresse, contacte un professionnel.
         </p>
 
-        {messages.length <= 1 && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button type="button" onClick={handleNew} className="choice rounded-full px-3 py-1.5 text-xs">
+            ＋ Nouvelle
+          </button>
+          {hasConversation && (
+            <button
+              type="button"
+              onClick={handleToggleKeep}
+              className={`rounded-full px-3 py-1.5 text-xs ${conv.savedId ? 'choice-selected' : 'choice'}`}
+            >
+              {conv.savedId ? 'Gardée ✓' : 'Garder'}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => setShowHistory((s) => !s)}
+            className={`rounded-full px-3 py-1.5 text-xs ${showHistory ? 'choice-selected' : 'choice'}`}
+          >
+            Historique ({saved.length})
+          </button>
+        </div>
+
+        <p className="mt-2 text-xs text-navy-800/45 dark:text-sand-100/45">
+          {conv.savedId
+            ? 'Cette conversation est gardée sur ton appareil (retire-la avec « Gardée ✓»).'
+            : "Cette conversation s'efface quand tu quittes l'app, sauf si tu la gardes."}
+        </p>
+
+        {showHistory && (
+          <section className="surface mt-3 rounded-2xl p-3">
+            {saved.length === 0 ? (
+              <p className="text-sm text-navy-800/60 dark:text-sand-100/60">
+                Aucune conversation gardée pour l'instant.
+              </p>
+            ) : (
+              <ul className="flex flex-col gap-2">
+                {saved.map((item) => (
+                  <li key={item.id} className="surface-inset flex items-center gap-2 rounded-xl px-3 py-2">
+                    <button
+                      type="button"
+                      onClick={() => handleOpen(item)}
+                      className="min-w-0 flex-1 text-left"
+                    >
+                      <span className="block truncate text-sm font-medium text-navy-800 dark:text-sand-100">
+                        {item.title}
+                      </span>
+                      <span className="text-xs text-navy-800/50 dark:text-sand-100/50">
+                        {formatDate(item.savedAt)} · {item.messages.length - 1} messages
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(item)}
+                      aria-label={`Supprimer la conversation ${item.title}`}
+                      className="shrink-0 rounded-full px-2 py-1 text-xs text-coral-600 dark:text-coral-300"
+                    >
+                      Supprimer
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {saved.length > 1 && (
+              <button
+                type="button"
+                onClick={handleDeleteAll}
+                className="mt-3 text-xs text-coral-600 dark:text-coral-300"
+              >
+                Tout supprimer
+              </button>
+            )}
+          </section>
+        )}
+
+        {!hasConversation && (
           <div className="mt-4 flex flex-wrap gap-2">
             {SUGGESTED_TOPICS.map((topic) => (
               <button
@@ -122,9 +247,7 @@ export default function Coach() {
               <div key={m.id}>
                 <div
                   className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
-                    m.from === 'coach'
-                      ? 'surface'
-                      : 'ml-auto bg-coral-500 text-white'
+                    m.from === 'coach' ? 'surface' : 'ml-auto bg-coral-500 text-white'
                   }`}
                 >
                   {m.text}

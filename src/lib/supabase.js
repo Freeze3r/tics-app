@@ -25,13 +25,13 @@ export async function signInWithEmail(email, password) {
   return data.user
 }
 
-// Nécessite qu'un fournisseur Google OAuth soit configuré côté Supabase
-// (Authentication > Providers > Google) — pas encore branché.
+// Nécessite que Google OAuth soit configuré côté Supabase (Authentication > Providers >
+// Google). Après Google, on revient sur /auth qui aiguille vers l'accueil ou le quiz.
 export async function signInWithGoogle() {
   if (!supabase) throw new Error('Supabase non configuré')
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: `${window.location.origin}/quiz` },
+    options: { redirectTo: `${window.location.origin}/auth` },
   })
   if (error) throw error
 }
